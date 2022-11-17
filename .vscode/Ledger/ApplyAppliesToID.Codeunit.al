@@ -61,12 +61,11 @@ codeunit 81904 "wanaStart Apply Applies-to ID"
         if VendorLedgerEntry.Open then
             VendorLedgerEntry."Applies-to ID" := GenJournalLine."Applies-to ID";
     end;
-    /* Missing Event
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnBeforeEmployeeLedgEntryInsert', '', false, false)]
-    local procedure OnBeforeEmployeeLedgEntryInsert(var VendorLedgerEntry: Record "Employee Ledger Entry"; GenJournalLine: Record "Gen. Journal Line"; GLRegister: Record "G/L Register")
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnPostEmployeeOnBeforeEmployeeLedgerEntryInsert', '', false, false)]
+    local procedure OnPostEmployeeOnBeforeEmployeeLedgerEntryInsert(var GenJnlLine: Record "Gen. Journal Line"; var EmployeeLedgerEntry: Record "Employee Ledger Entry")
     begin
         if EmployeeLedgerEntry.Open then
-            EmployeeLedgerEntry."Applies-to ID" := GenJournalLine."Applies-to ID";
+            EmployeeLedgerEntry."Applies-to ID" := GenJnlLine."Applies-to ID";
     end;
-    */
 }

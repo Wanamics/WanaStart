@@ -2,7 +2,7 @@
   "id": "64b9e44f-3f19-4fec-9a69-dcdcf1ead0ed",
   "name": "WanaStart",
   "publisher": "Wanamics",
-  "version": "21.0.0.0",
+  "version": "21.0.0.2",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -12,8 +12,8 @@
   "logo": "Wanamics90x90.png",
   "dependencies": [],
   "screenshots": [],
-  "platform": "20.0.0.0",
-  "application": "20.0.0.0",
+  "platform": "21.0.0.0",
+  "application": "21.0.0.0",
   "idRanges": [
     {
       "from": 81900,
@@ -25,7 +25,7 @@
     "allowDownloadingSource": false,
     "includeSourceInSymbolFile": false
   },
-  "runtime": "9.0",
+  "runtime": "10.0",
   "features": [
     "NoImplicitWith",
     "TranslationFile", "GenerateCaptions"
