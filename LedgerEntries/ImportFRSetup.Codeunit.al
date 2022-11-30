@@ -1,4 +1,4 @@
-codeunit 81901 "wanaStart Import FR Setup"
+codeunit 87101 "wanaStart Import FR Setup"
 {
     trigger OnRun()
     var

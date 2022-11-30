@@ -1,4 +1,4 @@
-pageextension 81910 "wanaStart Chart of Accounts" extends "Chart of Accounts"
+pageextension 87105 "wanaStart Chart of Accounts" extends "Chart of Accounts"
 {
     actions
     {

@@ -1,4 +1,4 @@
-query 81902 "wan Apply Cust. Applies-to ID"
+query 87102 "wan Apply Cust. Applies-to ID"
 {
     Caption = 'Apply Cust. Applies-to ID';
     QueryType = Normal;

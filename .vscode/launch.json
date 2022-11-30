@@ -28,7 +28,7 @@
             "environmentType": "Sandbox",
             "environmentName": "Development",
             "startupObjectType": "Page",
-            "startupObjectId": 39, // General Journal
+            //"startupObjectId": 39, // General Journal
             //"schemaUpdateMode": "ForceSync",
             "breakOnError": true,
             "launchBrowser": true,

@@ -1,4 +1,4 @@
-report 81902 "wan Apply Cust. Applies-to ID"
+report 87102 "wan Apply Cust. Applies-to ID"
 {
     ApplicationArea = All;
     Caption = 'Apply Cust. Applies-to ID';

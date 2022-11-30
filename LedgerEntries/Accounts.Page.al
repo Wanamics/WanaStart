@@ -1,4 +1,4 @@
-page 81900 "wanaStart Accounts"
+page 87100 "wanaStart Accounts"
 {
     ApplicationArea = All;
     Caption = 'WanaStart : Accounts';

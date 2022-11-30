@@ -1,4 +1,4 @@
-table 81900 "wanaStart Account"
+table 87100 "wanaStart Account"
 {
     Caption = 'Import FEC Account';
     DataClassification = ToBeClassified;

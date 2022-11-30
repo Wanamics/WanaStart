@@ -1,4 +1,4 @@
-report 81910 "wanaStart Check Direct Posting"
+report 87105 "wanaStart Check Direct Posting"
 {
     DefaultLayout = Word;
     WordLayout = './CheckDirectPosting.docx';

@@ -1,4 +1,4 @@
-codeunit 81902 "wanaStart Suggest Setup"
+codeunit 87102 "wanaStart Suggest Setup"
 {
     TableNo = "wanaStart Account";
     trigger OnRun()

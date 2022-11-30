@@ -1,4 +1,4 @@
-codeunit 81905 "wanaStart Gen. Journal Excel"
+codeunit 87105 "wanaStart Gen. Journal Excel"
 {
     trigger OnRun()
     begin

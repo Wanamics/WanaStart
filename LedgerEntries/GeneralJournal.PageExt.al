@@ -1,4 +1,4 @@
-pageextension 81900 "wanaStart General Journal" extends "General Journal"
+pageextension 87100 "wanaStart General Journal" extends "General Journal"
 {
     actions
     {

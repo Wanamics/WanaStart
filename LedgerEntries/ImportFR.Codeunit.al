@@ -1,4 +1,4 @@
-codeunit 81900 "wanaStart Import FR"
+codeunit 87100 "wanaStart Import FR"
 {
     TableNo = "Gen. Journal Line";
     trigger OnRun()

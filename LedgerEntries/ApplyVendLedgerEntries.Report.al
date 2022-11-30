@@ -1,4 +1,4 @@
-report 81903 "wan Apply Vendor Applies-to ID"
+report 87103 "wan Apply Vendor Applies-to ID"
 {
     ApplicationArea = All;
     Caption = 'Apply Vendor Applies-to ID';

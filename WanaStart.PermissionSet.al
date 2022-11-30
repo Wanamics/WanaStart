@@ -1,4 +1,4 @@
-permissionset 81900 "WANASTART"
+permissionset 87100 "WANASTART"
 {
     Assignable = true;
     Caption = 'WanaStart';

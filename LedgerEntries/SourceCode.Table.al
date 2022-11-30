@@ -1,4 +1,4 @@
-table 81901 "wanaStart Source Code"
+table 87101 "wanaStart Source Code"
 {
     Caption = 'ImportFEC SourceCode';
     DataClassification = ToBeClassified;

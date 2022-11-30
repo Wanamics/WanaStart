@@ -1,4 +1,4 @@
-table 81910 "wanaStart Direct Posting Buf."
+table 87105 "wanaStart Direct Posting Buf."
 {
     Caption = 'Check Direct Posting Buf.';
     DataClassification = ToBeClassified;

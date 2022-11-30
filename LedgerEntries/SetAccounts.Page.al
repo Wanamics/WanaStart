@@ -1,4 +1,4 @@
-page 81901 "wanaStart Set Accounts"
+page 87101 "wanaStart Set Accounts"
 {
     Caption = 'Set';
     SaveValues = true;
