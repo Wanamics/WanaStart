@@ -14,6 +14,7 @@ codeunit 81901 "wanaStart Import FR Setup"
         FileNameMsg: Label 'Warning, File name %1 does not match "%2" %3.';
         Tab: Text[1];
         _Account: Record "wanaStart Account";
+        CsvBuffer: Record "CSV Buffer" temporary;
     begin
         if UploadIntoStream('', '', '', FileName, IStream) then begin
             CompanyInformation.Get();
@@ -28,14 +29,13 @@ codeunit 81901 "wanaStart Import FR Setup"
             //CsvBuffer.LoadDataFromStream(iStream, ';', '"');
             Tab[1] := 9;
             CsvBuffer.LoadDataFromStream(iStream, Tab, '"');
-            Import(_Account);
+            Import(_Account, CsvBuffer);
             CsvBuffer.DeleteAll();
             Message(DoneMsg, _Account.Count(), CurrentDateTime - StartDateTime);
         end;
     end;
 
     var
-        CsvBuffer: Record "CSV Buffer" temporary;
         RowNo: Integer;
         ColumnNo: Integer;
         _SourceCode: Record "wanaStart Source Code";
@@ -46,7 +46,7 @@ codeunit 81901 "wanaStart Import FR Setup"
         //TODO
     end;
 
-    local procedure Import(pRec: Record "wanaStart Account")
+    local procedure Import(pRec: Record "wanaStart Account"; CsvBuffer: Record "CSV Buffer")
     var
         LineNo: Integer;
         Next: Integer;
@@ -63,7 +63,7 @@ codeunit 81901 "wanaStart Import FR Setup"
                 InitLine(pRec);
                 LineNo := CsvBuffer."Line No.";
                 repeat
-                    ImportCell(pRec, CsvBuffer."Field No.", CsvBuffer.Value);
+                    ImportCell(pRec, CsvBuffer); // CsvBuffer."Field No.", CsvBuffer.Value);
                     Next := CsvBuffer.Next;
                 until (Next = 0) or (CsvBuffer."Line No." <> LineNo);
                 InsertLine(pRec);
@@ -84,30 +84,30 @@ codeunit 81901 "wanaStart Import FR Setup"
         Inserted += 1;
     end;
 
-    local procedure ImportCell(var pRec: Record "wanaStart Account"; pColumnNo: Integer; pCell: Text)
+    local procedure ImportCell(var pRec: Record "wanaStart Account"; pCsvBuffer: Record "CSV Buffer"); // pColumnNo: Integer; pCell: Text)
     begin
-        case pColumnNo of
+        case pCsvBuffer."Field No." of
             1: // JournalCode
-                if pCell <> _SourceCode."Source Code" then
-                    if not _SourceCode.Get(pCell) then begin
+                if pCsvBuffer.Value <> _SourceCode."Source Code" then
+                    if not _SourceCode.Get(pCsvBuffer.Value) then begin
                         _SourceCode.Init();
-                        _SourceCode."From Source Code" := pCell;
+                        _SourceCode."From Source Code" := pCsvBuffer.Value;
                         _SourceCode.Insert();
                     end;
             2: //JournalLib
                 if _SourceCode."From Source Name" = '' then begin
-                    _SourceCode."From Source Name" := pCell;
+                    _SourceCode."From Source Name" := pCsvBuffer.Value;
                     _SourceCode.Modify();
                 end;
             5: // CompteNum
-                pRec."From Account No." := pCell;
+                pRec."From Account No." := pCsvBuffer.Value;
             6: // CompteLib
-                pRec."From Account Name" := pCell;
+                pRec."From Account Name" := pCsvBuffer.Value;
             7: // CompteAuxNum
-                pRec."From SubAccount No." := pCell;
+                pRec."From SubAccount No." := pCsvBuffer.Value;
             8: // CompteAuxLib
-                if pCell <> '' then
-                    pRec."From Account Name" := pCell;
+                if pCsvBuffer.Value <> '' then
+                    pRec."From Account Name" := pCsvBuffer.Value;
         end;
     end;
 }
