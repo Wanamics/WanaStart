@@ -2,7 +2,7 @@
   "id": "64b9e44f-3f19-4fec-9a69-dcdcf1ead0ed",
   "name": "WanaStart",
   "publisher": "Wanamics",
-  "version": "21.0.0.2",
+  "version": "21.0.0.3",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -17,7 +17,7 @@
   "idRanges": [
     {
       "from": 87100,
-      "to": 87199
+      "to": 87149
     }
   ],
   "resourceExposurePolicy": {
