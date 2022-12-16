@@ -5,7 +5,7 @@ codeunit 87101 "wanaStart Import FR Setup"
         ImportFromExcelTitle: Label 'Import FR Tax Audit';
         ExcelFileCaption: Label 'Text Files (*.txt)';
         ExcelFileExtensionTok: Label '.txt', Locked = true;
-        IStream: InStream;
+        iStream: InStream;
         FileName: Text;
         CompanyInformation: Record "Company Information";
         ContinueMsg: Label 'Do-you want to continue?';
@@ -13,10 +13,10 @@ codeunit 87101 "wanaStart Import FR Setup"
         DoneMsg: Label '%1 lines imported in %2.';
         FileNameMsg: Label 'Warning, File name %1 does not match "%2" %3.';
         Tab: Text[1];
-        _Account: Record "wanaStart Account";
+        StartAccount: Record "wanaStart Account";
         CsvBuffer: Record "CSV Buffer" temporary;
     begin
-        if UploadIntoStream('', '', '', FileName, IStream) then begin
+        if UploadIntoStream('', '', '', FileName, iStream) then begin
             CompanyInformation.Get();
             CompanyInformation.TestField("VAT Registration No.");
             if FileName.Substring(1, 9) <> CompanyInformation."VAT Registration No.".Replace(' ', '').Substring(5, 9) then
@@ -24,21 +24,20 @@ codeunit 87101 "wanaStart Import FR Setup"
                     Error('');
 
             StartDateTime := CurrentDateTime;
-            SwitchTextEncoding(IStream);
+            SwitchTextEncoding(iStream);
             CsvBuffer.LockTable();
-            //CsvBuffer.LoadDataFromStream(iStream, ';', '"');
             Tab[1] := 9;
             CsvBuffer.LoadDataFromStream(iStream, Tab, '"');
-            Import(_Account, CsvBuffer);
+            Import(StartAccount, CsvBuffer);
             CsvBuffer.DeleteAll();
-            Message(DoneMsg, _Account.Count(), CurrentDateTime - StartDateTime);
+            Message(DoneMsg, StartAccount.Count(), CurrentDateTime - StartDateTime);
         end;
     end;
 
     var
         RowNo: Integer;
         ColumnNo: Integer;
-        _SourceCode: Record "wanaStart Source Code";
+        StartSourceCode: Record "wanaStart Source Code";
         Inserted: Integer;
 
     local procedure SwitchTextEncoding(var pInStream: InStream)
@@ -63,7 +62,7 @@ codeunit 87101 "wanaStart Import FR Setup"
                 InitLine(pRec);
                 LineNo := CsvBuffer."Line No.";
                 repeat
-                    ImportCell(pRec, CsvBuffer); // CsvBuffer."Field No.", CsvBuffer.Value);
+                    ImportCell(pRec, CsvBuffer);
                     Next := CsvBuffer.Next;
                 until (Next = 0) or (CsvBuffer."Line No." <> LineNo);
                 InsertLine(pRec);
@@ -84,20 +83,20 @@ codeunit 87101 "wanaStart Import FR Setup"
         Inserted += 1;
     end;
 
-    local procedure ImportCell(var pRec: Record "wanaStart Account"; pCsvBuffer: Record "CSV Buffer"); // pColumnNo: Integer; pCell: Text)
+    local procedure ImportCell(var pRec: Record "wanaStart Account"; pCsvBuffer: Record "CSV Buffer");
     begin
         case pCsvBuffer."Field No." of
             1: // JournalCode
-                if pCsvBuffer.Value <> _SourceCode."Source Code" then
-                    if not _SourceCode.Get(pCsvBuffer.Value) then begin
-                        _SourceCode.Init();
-                        _SourceCode."From Source Code" := pCsvBuffer.Value;
-                        _SourceCode.Insert();
+                if pCsvBuffer.Value <> StartSourceCode."Source Code" then
+                    if not StartSourceCode.Get(pCsvBuffer.Value) then begin
+                        StartSourceCode.Init();
+                        StartSourceCode."From Source Code" := pCsvBuffer.Value;
+                        StartSourceCode.Insert();
                     end;
             2: //JournalLib
-                if _SourceCode."From Source Name" = '' then begin
-                    _SourceCode."From Source Name" := pCsvBuffer.Value;
-                    _SourceCode.Modify();
+                if StartSourceCode."From Source Name" = '' then begin
+                    StartSourceCode."From Source Name" := pCsvBuffer.Value;
+                    StartSourceCode.Modify();
                 end;
             5: // CompteNum
                 pRec."From Account No." := pCsvBuffer.Value;
