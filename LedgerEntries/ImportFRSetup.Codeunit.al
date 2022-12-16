@@ -45,7 +45,7 @@ codeunit 87101 "wanaStart Import FR Setup"
         //TODO
     end;
 
-    local procedure Import(pRec: Record "wanaStart Account"; CsvBuffer: Record "CSV Buffer")
+    local procedure Import(pRec: Record "wanaStart Account"; var CsvBuffer: Record "CSV Buffer")
     var
         LineNo: Integer;
         Next: Integer;

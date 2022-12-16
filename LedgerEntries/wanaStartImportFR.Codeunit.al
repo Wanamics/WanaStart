@@ -59,7 +59,7 @@ codeunit 87100 "wanaStart Import FR"
         */
     end;
 
-    local procedure Import(pRec: Record "Gen. Journal Line"; pCsvBuffer: Record "CSV Buffer")
+    local procedure Import(pRec: Record "Gen. Journal Line"; var pCsvBuffer: Record "CSV Buffer")
     var
         LineNo: Integer;
         Next: Integer;
@@ -169,10 +169,14 @@ codeunit 87100 "wanaStart Import FR"
             12: // Debit
                 pRec.Validate("Debit Amount", ToDecimal(pCsvBuffer.Value));
             13: // Credit
-                if pCsvBuffer.Value = 'C' then
-                    pRec.Validate("Credit Amount", pRec."Debit Amount")
-                else
-                    pRec.Validate("Credit Amount", ToDecimal(pCsvBuffer.Value));
+                case pCsvBuffer.Value of
+                    'D':
+                        ;
+                    'C':
+                        pRec.Validate("Credit Amount", pRec."Debit Amount")
+                    else
+                        pRec.Validate("Credit Amount", ToDecimal(pCsvBuffer.Value));
+                end;
             14: // EcritureLet
                 pRec.Validate("Applies-to ID", CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec."Applies-to ID")));
             15: // DateLet
