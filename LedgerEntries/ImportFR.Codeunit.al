@@ -33,7 +33,6 @@ codeunit 87100 "wanaStart Import FR"
             SwitchTextEncoding(iStream);
 
             CsvBuffer.LockTable();
-            //CsvBuffer.LoadDataFromStream(iStream, ';', '"');
             Tab[1] := 9;
             CsvBuffer.LoadDataFromStream(iStream, Tab, '"');
             Import(Rec, CsvBuffer);
@@ -45,9 +44,8 @@ codeunit 87100 "wanaStart Import FR"
     var
         RowNo: Integer;
         ColumnNo: Integer;
-        _Account: Record "wanaStart Account";
-        _SourceCode: Record "wanaStart Source Code";
-    //BalanceDocumentNo: Code[20];
+        StartAccount: Record "wanaStart Account";
+        StartSourceCode: Record "wanaStart Source Code";
 
     local procedure SwitchTextEncoding(var pInStream: InStream)
     var
@@ -70,7 +68,7 @@ codeunit 87100 "wanaStart Import FR"
 
     begin
         pCsvBuffer.SetFilter("Line No.", '>1');
-        pCsvBuffer.SetFilter("Field No.", '1|4|5|7|9..14');
+        pCsvBuffer.SetFilter("Field No.", '1|4|5|7|9..');
         ProgressDialog.Open(ProgressMsg);
         if pCsvBuffer.FindSet then
             repeat
@@ -78,7 +76,7 @@ codeunit 87100 "wanaStart Import FR"
                 InitLine(pRec);
                 LineNo := pCsvBuffer."Line No.";
                 repeat
-                    ImportCell(pRec, pCsvBuffer); //CsvBuffer."Field No.", CsvBuffer.Value);
+                    ImportCell(pRec, pCsvBuffer);
                     Next := pCsvBuffer.Next;
                 until (Next = 0) or (pCsvBuffer."Line No." <> LineNo);
                 InsertLine(pRec);
@@ -93,24 +91,19 @@ codeunit 87100 "wanaStart Import FR"
         pRec.Init;
         GenJournalTemplate.Get(pRec."Journal Template Name");
         GenJournalBatch.Get(pRec."Journal Template Name", pRec."Journal Batch Name");
-        //pRec."Source Code" := GenJournalTemplate."Source Code";
         pRec."Reason Code" := GenJournalBatch."Reason Code";
-        //pRec."Posting No. Series" := GenJournalBatch."Posting No. Series";
-        //pRec."Copy VAT Setup to Jnl. Lines" := GenJournalBatch."Copy VAT Setup to Jnl. Lines";
-        //pRec."Bal. Account Type" := GenJournalBatch."Bal. Account Type";
-        //pRec.Validate("Bal. Account No.", GenJournalBatch."Bal. Account No.");
-        _Account.Init();
+        StartAccount.Init();
     end;
 
     local procedure InsertLine(var pRec: Record "Gen. Journal Line")
     begin
-        if _Account.Skip or _SourceCode.Skip or
-            (_Account."Gen. Posting Type" <> _Account."Gen. Posting Type"::" ") and
-            (_Account."Gen. Posting Type" = _SourceCode."Gen. Posting Type") then
+        if StartAccount.Skip or StartSourceCode.Skip or
+            (StartAccount."Gen. Posting Type" <> StartAccount."Gen. Posting Type"::" ") and
+            (StartAccount."Gen. Posting Type" = StartSourceCode."Gen. Posting Type") then
             exit;
-        if _SourceCode."Gen. Posting Type" <> _SourceCode."Gen. Posting Type"::" " then begin
-            pRec.Validate("Bal. Account No.", _SourceCode."Bal. Account No.");
-            if IsInvoice(_SourceCode."Gen. Posting Type", pRec) then
+        if StartSourceCode."Gen. Posting Type" <> StartSourceCode."Gen. Posting Type"::" " then begin
+            pRec.Validate("Bal. Account No.", StartSourceCode."Bal. Account No.");
+            if IsInvoice(StartSourceCode."Gen. Posting Type", pRec) then
                 pRec.Validate("Document Type", pRec."Document Type"::Invoice)
             else
                 pRec.Validate("Document Type", pRec."Document Type"::"Credit Memo");
@@ -120,7 +113,7 @@ codeunit 87100 "wanaStart Import FR"
         end;
 
         if pRec."Account No." = '' then
-            pRec.Description := CopyStr('!' + _Account."From Account No." + '|' + _Account."From SubAccount No." + '!' + pRec.Description, 1, MaxStrLen(prec.Description));
+            pRec.Description := CopyStr('!' + StartAccount."From Account No." + '|' + StartAccount."From SubAccount No." + '!' + pRec.Description, 1, MaxStrLen(prec.Description));
 
         if not (pRec."Account Type" in [pRec."Account Type"::Customer, pRec."Account Type"::Vendor]) then
             pRec."Applies-to ID" := '';
@@ -136,7 +129,8 @@ codeunit 87100 "wanaStart Import FR"
 
     local procedure ToDate(pCell: Text) ReturnValue: Date
     begin
-        Evaluate(ReturnValue, pCell.Substring(7, 2) + pCell.Substring(5, 2) + pCell.Substring(1, 4));
+        if not Evaluate(ReturnValue, pCell.Substring(7, 2) + pCell.Substring(5, 2) + pCell.Substring(1, 4)) then
+            Evaluate(ReturnValue, pCell);
     end;
 
     local procedure ImportCell(var pRec: Record "Gen. Journal Line"; pCsvBuffer: Record "CSV Buffer"); //; pColumnNo: Integer; pCell: Text)
@@ -153,11 +147,11 @@ codeunit 87100 "wanaStart Import FR"
             4: // EcritureDate
                 pRec.Validate("Posting Date", ToDate(pCsvBuffer.Value));
             5: // CompteNum
-                _Account."From Account No." := pCsvBuffer.Value;
+                StartAccount."From Account No." := pCsvBuffer.Value;
             6: // CompteLib
                 ;
             7: // CompteAuxNum
-                _Account."From SubAccount No." := pCsvBuffer.Value;
+                StartAccount."From SubAccount No." := pCsvBuffer.Value;
             8: // CompteAuxLib
                 ;
             9: // PieceRef
@@ -175,21 +169,19 @@ codeunit 87100 "wanaStart Import FR"
             12: // Debit
                 pRec.Validate("Debit Amount", ToDecimal(pCsvBuffer.Value));
             13: // Credit
-                Case pCsvBuffer.Value of
-                    'D':
-                        ;
-                    'C':
-                        pRec.Validate("Credit Amount", pRec."Debit Amount");
-                    else
-                        pRec.Validate("Credit Amount", ToDecimal(pCsvBuffer.Value));
-                end;
+                if pCsvBuffer.Value = 'C' then
+                    pRec.Validate("Credit Amount", pRec."Debit Amount")
+                else
+                    pRec.Validate("Credit Amount", ToDecimal(pCsvBuffer.Value));
             14: // EcritureLet
                 pRec.Validate("Applies-to ID", CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec."Applies-to ID")));
             15: // DateLet
                 ;
-            16: // MontantDev
+            16: // ValidDate
                 ;
-            17: // Idevise
+            17:// MontantDev
+                ;
+            18: // Idevise
                 ;
             else
                 OnAfterImportCell(pRec, pCsvBuffer);
@@ -198,17 +190,17 @@ codeunit 87100 "wanaStart Import FR"
 
     local procedure ToSourceCode(pCode: Code[10]): Code[10]
     begin
-        if pCode <> _SourceCode."From Source Code" then
-            _SourceCode.Get(pCode);
-        exit(_SourceCode."Source Code");
+        if pCode <> StartSourceCode."From Source Code" then
+            StartSourceCode.Get(pCode);
+        exit(StartSourceCode."Source Code");
     end;
 
     local procedure MapAccount(var pRec: Record "Gen. Journal Line")
     begin
-        if _Account.Get(_Account."From Account No.", _Account."From SubAccount No.") and
-            (_Account."Account No." <> '') then begin
-            pRec.Validate("Account Type", _Account."Account Type");
-            pRec.Validate("Account No.", _Account."Account No.");
+        if StartAccount.Get(StartAccount."From Account No.", StartAccount."From SubAccount No.") and
+            (StartAccount."Account No." <> '') then begin
+            pRec.Validate("Account Type", StartAccount."Account Type");
+            pRec.Validate("Account No.", StartAccount."Account No.");
         end;
     end;
 
@@ -224,18 +216,18 @@ codeunit 87100 "wanaStart Import FR"
 
     local procedure SetBalanceVAT(var pRec: Record "Gen. Journal Line")
     begin
-        pRec.Validate("Bal. Gen. Posting Type", _SourceCode."Gen. Posting Type");
+        pRec.Validate("Bal. Gen. Posting Type", StartSourceCode."Gen. Posting Type");
         case pRec."Account Type" of
             pRec."Account Type"::Customer:
                 SetCustomerVATBusPostingGroup(pRec);
             pRec."Account Type"::Vendor:
                 SetVendorVATBusPostingGroup(pRec);
         end;
-        if _Account."VAT Prod. Posting Group" <> '' then
-            pRec.Validate("Bal. VAT Prod. Posting Group", _Account."VAT Prod. Posting Group")
+        if StartAccount."VAT Prod. Posting Group" <> '' then
+            pRec.Validate("Bal. VAT Prod. Posting Group", StartAccount."VAT Prod. Posting Group")
         else
-            if _SourceCode."VAT Prod. Posting Group" <> '' then
-                pRec.Validate("Bal. VAT Prod. Posting Group", _SourceCode."VAT Prod. Posting Group");
+            if StartSourceCode."VAT Prod. Posting Group" <> '' then
+                pRec.Validate("Bal. VAT Prod. Posting Group", StartSourceCode."VAT Prod. Posting Group");
         pRec.TestField("Bal. VAT Prod. Posting Group");
     end;
 
