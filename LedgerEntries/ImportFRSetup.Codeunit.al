@@ -13,7 +13,7 @@ codeunit 87101 "wanaStart Import FR Setup"
         DoneMsg: Label '%1 lines imported in %2.';
         FileNameMsg: Label 'Warning, File name %1 does not match "%2" %3.';
         Tab: Text[1];
-        StartAccount: Record "wanaStart Account";
+        StartAccount: Record "wanaStart Map Account";
         CsvBuffer: Record "CSV Buffer" temporary;
     begin
         if UploadIntoStream('', '', '', FileName, iStream) then begin
@@ -37,7 +37,7 @@ codeunit 87101 "wanaStart Import FR Setup"
     var
         RowNo: Integer;
         ColumnNo: Integer;
-        StartSourceCode: Record "wanaStart Source Code";
+        StartSourceCode: Record "wanaStart Map Source Code";
         Inserted: Integer;
 
     local procedure SwitchTextEncoding(var pInStream: InStream)
@@ -45,7 +45,7 @@ codeunit 87101 "wanaStart Import FR Setup"
         //TODO
     end;
 
-    local procedure Import(pRec: Record "wanaStart Account"; var CsvBuffer: Record "CSV Buffer")
+    local procedure Import(pRec: Record "wanaStart Map Account"; var CsvBuffer: Record "CSV Buffer")
     var
         LineNo: Integer;
         Next: Integer;
@@ -70,12 +70,12 @@ codeunit 87101 "wanaStart Import FR Setup"
         ProgressDialog.Close();
     end;
 
-    local procedure InitLine(var pRec: Record "wanaStart Account")
+    local procedure InitLine(var pRec: Record "wanaStart Map Account")
     begin
         pRec.Init;
     end;
 
-    local procedure InsertLine(var pRec: Record "wanaStart Account")
+    local procedure InsertLine(var pRec: Record "wanaStart Map Account")
     begin
         if pRec.Get(pRec."From Account No.", pRec."From SubAccount No.") then
             exit;
@@ -83,7 +83,7 @@ codeunit 87101 "wanaStart Import FR Setup"
         Inserted += 1;
     end;
 
-    local procedure ImportCell(var pRec: Record "wanaStart Account"; pCsvBuffer: Record "CSV Buffer");
+    local procedure ImportCell(var pRec: Record "wanaStart Map Account"; pCsvBuffer: Record "CSV Buffer");
     begin
         case pCsvBuffer."Field No." of
             1: // JournalCode

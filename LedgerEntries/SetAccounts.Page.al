@@ -3,7 +3,7 @@ page 87101 "wanaStart Set Accounts"
     Caption = 'Set';
     SaveValues = true;
     PageType = StandardDialog; //ConfirmationDialog;
-    SourceTable = "wanaStart Account";
+    SourceTable = "wanaStart Map Account";
     layout
     {
         area(content)
@@ -27,7 +27,7 @@ page 87101 "wanaStart Set Accounts"
         }
     }
 
-    procedure Update(var pRec: Record "wanaStart Account")
+    procedure Update(var pRec: Record "wanaStart Map Account")
     begin
         if pRec.FindSet() then
             repeat

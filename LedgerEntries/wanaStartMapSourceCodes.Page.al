@@ -1,8 +1,8 @@
-page 87102 "wanaStart Source Codes"
+page 87102 "wanaStart Map Source Codes"
 {
-    Caption = 'WanaStart : Source Codes';
+    Caption = 'Map Source Codes';
     PageType = List;
-    SourceTable = "wanaStart Source Code";
+    SourceTable = "wanaStart Map Source Code";
 
     layout
     {

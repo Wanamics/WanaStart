@@ -1,6 +1,6 @@
-table 87101 "wanaStart Source Code"
+table 87101 "wanaStart Map Source Code"
 {
-    Caption = 'ImportFEC SourceCode';
+    Caption = 'Map SourceCode';
     DataClassification = ToBeClassified;
 
     fields
@@ -36,7 +36,7 @@ table 87101 "wanaStart Source Code"
         {
             Caption = 'Gen. Posting Type';
         }
-        field(9; Skip; Boolean)
+        field(9; "Skip"; Boolean)
         {
             Caption = 'Skip';
         }

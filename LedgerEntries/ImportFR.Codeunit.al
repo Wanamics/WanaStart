@@ -44,8 +44,8 @@ codeunit 87100 "wanaStart Import FR"
     var
         RowNo: Integer;
         ColumnNo: Integer;
-        StartAccount: Record "wanaStart Account";
-        StartSourceCode: Record "wanaStart Source Code";
+        StartAccount: Record "wanaStart Map Account";
+        StartSourceCode: Record "wanaStart Map Source Code";
 
     local procedure SwitchTextEncoding(var pInStream: InStream)
     var

@@ -1,6 +1,6 @@
-table 87100 "wanaStart Account"
+table 87100 "wanaStart Map Account"
 {
-    Caption = 'Import FEC Account';
+    Caption = 'Map Account';
     DataClassification = ToBeClassified;
 
     fields
@@ -98,7 +98,7 @@ table 87100 "wanaStart Account"
             end;
 
         }
-        field(9; Skip; Boolean)
+        field(9; "Skip"; Boolean)
         {
             Caption = 'Skip';
         }
@@ -115,7 +115,7 @@ table 87100 "wanaStart Account"
         RowNo: Integer;
         ColumnNo: Integer;
 
-    procedure Initialize(Rec: Record "wanaStart Account")
+    procedure Initialize(Rec: Record "wanaStart Map Account")
     var
         ImportFromExcelTitle: Label 'Import FEC File';
         ExcelFileCaption: Label 'FEC Files (*.txt)';
@@ -179,7 +179,7 @@ table 87100 "wanaStart Account"
         end;
     end;
 
-    procedure CreateAccount(pRec: Record "wanaStart Account")
+    procedure CreateAccount(pRec: Record "wanaStart Map Account")
     begin
         case pRec."Account Type" of
             "Account Type"::"G/L Account":
@@ -193,7 +193,7 @@ table 87100 "wanaStart Account"
         end;
     end;
 
-    local procedure CreateGLAccount(pRec: Record "wanaStart Account")
+    local procedure CreateGLAccount(pRec: Record "wanaStart Map Account")
     var
         GLAccount: Record "G/L Account";
     begin
@@ -202,7 +202,7 @@ table 87100 "wanaStart Account"
         GLAccount.Insert(true);
     end;
 
-    local procedure CreateCustomer(pRec: Record "wanaStart Account")
+    local procedure CreateCustomer(pRec: Record "wanaStart Map Account")
     var
         Customer: Record Customer;
         Template: Record "Customer Templ.";
@@ -216,7 +216,7 @@ table 87100 "wanaStart Account"
         Update(pRec, Customer."No.");
     end;
 
-    local procedure CreateVendor(pRec: Record "wanaStart Account")
+    local procedure CreateVendor(pRec: Record "wanaStart Map Account")
     var
         Vendor: Record Vendor;
         Template: Record "Vendor Templ.";
@@ -231,7 +231,7 @@ table 87100 "wanaStart Account"
         Update(pRec, Vendor."No.");
     end;
 
-    local procedure CreateEmployee(pRec: Record "wanaStart Account")
+    local procedure CreateEmployee(pRec: Record "wanaStart Map Account")
     var
         Employee: Record Employee;
         Template: Record "Employee Templ.";
@@ -245,9 +245,9 @@ table 87100 "wanaStart Account"
         Update(pRec, Employee."No.");
     end;
 
-    local procedure Update(pRec: Record "wanaStart Account"; pAccountNo: Code[20])
+    local procedure Update(pRec: Record "wanaStart Map Account"; pAccountNo: Code[20])
     var
-        lRec: Record "wanaStart Account";
+        lRec: Record "wanaStart Map Account";
     begin
         Rec.Get(pRec."From Account No.");
         Rec."Account No." := pAccountNo;

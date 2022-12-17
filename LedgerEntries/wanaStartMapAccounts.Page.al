@@ -1,9 +1,9 @@
-page 87100 "wanaStart Accounts"
+page 87100 "wanaStart Map Accounts"
 {
     ApplicationArea = All;
-    Caption = 'WanaStart : Accounts';
+    Caption = 'Map Accounts';
     PageType = List;
-    SourceTable = "wanaStart Account";
+    SourceTable = "wanaStart Map Account";
     UsageCategory = Administration;
     InsertAllowed = false;
 
@@ -74,7 +74,7 @@ page 87100 "wanaStart Accounts"
 
                 trigger OnAction()
                 var
-                    lRec: Record "wanaStart Account";
+                    lRec: Record "wanaStart Map Account";
                     ConfirmMsg: Label 'Do-you want to map %1 G/L account(s)?';
                 begin
                     CurrPage.SetSelectionFilter(lRec);
@@ -94,7 +94,7 @@ page 87100 "wanaStart Accounts"
 
                 trigger OnAction()
                 var
-                    lRec: Record "wanaStart Account";
+                    lRec: Record "wanaStart Map Account";
                     GetValues: Page "wanaStart Set Accounts";
                     ConfirmMsg: Label 'Do-you want to set %1 account(s)?';
                 begin
@@ -115,7 +115,7 @@ page 87100 "wanaStart Accounts"
 
                 trigger OnAction()
                 var
-                    lRec: Record "wanaStart Account";
+                    lRec: Record "wanaStart Map Account";
                     ConfirmMsg: Label 'Do-you want to create %1 account(s)?';
                 begin
                     CurrPage.SetSelectionFilter(lRec);

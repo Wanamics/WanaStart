@@ -1,6 +1,6 @@
 codeunit 87102 "wanaStart Suggest Setup"
 {
-    TableNo = "wanaStart Account";
+    TableNo = "wanaStart Map Account";
     trigger OnRun()
     begin
         if Rec.FindSet() then
@@ -18,7 +18,7 @@ codeunit 87102 "wanaStart Suggest Setup"
             until Rec.Next() = 0;
     end;
 
-    local procedure MapGLAccount(var pRec: Record "wanaStart Account")
+    local procedure MapGLAccount(var pRec: Record "wanaStart Map Account")
     var
         GLAccount: Record "G/L Account";
         Root: Code[20];
@@ -80,7 +80,7 @@ codeunit 87102 "wanaStart Suggest Setup"
     */
 
 
-    local procedure MapCustomer(var pRec: Record "wanaStart Account")
+    local procedure MapCustomer(var pRec: Record "wanaStart Map Account")
     var
         Customer: Record Customer;
     begin
@@ -96,7 +96,7 @@ codeunit 87102 "wanaStart Suggest Setup"
         end;
     end;
 
-    local procedure MapVendor(var pRec: Record "wanaStart Account")
+    local procedure MapVendor(var pRec: Record "wanaStart Map Account")
     var
         Vendor: Record Vendor;
     begin
@@ -112,7 +112,7 @@ codeunit 87102 "wanaStart Suggest Setup"
         end;
     end;
 
-    local procedure MapEmployee(var pRec: Record "wanaStart Account")
+    local procedure MapEmployee(var pRec: Record "wanaStart Map Account")
     var
         Employee: Record Employee;
     begin

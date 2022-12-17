@@ -47,14 +47,14 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
                     Caption = 'Map Accounts';
                     ApplicationArea = All;
                     Image = Accounts;
-                    RunObject = page "wanaStart Accounts";
+                    RunObject = page "wanaStart Map Accounts";
                 }
                 action(WanaStartMapSourceCode)
                 {
                     Caption = 'Map Source Codes';
                     ApplicationArea = All;
                     Image = JournalSetup;
-                    RunObject = page "wanaStart Source Codes";
+                    RunObject = page "wanaStart Map Source Codes";
                 }
                 action(WanaStartImportFEC)
                 {

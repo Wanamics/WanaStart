@@ -1,6 +1,6 @@
 codeunit 87103 "wanaStart Create Accounts"
 {
-    TableNo = "wanaStart Account";
+    TableNo = "wanaStart Map Account";
     trigger OnRun()
     begin
         if Rec.FindSet() then
@@ -18,7 +18,7 @@ codeunit 87103 "wanaStart Create Accounts"
             until Rec.Next() = 0;
     end;
 
-    local procedure CreateGLAccount(pRec: Record "wanaStart Account")
+    local procedure CreateGLAccount(pRec: Record "wanaStart Map Account")
     var
         GLAccount: Record "G/L Account";
     begin
@@ -31,7 +31,7 @@ codeunit 87103 "wanaStart Create Accounts"
         Update(pRec, GLAccount."No.");
     end;
 
-    local procedure CreateCustomer(pRec: Record "wanaStart Account")
+    local procedure CreateCustomer(pRec: Record "wanaStart Map Account")
     var
         Customer: Record Customer;
         Template: Record "Customer Templ.";
@@ -49,7 +49,7 @@ codeunit 87103 "wanaStart Create Accounts"
         Update(pRec, Customer."No.");
     end;
 
-    local procedure CreateVendor(pRec: Record "wanaStart Account")
+    local procedure CreateVendor(pRec: Record "wanaStart Map Account")
     var
         Vendor: Record Vendor;
         Template: Record "Vendor Templ.";
@@ -67,7 +67,7 @@ codeunit 87103 "wanaStart Create Accounts"
         Update(pRec, Vendor."No.");
     end;
 
-    local procedure CreateEmployee(pRec: Record "wanaStart Account")
+    local procedure CreateEmployee(pRec: Record "wanaStart Map Account")
     var
         Employee: Record Employee;
         Template: Record "Employee Templ.";
@@ -85,9 +85,9 @@ codeunit 87103 "wanaStart Create Accounts"
         Update(pRec, Employee."No.");
     end;
 
-    local procedure Update(pRec: Record "wanaStart Account"; pAccountNo: Code[20])
+    local procedure Update(pRec: Record "wanaStart Map Account"; pAccountNo: Code[20])
     var
-        lRec: Record "wanaStart Account";
+        lRec: Record "wanaStart Map Account";
     begin
         pRec.Get(pRec."From Account No.", pRec."From SubAccount No.");
         pRec."Account No." := pAccountNo;
