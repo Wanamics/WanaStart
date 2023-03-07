@@ -5,9 +5,9 @@ codeunit 87102 "wanaStart Suggest Setup"
     begin
         if Rec.FindSet() then
             repeat
-                if Rec."Account Type" = Rec."Account Type"::"G/L Account" then
-                    MapGLAccount(Rec);
                 case Rec."Account Type" of
+                    Rec."Account Type"::"G/L Account":
+                        MapGLAccount(Rec);
                     Rec."Account Type"::Customer:
                         MapCustomer(Rec);
                     Rec."Account Type"::Vendor:

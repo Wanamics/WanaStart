@@ -75,11 +75,11 @@ page 87100 "wanaStart Map Accounts"
                 trigger OnAction()
                 var
                     lRec: Record "wanaStart Map Account";
-                    ConfirmMsg: Label 'Do-you want to map %1 G/L account(s)?';
+                    ConfirmMsg: Label 'Do-you want to map %1 account(s)?';
                 begin
                     CurrPage.SetSelectionFilter(lRec);
                     lRec.SetRange("Account No.", '');
-                    lRec.SetRange("Account Type", lRec."Account Type"::"G/L Account");
+                    //lRec.SetRange("Account Type", lRec."Account Type"::"G/L Account");
                     if Confirm(ConfirmMsg, false, lRec.Count()) then
                         Codeunit.Run(Codeunit::"wanaStart Suggest Setup", lRec);
                 end;
