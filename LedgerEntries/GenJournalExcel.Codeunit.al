@@ -297,15 +297,14 @@ codeunit 87105 "wanaStart Gen. Journal Excel"
                 pRec.Validate("Bal. VAT Bus. Posting Group", pCell);
             19:
                 pRec.Validate("Bal. VAT Prod. Posting Group", pCell);
+            /*
             20:
                 pRec."Shortcut Dimension 1 Code" := pCell;
             21:
                 pRec."Shortcut Dimension 2 Code" := pCell;
-            22 .. 27:
-                begin
-                    Code20 := pCell;
-                    pRec.ValidateShortcutDimCode(pColumnNo - 24, Code20);
-                end;
+            */
+            20 .. 27:
+                ShortcutDimCode[pColumnNo - 19] := pCell;
             28:
                 pRec.Validate("Job No.", pCell);
             29:
@@ -325,10 +324,16 @@ codeunit 87105 "wanaStart Gen. Journal Excel"
     end;
 
     local procedure AfterInsert(var pRec: Record "Gen. Journal Line")
+    var
+        i: Integer;
     begin
-        pRec.Validate("Shortcut Dimension 1 Code");
-        pRec.Validate("Shortcut Dimension 2 Code");
+        pRec.Validate("Shortcut Dimension 1 Code", ShortcutDimCode[1]);
+        pRec.Validate("Shortcut Dimension 2 Code", ShortcutDimCode[2]);
+        for i := 3 to 8 do
+            if ShortcutDimCode[i] <> '' then
+                pRec.ValidateShortcutDimCode(i, ShortcutDimCode[i]);
         OnAfterInsert(pRec);
+        pRec.Modify(true);
     end;
 
     [IntegrationEvent(false, false)]

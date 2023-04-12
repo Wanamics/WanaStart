@@ -1,39 +1,80 @@
 {
     "version": "0.2.0",
     "configurations": [
-        /*{
-            "name": "Wanamics Template",
-            "request": "launch",
-            "type": "al",
-            "server": "https://businesscentral.dynamics.com/",
-            "environmentType": "Sandbox",
-            "environmentName": "Template",
-            "tenant": "e58e4362-4ba1-46f8-b9da-326a8fa42dc7",
-            //"port": 7049,
-            //"authentication": "AAD",
-            "startupObjectType": "Page",
-            "startupObjectId": 81900,
-            "breakOnError": true,
-            "launchBrowser": true,
-            "enableLongRunningSqlStatements": true,
-            "enableSqlInformationDebugger": true
-        },
-        */
         {
-            "name": "SYN Development",
+            "name": "LORCA2_DEV",
             "request": "launch",
-            "server": "https://businesscentral.dynamics.com/",
-            "tenant": "7976175f-bf14-44d1-a0fb-d1307bebb8be",
             "type": "al",
-            "environmentType": "Sandbox",
-            "environmentName": "Development",
+            "environmentType": "OnPrem",
+            "server": "https://bcdev.lorca.fr",
+            "serverInstance": "LORCA2_DEV",
+            "port": 7469,
+            "authentication": "Windows",
+            //"startupObjectId": 50023,
             "startupObjectType": "Page",
-            "startupObjectId": 39, // General Journal
-            //"schemaUpdateMode": "ForceSync",
             "breakOnError": true,
             "launchBrowser": true,
-            "enableLongRunningSqlStatements": true,
-            "enableSqlInformationDebugger": true
+            //"schemaUpdateMode": "ForceSync"
+        },
+        {
+            "name": "LORCA2_TEST",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "OnPrem",
+            "server": "https://bcdev.lorca.fr",
+            "serverInstance": "LORCA2_TEST",
+            "port": 7169,
+            "authentication": "Windows",
+            "startupObjectId": 22,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            //"schemaUpdateMode": "ForceSync 
+        },
+        {
+            "name": "LORCA2_PROD",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "OnPrem",
+            "server": "https://bc.lorca.fr",
+            "serverInstance": "LORCA2",
+            "port": 7069,
+            "authentication": "Windows",
+            "startupObjectId": 22,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            //"schemaUpdateMode": "ForceSync 
+        },
+        {
+            "name": "LORCA_SCI_TEST",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "OnPrem",
+            "server": "http://srv19-bc-dev.lorca.fr",
+            "serverInstance": "LORCA_SCI_TEST",
+            "port": 7349,
+            "authentication": "Windows",
+            "startupObjectId": 39,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "schemaUpdateMode": "ForceSync"
+        },
+        {
+            "name": "LORCA_SCI_PROD",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "OnPrem",
+            "server": "http://srv19-bc.lorca.fr",
+            "serverInstance": "LORCA_SCI",
+            "port": 7249,
+            "authentication": "Windows",
+            "startupObjectId": 39,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "schemaUpdateMode": "ForceSync"
         }
     ]
 }

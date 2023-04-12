@@ -1,5 +1,4 @@
 codeunit 87104 "wanaStart Apply Applies-to ID"
-
 {
     trigger OnRun()
     var
@@ -34,7 +33,6 @@ codeunit 87104 "wanaStart Apply Applies-to ID"
     */
 
     procedure ResetAppliesToIDs()
-
     var
         CustLedgerEntry: Record "Cust. Ledger Entry";
         VendorLedgerEntry: Record "Vendor Ledger Entry";
