@@ -303,6 +303,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report wan Apply Cust. Applies-to ID - ReportDataItem CustVend - Method OnPreDataItem - NamedType ConfirmMsg</note>
         </trans-unit>
+        <trans-unit id="Report 2844555257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Apply Employee Applies-to ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report wan Apply Empl. Applies-to ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 2844555257 - ReportDataItem 1498446062 - Method 72583909 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to apply %1 "%2" based on %3?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report wan Apply Empl. Applies-to ID - ReportDataItem Employee - Method OnPreDataItem - NamedType ConfirmMsg</note>
+        </trans-unit>
         <trans-unit id="Report 1283501323 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Apply Vendor Applies-to ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -407,6 +417,11 @@
           <source>Apply Cust. Applies-to ID</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Query wan Apply Cust. Applies-to ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Query 2844555257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Apply Employee Applies-to ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Query wan Apply Empl. Applies-to ID - Property Caption</note>
         </trans-unit>
         <trans-unit id="Query 1283501323 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Apply Vendor Applies-to ID</source>

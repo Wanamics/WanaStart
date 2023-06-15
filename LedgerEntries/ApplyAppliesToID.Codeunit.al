@@ -1,48 +1,37 @@
 codeunit 87104 "wanaStart Apply Applies-to ID"
 {
+    Permissions =
+        tabledata "Cust. Ledger Entry" = m,
+        tabledata "Vendor Ledger Entry" = m,
+        tabledata "Employee Ledger Entry" = m;
+
     trigger OnRun()
     var
-        ApplicationMethod: enum "Application Method";
         ApplyCustLedgerEntries: Report "wan Apply Cust. Applies-to ID";
         ApplyVendLedgerEntries: Report "wan Apply Vendor Applies-to ID";
+        ApplyEmplLedgerEntries: Report "wan Apply Empl. Applies-to ID";
     begin
         ApplyCustLedgerEntries.UseRequestPage(false);
         ApplyCustLedgerEntries.RunModal();
         ApplyVendLedgerEntries.UseRequestPage(false);
         ApplyVendLedgerEntries.RunModal();
+        ApplyEmplLedgerEntries.UseRequestPage(false);
+        ApplyEmplLedgerEntries.RunModal();
 
         ResetAppliesToIDs();
     end;
 
-    /*
-    procedure SetApplicationMethod(pApplicationMethod: Enum "Application Method")
-    var
-        Customer: Record Customer;
-        Vendor: Record Vendor;
-        Employee: Record Employee;
-    tConfirm: TextConst
-        ENU = 'Do you want to set "Application Method" to ::"Apply to Oldest" for ALL customers and ALL vendors?',
-        FRA = 'Voulez-vous définir "%1" à ''%2'' pour TOUS les clients et TOUS les fournisseurs ?';
-    begin
-        if not Confirm(tConfirm, false, Customer.FieldCaption("Application Method"), Customer."Application Method"::"Apply to Oldest") then
-            exit;
-        Customer.ModifyAll("Application Method", pApplicationMethod);
-        Vendor.ModifyAll("Application Method", pApplicationMethod);
-        Employee.ModifyAll("Application Method", pApplicationMethod);
-    end;
-    */
-
     procedure ResetAppliesToIDs()
     var
         CustLedgerEntry: Record "Cust. Ledger Entry";
-        VendorLedgerEntry: Record "Vendor Ledger Entry";
+        VendorLedgerEntry: Record "Employee Ledger Entry";
         EmployeeLedgerEntry: Record "Employee Ledger Entry";
     begin
         CustLedgerEntry.SetFilter("Applies-to ID", '<>%1', '');
-        VendorLedgerEntry.SetFilter("Applies-to ID", '<>%1', '');
-        EmployeeLedgerEntry.SetFilter("Applies-to ID", '<>%1', '');
         CustLedgerEntry.ModifyAll("Applies-to ID", '');
+        VendorLedgerEntry.SetFilter("Applies-to ID", '<>%1', '');
         VendorLedgerEntry.ModifyAll("Applies-to ID", '');
+        EmployeeLedgerEntry.SetFilter("Applies-to ID", '<>%1', '');
         EmployeeLedgerEntry.ModifyAll("Applies-to ID", '');
     end;
 

@@ -245,7 +245,7 @@ report 87109 "wanaStart Clean Data"
         CleanTable(Database::Customer, TableType::Master, true); // 18
         CleanTable(Database::"Cust. Ledger Entry", TableType::Entry, true); // 21
         CleanTable(Database::Vendor, TableType::Master, true); // 23
-        CleanTable(Database::"Vendor Ledger Entry", TableType::Entry, true); // 25
+        CleanTable(Database::"Employee Ledger Entry", TableType::Entry, true); // 25
         CleanTable(Database::Item, TableType::Master, true); // 27
         CleanTable(Database::"Item Ledger Entry", TableType::Entry, true); // 32
         CleanTable(Database::"Sales Header", TableType::Document, false); // 36

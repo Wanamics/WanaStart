@@ -1,13 +1,13 @@
-report 87103 "wan Apply Vendor Applies-to ID"
+report 87100 "wan Apply Empl. Applies-to ID"
 {
     ApplicationArea = All;
-    Caption = 'Apply Vendor Applies-to ID';
+    Caption = 'Apply Employee Applies-to ID';
     UsageCategory = Administration;
     ProcessingOnly = true;
 
     dataset
     {
-        dataitem(CustVend; Vendor)
+        dataitem(Employee; Employee)
         {
             RequestFilterFields = "No.";
 
@@ -16,10 +16,10 @@ report 87103 "wan Apply Vendor Applies-to ID"
                 DataItemTableView = sorting(Number);
                 trigger OnPreDataItem()
                 begin
-                    HoldApplicationMethod := CustVend."Application Method";
-                    CustVend."Application Method" := CustVend."Application Method"::"Apply to Oldest";
-                    CustVend.Modify(false);
-                    ApplyLedgerEntryQuery.SetRange(No, CustVend."No.");
+                    HoldApplicationMethod := Employee."Application Method";
+                    Employee."Application Method" := Employee."Application Method"::"Apply to Oldest";
+                    Employee.Modify(false);
+                    ApplyLedgerEntryQuery.SetRange(No, Employee."No.");
                     ApplyLedgerEntryQuery.Open();
                 end;
 
@@ -34,8 +34,8 @@ report 87103 "wan Apply Vendor Applies-to ID"
 
                 trigger OnPostDataItem()
                 begin
-                    CustVend."Application Method" := HoldApplicationMethod;
-                    CustVend.Modify(false);
+                    Employee."Application Method" := HoldApplicationMethod;
+                    Employee.Modify(false);
                 end;
             }
             trigger OnPreDataItem()
@@ -60,7 +60,7 @@ report 87103 "wan Apply Vendor Applies-to ID"
         SaveValues = true;
     }
     var
-        ApplyLedgerEntryQuery: Query "wan Apply Vendor Applies-to ID";
+        ApplyLedgerEntryQuery: Query "wan Apply Empl. Applies-to ID";
         GLSetup: Record "General Ledger Setup";
         ProgressDialog: Codeunit "Progress Dialog";
         HoldApplicationMethod: Enum "Application Method";
@@ -80,19 +80,19 @@ report 87103 "wan Apply Vendor Applies-to ID"
             GLSetup."Allow Posting From" := UserSetup."Allow Posting From";
     end;
 
-    local procedure Apply(pQuery: Query "wan Apply Vendor Applies-to ID")
+    local procedure Apply(pQuery: Query "wan Apply Empl. Applies-to ID")
     var
-        LedgerEntry: Record "Vendor Ledger Entry";
+        LedgerEntry: Record "Employee Ledger Entry";
         ApplyUnapplyParameters: Record "Apply Unapply Parameters";
-        VendEntryApplyPostedEntries: Codeunit "VendEntry-Apply Posted Entries";
+        VendEntryApplyPostedEntries: Codeunit "EmplEntry-Apply Posted Entries";
         ApplicationDate: Date;
     begin
-        LedgerEntry.SetCurrentKey("Vendor No.", "Applies-to ID");
-        LedgerEntry.SetRange("Vendor No.", pQuery.No);
+        LedgerEntry.SetCurrentKey("Employee No.", "Applies-to ID");
+        LedgerEntry.SetRange("Employee No.", pQuery.No);
         LedgerEntry.SetRange("Applies-to ID", pQuery.AppliestoID);
         LedgerEntry.SetRange(Open, True);
         LedgerEntry.SetRange("Currency Code", pQuery.CurrencyCode);
-        LedgerEntry.SetRange("Vendor Posting Group", pQuery.PostingGroup);
+        LedgerEntry.SetRange("Employee Posting Group", pQuery.PostingGroup);
 
         if LedgerEntry.FindSet() then
             repeat
@@ -101,14 +101,14 @@ report 87103 "wan Apply Vendor Applies-to ID"
                     LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
                 end else
                     LedgerEntry."Amount to Apply" := 0;
-                LedgerEntry."Accepted Payment Tolerance" := 0;
-                LedgerEntry."Accepted Pmt. Disc. Tolerance" := false;
-                Codeunit.Run(Codeunit::"Vend. Entry-Edit", LedgerEntry);
+                // LedgerEntry."Accepted Payment Tolerance" := 0;
+                // LedgerEntry."Accepted Pmt. Disc. Tolerance" := false;
+                Codeunit.Run(Codeunit::"Empl. Entry-Edit", LedgerEntry);
                 if LedgerEntry."Posting Date" > ApplicationDate then
                     ApplicationDate := LedgerEntry."Posting Date";
             until LedgerEntry.Next() = 0;
 
-        ApplyUnapplyParameters.CopyFromVendLedgEntry(LedgerEntry);
+        ApplyUnapplyParameters.CopyFromEmplLedgEntry(LedgerEntry);
         ApplyUnapplyParameters."Posting Date" := ApplicationDate;
         if GLSetup."Journal Templ. Name Mandatory" then begin
             ApplyUnapplyParameters."Journal Template Name" := GLSetup."Apply Jnl. Template Name";
