@@ -187,6 +187,14 @@ codeunit 87100 "wanaStart Import FR"
                 ;
             18: // Idevise
                 ;
+            //[
+            19:
+                pRec.Validate("External Document No.", CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec."External Document No.")));
+            20:
+                pRec.Validate("Shortcut Dimension 1 Code", pCsvBuffer.Value);
+            21:
+                pRec.Validate("Shortcut Dimension 2 Code", pCsvBuffer.Value);
+            //]
             else
                 OnAfterImportCell(pRec, pCsvBuffer);
         end;

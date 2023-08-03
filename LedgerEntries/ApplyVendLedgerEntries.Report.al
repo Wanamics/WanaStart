@@ -41,7 +41,7 @@ report 87103 "wan Apply Vendor Applies-to ID"
             trigger OnPreDataItem()
             var
                 ConfirmMsg: Label 'Do you want to apply %1 "%2" based on %3?';
-                CustVendLedgerEntry: Record "Employee Ledger Entry";
+                CustVendLedgerEntry: Record "Vendor Ledger Entry";
             begin
                 if CurrReport.UseRequestPage then
                     if not Confirm(ConfirmMsg, false, Count(), TableCaption(), CustVendLedgerEntry.FieldCaption("Applies-to ID")) then
