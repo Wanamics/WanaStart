@@ -3,8 +3,10 @@
 // + columns "External Document No.", "Closed by Entry No." for Vendor & Customer Ledger Entries
 // + columns "Global Dimension 1", "Global Dimension 2" for G/L entries
 // - UsageCategory (must be run by URL Report ID)
+// - FeatureTelemetry
+// - Obsolete & if not CLEAN23
 report 87101 "wan Export G/L Entries - M & A"
-#if not CLEAN23
+// #if not CLEAN23
 {
     ApplicationArea = Basic, Suite;
     Caption = 'Export G/L Entries - M & A';
@@ -13,9 +15,9 @@ report 87101 "wan Export G/L Entries - M & A"
     UsageCategory = ReportsAndAnalysis;
     ]*/
     DataAccessIntent = ReadOnly;
-    ObsoleteReason = 'Use Audit File Export Document with the FEC format selected. The Audit File Export and FEC Audit File extensions must be installed.';
-    ObsoleteState = Pending;
-    ObsoleteTag = '23.0';
+    // ObsoleteReason = 'Use Audit File Export Document with the FEC format selected. The Audit File Export and FEC Audit File extensions must be installed.';
+    // ObsoleteState = Pending;
+    // ObsoleteTag = '23.0';
 
     dataset
     {
@@ -183,19 +185,19 @@ report 87101 "wan Export G/L Entries - M & A"
 
     trigger OnPostReport()
     begin
-        FeatureTelemetry.LogUptake('1000HO4', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::"Used");
+        // FeatureTelemetry.LogUptake('1000HO4', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::"Used");
         ToFileName := GetFileName();
 
         TempBlob.CreateInStream(InStreamObj);
 
         DownloadFromStream(InStreamObj, '', '', '', ToFileName);
 
-        FeatureTelemetry.LogUsage('1000HO5', FRGeneralLedgerTok, 'FR General Ledger Entries for Tax Audits Exported');
+        // FeatureTelemetry.LogUsage('1000HO5', FRGeneralLedgerTok, 'FR General Ledger Entries for Tax Audits Exported');
     end;
 
     trigger OnPreReport()
     begin
-        FeatureTelemetry.LogUptake('1000HO3', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::"Set up");
+        // FeatureTelemetry.LogUptake('1000HO3', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::"Set up");
 
         SetLoadFieldsForRecords();
 
@@ -221,7 +223,7 @@ report 87101 "wan Export G/L Entries - M & A"
 
     trigger OnInitReport()
     begin
-        FeatureTelemetry.LogUptake('1000HO2', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::Discovered);
+        // FeatureTelemetry.LogUptake('1000HO2', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::Discovered);
     end;
 
     var
@@ -229,7 +231,7 @@ report 87101 "wan Export G/L Entries - M & A"
         CustomerPostingGroup: Record "Customer Posting Group";
         VendorPostingGroup: Record "Vendor Posting Group";
         BankAccountPostingGroup: Record "Bank Account Posting Group";
-        FeatureTelemetry: Codeunit "Feature Telemetry";
+        // FeatureTelemetry: Codeunit "Feature Telemetry";
         TempBlob: Codeunit "Temp Blob";
         TypeHelper: Codeunit "Type Helper";
         InStreamObj: InStream;
@@ -920,17 +922,19 @@ report 87101 "wan Export G/L Entries - M & A"
                 begin
                     if wanVendorLedgerEntry.Get(GLEntry."Entry No.") then begin
                         ExternalDocumentNo := wanVendorLedgerEntry."External Document No.";
-                        ClosedByEntryNo := wanVendorLedgerEntry."Closed by Entry No.";
+                        ClosedByEntryNo := GetClosedByEntryNo(wanVendorLedgerEntry."Entry No.", wanVendorLedgerEntry.Open, wanVendorLedgerEntry."Closed by Entry No.");
                     end;
                 end;
             GLEntry."Source Type"::Customer:
                 if wanCustLedgerEntry.Get(GLEntry."Entry No.") then begin
                     ExternalDocumentNo := wanCustLedgerEntry."External Document No.";
                     ClosedByEntryNo := wanCustLedgerEntry."Closed by Entry No.";
+                    ClosedByEntryNo := GetClosedByEntryNo(wanCustLedgerEntry."Entry No.", wanCustLedgerEntry.Open, wanCustLedgerEntry."Closed by Entry No.");
                 end;
             GLEntry."Source Type"::Employee:
                 if wanEmployeeLedgerEntry.Get(GLEntry."Entry No.") then begin
                     ClosedByEntryNo := wanEmployeeLedgerEntry."Closed by Entry No.";
+                    ClosedByEntryNo := GetClosedByEntryNo(wanEmployeeLedgerEntry."Entry No.", wanEmployeeLedgerEntry.Open, wanEmployeeLedgerEntry."Closed by Entry No.");
                 end;
         end;
         exit(
@@ -940,5 +944,14 @@ report 87101 "wan Export G/L Entries - M & A"
             GLEntry."Global Dimension 2 Code"
             );
     end;
+
+    local procedure GetClosedByEntryNo(pEntryNo: Integer; pOpen: Boolean; pClosedByEntryNo: Integer): Integer
+    begin
+        if pClosedByEntryNo <> 0 then
+            exit(pClosedByEntryNo)
+        else
+            if not pOpen then
+                exit(pEntryNo);
+    end;
 }
-#endif
+// #endif
