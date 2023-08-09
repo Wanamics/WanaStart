@@ -17,8 +17,10 @@ report 87103 "wan Apply Vendor Applies-to ID"
                 trigger OnPreDataItem()
                 begin
                     HoldApplicationMethod := CustVend."Application Method";
-                    CustVend."Application Method" := CustVend."Application Method"::"Apply to Oldest";
-                    CustVend.Modify(false);
+                    if CustVend."Application Method" <> CustVend."Application Method"::"Apply to Oldest" then begin
+                        CustVend."Application Method" := CustVend."Application Method"::"Apply to Oldest";
+                        CustVend.Modify(false);
+                    end;
                     ApplyLedgerEntryQuery.SetRange(No, CustVend."No.");
                     ApplyLedgerEntryQuery.Open();
                 end;
@@ -34,8 +36,10 @@ report 87103 "wan Apply Vendor Applies-to ID"
 
                 trigger OnPostDataItem()
                 begin
-                    CustVend."Application Method" := HoldApplicationMethod;
-                    CustVend.Modify(false);
+                    if CustVend."Application Method" <> HoldApplicationMethod then begin
+                        CustVend."Application Method" := HoldApplicationMethod;
+                        CustVend.Modify(false);
+                    end;
                 end;
             }
             trigger OnPreDataItem()
@@ -70,10 +74,12 @@ report 87103 "wan Apply Vendor Applies-to ID"
         UserSetup: Record "User Setup";
     begin
         GLSetup.Get();
+#if v19
         if GLSetup."Journal Templ. Name Mandatory" then begin
             GLSetup.TestField("Apply Jnl. Template Name");
             GLSetup.TestField("Apply Jnl. Batch Name");
         end;
+#endif
         if UserSetup.Get(UserId) and
             (UserSetup."Allow Posting From" < GLSetup."Allow Posting From") and
             (UserSetup."Allow Posting From" <> 0D) then
@@ -86,6 +92,7 @@ report 87103 "wan Apply Vendor Applies-to ID"
         ApplyUnapplyParameters: Record "Apply Unapply Parameters";
         VendEntryApplyPostedEntries: Codeunit "VendEntry-Apply Posted Entries";
         ApplicationDate: Date;
+        xLedgerEntry: Record "Vendor Ledger Entry";
     begin
         LedgerEntry.SetCurrentKey("Vendor No.", "Applies-to ID");
         LedgerEntry.SetRange("Vendor No.", pQuery.No);
@@ -96,14 +103,18 @@ report 87103 "wan Apply Vendor Applies-to ID"
 
         if LedgerEntry.FindSet() then
             repeat
-                if LedgerEntry."Amount to Apply" = 0 then begin
-                    LedgerEntry.CalcFields("Remaining Amount");
-                    LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
-                end else
-                    LedgerEntry."Amount to Apply" := 0;
+                xLedgerEntry := LedgerEntry;
+                // if LedgerEntry."Amount to Apply" = 0 then begin
+                LedgerEntry.CalcFields("Remaining Amount");
+                LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
+                // end else
+                //     LedgerEntry."Amount to Apply" := 0;
                 LedgerEntry."Accepted Payment Tolerance" := 0;
                 LedgerEntry."Accepted Pmt. Disc. Tolerance" := false;
-                Codeunit.Run(Codeunit::"Vend. Entry-Edit", LedgerEntry);
+                if (LedgerEntry."Amount to Apply" <> xLedgerEntry."Amount to Apply") or
+                    (LedgerEntry."Accepted Payment Tolerance" <> xLedgerEntry."Accepted Payment Tolerance") or
+                    (LedgerEntry."Accepted Pmt. Disc. Tolerance" <> xLedgerEntry."Accepted Pmt. Disc. Tolerance") then
+                    Codeunit.Run(Codeunit::"Cust. Entry-Edit", LedgerEntry);
                 if LedgerEntry."Posting Date" > ApplicationDate then
                     ApplicationDate := LedgerEntry."Posting Date";
             until LedgerEntry.Next() = 0;

@@ -7,7 +7,7 @@ report 87100 "wan Apply Empl. Applies-to ID"
 
     dataset
     {
-        dataitem(Employee; Employee)
+        dataitem(CUstVend; Employee)
         {
             RequestFilterFields = "No.";
 
@@ -16,10 +16,12 @@ report 87100 "wan Apply Empl. Applies-to ID"
                 DataItemTableView = sorting(Number);
                 trigger OnPreDataItem()
                 begin
-                    HoldApplicationMethod := Employee."Application Method";
-                    Employee."Application Method" := Employee."Application Method"::"Apply to Oldest";
-                    Employee.Modify(false);
-                    ApplyLedgerEntryQuery.SetRange(No, Employee."No.");
+                    HoldApplicationMethod := CustVend."Application Method";
+                    if CustVend."Application Method" <> CustVend."Application Method"::"Apply to Oldest" then begin
+                        CustVend."Application Method" := CustVend."Application Method"::"Apply to Oldest";
+                        CustVend.Modify(false);
+                    end;
+                    ApplyLedgerEntryQuery.SetRange(No, CustVend."No.");
                     ApplyLedgerEntryQuery.Open();
                 end;
 
@@ -34,8 +36,10 @@ report 87100 "wan Apply Empl. Applies-to ID"
 
                 trigger OnPostDataItem()
                 begin
-                    Employee."Application Method" := HoldApplicationMethod;
-                    Employee.Modify(false);
+                    if CustVend."Application Method" <> HoldApplicationMethod then begin
+                        CustVend."Application Method" := HoldApplicationMethod;
+                        CustVend.Modify(false);
+                    end;
                 end;
             }
             trigger OnPreDataItem()
@@ -70,10 +74,12 @@ report 87100 "wan Apply Empl. Applies-to ID"
         UserSetup: Record "User Setup";
     begin
         GLSetup.Get();
+#if v19
         if GLSetup."Journal Templ. Name Mandatory" then begin
             GLSetup.TestField("Apply Jnl. Template Name");
             GLSetup.TestField("Apply Jnl. Batch Name");
         end;
+#endif
         if UserSetup.Get(UserId) and
             (UserSetup."Allow Posting From" < GLSetup."Allow Posting From") and
             (UserSetup."Allow Posting From" <> 0D) then
@@ -86,6 +92,7 @@ report 87100 "wan Apply Empl. Applies-to ID"
         ApplyUnapplyParameters: Record "Apply Unapply Parameters";
         VendEntryApplyPostedEntries: Codeunit "EmplEntry-Apply Posted Entries";
         ApplicationDate: Date;
+        xLedgerEntry: Record "Employee Ledger Entry";
     begin
         LedgerEntry.SetCurrentKey("Employee No.", "Applies-to ID");
         LedgerEntry.SetRange("Employee No.", pQuery.No);
@@ -96,14 +103,16 @@ report 87100 "wan Apply Empl. Applies-to ID"
 
         if LedgerEntry.FindSet() then
             repeat
-                if LedgerEntry."Amount to Apply" = 0 then begin
-                    LedgerEntry.CalcFields("Remaining Amount");
-                    LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
-                end else
-                    LedgerEntry."Amount to Apply" := 0;
+                xLedgerEntry := LedgerEntry;
+                // if LedgerEntry."Amount to Apply" = 0 then begin
+                LedgerEntry.CalcFields("Remaining Amount");
+                LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
+                // end else
+                //     LedgerEntry."Amount to Apply" := 0;
                 // LedgerEntry."Accepted Payment Tolerance" := 0;
                 // LedgerEntry."Accepted Pmt. Disc. Tolerance" := false;
-                Codeunit.Run(Codeunit::"Empl. Entry-Edit", LedgerEntry);
+                if LedgerEntry."Amount to Apply" <> xLedgerEntry."Amount to Apply" then
+                    Codeunit.Run(Codeunit::"Empl. Entry-Edit", LedgerEntry);
                 if LedgerEntry."Posting Date" > ApplicationDate then
                     ApplicationDate := LedgerEntry."Posting Date";
             until LedgerEntry.Next() = 0;
