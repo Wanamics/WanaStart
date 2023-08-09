@@ -17,8 +17,10 @@ report 87102 "wan Apply Cust. Applies-to ID"
                 trigger OnPreDataItem()
                 begin
                     HoldApplicationMethod := CustVend."Application Method";
-                    CustVend."Application Method" := CustVend."Application Method"::"Apply to Oldest";
-                    CustVend.Modify(false);
+                    if CustVend."Application Method" <> CustVend."Application Method"::"Apply to Oldest" then begin
+                        CustVend."Application Method" := CustVend."Application Method"::"Apply to Oldest";
+                        CustVend.Modify(false);
+                    end;
                     ApplyLedgerEntryQuery.SetRange(No, CustVend."No.");
                     ApplyLedgerEntryQuery.Open();
                 end;
@@ -34,8 +36,10 @@ report 87102 "wan Apply Cust. Applies-to ID"
 
                 trigger OnPostDataItem()
                 begin
-                    CustVend."Application Method" := HoldApplicationMethod;
-                    CustVend.Modify(false);
+                    if CustVend."Application Method" <> HoldApplicationMethod then begin
+                        CustVend."Application Method" := HoldApplicationMethod;
+                        CustVend.Modify(false);
+                    end;
                 end;
             }
             trigger OnPreDataItem()
@@ -88,6 +92,7 @@ report 87102 "wan Apply Cust. Applies-to ID"
         ApplyUnapplyParameters: Record "Apply Unapply Parameters";
         CustEntryApplyPostedEntries: Codeunit "CustEntry-Apply Posted Entries";
         ApplicationDate: Date;
+        xLedgerEntry: Record "Cust. Ledger Entry";
     begin
         LedgerEntry.SetCurrentKey("Customer No.", "Applies-to ID");
         LedgerEntry.SetRange("Customer No.", pQuery.No);
@@ -98,14 +103,18 @@ report 87102 "wan Apply Cust. Applies-to ID"
 
         if LedgerEntry.FindSet() then
             repeat
-                if LedgerEntry."Amount to Apply" = 0 then begin
-                    LedgerEntry.CalcFields("Remaining Amount");
-                    LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
-                end else
-                    LedgerEntry."Amount to Apply" := 0;
+                xLedgerEntry := LedgerEntry;
+                // if LedgerEntry."Amount to Apply" = 0 then begin
+                LedgerEntry.CalcFields("Remaining Amount");
+                LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
+                // end else
+                //     LedgerEntry."Amount to Apply" := 0;
                 LedgerEntry."Accepted Payment Tolerance" := 0;
                 LedgerEntry."Accepted Pmt. Disc. Tolerance" := false;
-                Codeunit.Run(Codeunit::"Cust. Entry-Edit", LedgerEntry);
+                if (LedgerEntry."Amount to Apply" <> xLedgerEntry."Amount to Apply") or
+                    (LedgerEntry."Accepted Payment Tolerance" <> xLedgerEntry."Accepted Payment Tolerance") or
+                    (LedgerEntry."Accepted Pmt. Disc. Tolerance" <> xLedgerEntry."Accepted Pmt. Disc. Tolerance") then
+                    Codeunit.Run(Codeunit::"Cust. Entry-Edit", LedgerEntry);
                 if LedgerEntry."Posting Date" > ApplicationDate then
                     ApplicationDate := LedgerEntry."Posting Date";
             until LedgerEntry.Next() = 0;
