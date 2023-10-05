@@ -1,3 +1,6 @@
+#IF FALSE
+Moved to WanaPort
+/*
 codeunit 87105 "wanaStart Gen. Journal Excel"
 {
     trigger OnRun()
@@ -297,12 +300,6 @@ codeunit 87105 "wanaStart Gen. Journal Excel"
                 pRec.Validate("Bal. VAT Bus. Posting Group", pCell);
             19:
                 pRec.Validate("Bal. VAT Prod. Posting Group", pCell);
-            /*
-            20:
-                pRec."Shortcut Dimension 1 Code" := pCell;
-            21:
-                pRec."Shortcut Dimension 2 Code" := pCell;
-            */
             20 .. 27:
                 ShortcutDimCode[pColumnNo - 19] := pCell;
             28:
@@ -356,3 +353,5 @@ codeunit 87105 "wanaStart Gen. Journal Excel"
     begin
     end;
 }
+*/
+#ENDIF

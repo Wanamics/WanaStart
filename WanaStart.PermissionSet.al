@@ -10,7 +10,7 @@ permissionset 87100 "WANASTART"
         tabledata "wanaStart Direct Posting Buf." = RMID,
         report "wanaStart Check Direct Posting" = X,
         report "wanaStart Clean Data" = X,
-        codeunit "wanaStart Gen. Journal Excel" = X,
+        // codeunit "wanaStart Gen. Journal Excel" = X,
         codeunit "wanaStart Import FR Setup" = X,
         report "wan Apply Cust. Applies-to ID" = X,
         report "wan Apply Vendor Applies-to ID" = X,

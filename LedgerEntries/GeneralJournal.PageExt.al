@@ -2,34 +2,35 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
 {
     actions
     {
-        addlast("F&unctions")
+        /* Moved to WanaPort
+    addlast("F&unctions")
+    {
+        action(wanaStartExcelExport)
         {
-            action(wanaStartExcelExport)
-            {
-                ApplicationArea = All;
-                Caption = 'Excel Export';
-                Image = ExportToExcel;
-                trigger OnAction()
-                var
-                    GenJournalLineExcel: codeunit "wanaStart Gen. Journal Excel";
-                begin
-                    GenJournalLineExcel.Export(Rec);
-                end;
-            }
-            action(wanaStartExcelImport)
-            {
-                ApplicationArea = All;
-                Caption = 'Excel Import';
-                Image = ImportExcel;
-                trigger OnAction()
-                var
-                    GenJournalLineExcel: codeunit "wanaStart Gen. Journal Excel";
-                begin
-                    GenJournalLineExcel.Import(Rec);
-                end;
-            }
-
+            ApplicationArea = All;
+            Caption = 'Excel Export';
+            Image = ExportToExcel;
+            trigger OnAction()
+            var
+                GenJournalLineExcel: codeunit "wanaStart Gen. Journal Excel";
+            begin
+                GenJournalLineExcel.Export(Rec);
+            end;
         }
+        action(wanaStartExcelImport)
+        {
+            ApplicationArea = All;
+            Caption = 'Excel Import';
+            Image = ImportExcel;
+            trigger OnAction()
+            var
+                GenJournalLineExcel: codeunit "wanaStart Gen. Journal Excel";
+            begin
+                GenJournalLineExcel.Import(Rec);
+            end;
+        }
+    }
+    */
         addlast("Opening Balance")
         {
             group(WanaStart)

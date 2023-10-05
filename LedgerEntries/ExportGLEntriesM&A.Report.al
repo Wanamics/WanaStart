@@ -9,7 +9,7 @@ report 87101 "wan Export G/L Entries - M & A"
 // #if not CLEAN23
 {
     ApplicationArea = Basic, Suite;
-    Caption = 'Export G/L Entries - M & A';
+    Caption = 'Export G/L Entries - Merge & Aquisition';
     ProcessingOnly = true;
     /*[
     UsageCategory = ReportsAndAnalysis;
