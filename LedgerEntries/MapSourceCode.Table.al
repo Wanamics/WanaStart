@@ -40,6 +40,10 @@ table 87101 "wanaStart Map Source Code"
         {
             Caption = 'Skip';
         }
+        field(10; "Start"; Boolean)
+        {
+            Caption = 'PiecRef as Ext. Doc. No.';
+        }
     }
     keys
     {

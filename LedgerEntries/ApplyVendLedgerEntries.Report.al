@@ -100,12 +100,13 @@ report 87103 "wan Apply Vendor Applies-to ID"
         LedgerEntry.SetRange(Open, True);
         LedgerEntry.SetRange("Currency Code", pQuery.CurrencyCode);
         LedgerEntry.SetRange("Vendor Posting Group", pQuery.PostingGroup);
+        LedgerEntry.SetAutoCalcFields("Remaining Amount");
 
         if LedgerEntry.FindSet() then
             repeat
                 xLedgerEntry := LedgerEntry;
                 // if LedgerEntry."Amount to Apply" = 0 then begin
-                LedgerEntry.CalcFields("Remaining Amount");
+                // LedgerEntry.CalcFields("Remaining Amount");
                 LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
                 // end else
                 //     LedgerEntry."Amount to Apply" := 0;
@@ -114,7 +115,7 @@ report 87103 "wan Apply Vendor Applies-to ID"
                 if (LedgerEntry."Amount to Apply" <> xLedgerEntry."Amount to Apply") or
                     (LedgerEntry."Accepted Payment Tolerance" <> xLedgerEntry."Accepted Payment Tolerance") or
                     (LedgerEntry."Accepted Pmt. Disc. Tolerance" <> xLedgerEntry."Accepted Pmt. Disc. Tolerance") then
-                    Codeunit.Run(Codeunit::"Cust. Entry-Edit", LedgerEntry);
+                    Codeunit.Run(Codeunit::"Vend. Entry-Edit", LedgerEntry);
                 if LedgerEntry."Posting Date" > ApplicationDate then
                     ApplicationDate := LedgerEntry."Posting Date";
             until LedgerEntry.Next() = 0;

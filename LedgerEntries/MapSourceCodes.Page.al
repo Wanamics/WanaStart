@@ -38,6 +38,10 @@ page 87102 "wanaStart Map Source Codes"
                 {
                     ApplicationArea = All;
                 }
+                field("Unique Document No."; Rec."Start")
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

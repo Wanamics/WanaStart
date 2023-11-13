@@ -148,30 +148,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field Source Code - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3443212447 - Field 620325036 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>PiecRef as Ext. Doc. No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field Start - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3443212447 - Field 236064653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>VAT Prod. Posting Group</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field VAT Prod. Posting Group - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1784869399 - Method 846556168 - NamedType 1387521371" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Analyzing Data</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit wanaStart Gen. Journal Excel - Method AnalyzeData - NamedType ltAnalyzing</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1784869399 - Method 36190024 - NamedType 2981352172" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to create an Excel book for %1 %2(s)?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit wanaStart Gen. Journal Excel - Method Export - NamedType lblConfirm</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1784869399 - Method 3201496503 - NamedType 804005424" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import Excel File</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit wanaStart Gen. Journal Excel - Method Import - NamedType ImportFromExcelTitle</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1784869399 - Method 3201496503 - NamedType 3713533041" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Excel Files (*.xlsx)</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit wanaStart Gen. Journal Excel - Method Import - NamedType ExcelFileCaption</note>
         </trans-unit>
         <trans-unit id="Codeunit 3288642988 - Method 3201496503 - NamedType 2779639592" size-unit="char" translate="yes" xml:space="preserve">
           <source>FR Tax Audit Import</source>
@@ -324,7 +309,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Report wan Apply Vendor Applies-to ID - ReportDataItem CustVend - Method OnPreDataItem - NamedType ConfirmMsg</note>
         </trans-unit>
         <trans-unit id="Report 1117589263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Export G/L Entries - M &amp; A</source>
+          <source>Export G/L Entries - Merge &amp; Aquisition</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report wan Export G/L Entries - M &amp; A - Property Caption</note>
         </trans-unit>
@@ -517,16 +502,6 @@
           <source>Clean Data Before GoLive</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension wanaStart Data Administration - Action wanaStartCleanUp - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3015216602 - Action 2559076774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Excel Export</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension wanaStart General Journal - Action wanaStartExcelExport - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3015216602 - Action 3975133509 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Excel Import</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension wanaStart General Journal - Action wanaStartExcelImport - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 3015216602 - Action 3630933339 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
           <source>WanaStart</source>

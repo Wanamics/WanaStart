@@ -100,12 +100,13 @@ report 87100 "wan Apply Empl. Applies-to ID"
         LedgerEntry.SetRange(Open, True);
         LedgerEntry.SetRange("Currency Code", pQuery.CurrencyCode);
         LedgerEntry.SetRange("Employee Posting Group", pQuery.PostingGroup);
+        LedgerEntry.SetAutoCalcFields("Remaining Amount");
 
         if LedgerEntry.FindSet() then
             repeat
                 xLedgerEntry := LedgerEntry;
                 // if LedgerEntry."Amount to Apply" = 0 then begin
-                LedgerEntry.CalcFields("Remaining Amount");
+                // LedgerEntry.CalcFields("Remaining Amount");
                 LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
                 // end else
                 //     LedgerEntry."Amount to Apply" := 0;

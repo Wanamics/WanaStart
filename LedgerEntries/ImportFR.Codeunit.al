@@ -68,7 +68,7 @@ codeunit 87100 "wanaStart Import FR"
 
     begin
         pCsvBuffer.SetFilter("Line No.", '>1');
-        pCsvBuffer.SetFilter("Field No.", '1|4|5|7|9..');
+        pCsvBuffer.SetFilter("Field No.", '1|3|4|5|7|9..');
         ProgressDialog.Open(ProgressMsg);
         if pCsvBuffer.FindSet then
             repeat
@@ -136,6 +136,7 @@ codeunit 87100 "wanaStart Import FR"
     local procedure ImportCell(var pRec: Record "Gen. Journal Line"; pCsvBuffer: Record "CSV Buffer"); //; pColumnNo: Integer; pCell: Text)
     var
         GLAccount: Record "G/L Account";
+    // ClosingDocumentNo: Label 'START';
     begin
         case pCsvBuffer."Field No." of
             1: // JournalCode
@@ -143,7 +144,7 @@ codeunit 87100 "wanaStart Import FR"
             2: // JournalLib
                 ;
             3: // EcritureNum
-                ;
+                pRec.Validate("Document No.", CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec."Document No.")));
             4: // EcritureDate
                 pRec.Validate("Posting Date", ToDate(pCsvBuffer.Value));
             5: // CompteNum
@@ -157,13 +158,16 @@ codeunit 87100 "wanaStart Import FR"
             9: // PieceRef
                 begin
                     MapAccount(pRec);
-                    pRec.Validate("Document No.", CopyStr(pCsvBuffer.Value, 1, maxstrlen(pRec."Document No.")));
+                    if StartSourceCode."Start" then
+                        pRec.Validate("External Document No.", CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec."External Document No.")))
+                    else
+                        pRec.Validate("Document No.", CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec."Document No.")));
                 end;
             10: // PieceDate
                 pRec.Validate("Document Date", ToDate(pCsvBuffer.Value));
             11: // EcritureLib
                 //if pRec.Description = '' then
-                pRec.Validate(Description, CopyStr(pCsvBuffer.Value, 1, maxstrlen(pRec.Description)));
+                pRec.Validate(Description, CopyStr(pCsvBuffer.Value, 1, MaxStrLen(pRec.Description)));
             //else
             //    pRec.Description := CopyStr(pRec.Description + pCsvBuffer.Value, 1, MaxStrLen(pRec.Description));
             12: // Debit

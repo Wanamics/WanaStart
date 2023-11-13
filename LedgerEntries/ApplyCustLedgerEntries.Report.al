@@ -100,12 +100,13 @@ report 87102 "wan Apply Cust. Applies-to ID"
         LedgerEntry.SetRange(Open, True);
         LedgerEntry.SetRange("Currency Code", pQuery.CurrencyCode);
         LedgerEntry.SetRange("Customer Posting Group", pQuery.PostingGroup);
+        LedgerEntry.SetAutoCalcFields("Remaining Amount");
 
         if LedgerEntry.FindSet() then
             repeat
                 xLedgerEntry := LedgerEntry;
                 // if LedgerEntry."Amount to Apply" = 0 then begin
-                LedgerEntry.CalcFields("Remaining Amount");
+                // LedgerEntry.CalcFields("Remaining Amount");
                 LedgerEntry."Amount to Apply" := LedgerEntry."Remaining Amount";
                 // end else
                 //     LedgerEntry."Amount to Apply" := 0;
