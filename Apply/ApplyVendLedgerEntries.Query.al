@@ -20,6 +20,10 @@ query 87103 "wan Apply Vendor Applies-to ID"
             {
                 Method = Sum;
             }
+            column(NoOfEntry)
+            {
+                Method = Count;
+            }
         }
     }
 }

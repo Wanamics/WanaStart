@@ -93,6 +93,7 @@ report 87100 "wan Apply Empl. Applies-to ID"
         VendEntryApplyPostedEntries: Codeunit "EmplEntry-Apply Posted Entries";
         ApplicationDate: Date;
         xLedgerEntry: Record "Employee Ledger Entry";
+        HasDebit, HasCredit : boolean;
     begin
         LedgerEntry.SetCurrentKey("Employee No.", "Applies-to ID");
         LedgerEntry.SetRange("Employee No.", pQuery.No);
@@ -116,16 +117,22 @@ report 87100 "wan Apply Empl. Applies-to ID"
                     Codeunit.Run(Codeunit::"Empl. Entry-Edit", LedgerEntry);
                 if LedgerEntry."Posting Date" > ApplicationDate then
                     ApplicationDate := LedgerEntry."Posting Date";
+                if LedgerEntry."Remaining Amount" > 0 then
+                    HasDebit := true;
+                if LedgerEntry."Remaining Amount" < 0 then
+                    HasCredit := true;
             until LedgerEntry.Next() = 0;
 
-        ApplyUnapplyParameters.CopyFromEmplLedgEntry(LedgerEntry);
-        ApplyUnapplyParameters."Posting Date" := ApplicationDate;
-        if GLSetup."Journal Templ. Name Mandatory" then begin
-            ApplyUnapplyParameters."Journal Template Name" := GLSetup."Apply Jnl. Template Name";
-            ApplyUnapplyParameters."Journal Batch Name" := GLSetup."Apply Jnl. Batch Name";
+        if HasDebit and HasCredit then begin
+            ApplyUnapplyParameters.CopyFromEmplLedgEntry(LedgerEntry);
+            ApplyUnapplyParameters."Posting Date" := ApplicationDate;
+            if GLSetup."Journal Templ. Name Mandatory" then begin
+                ApplyUnapplyParameters."Journal Template Name" := GLSetup."Apply Jnl. Template Name";
+                ApplyUnapplyParameters."Journal Batch Name" := GLSetup."Apply Jnl. Batch Name";
+            end;
+            if ApplyUnapplyParameters."Posting Date" < GLSetup."Allow Posting From" then
+                ApplyUnapplyParameters."Posting Date" := GLSetup."Allow Posting From";
+            VendEntryApplyPostedEntries.Apply(LedgerEntry, ApplyUnapplyParameters);
         end;
-        if ApplyUnapplyParameters."Posting Date" < GLSetup."Allow Posting From" then
-            ApplyUnapplyParameters."Posting Date" := GLSetup."Allow Posting From";
-        VendEntryApplyPostedEntries.Apply(LedgerEntry, ApplyUnapplyParameters);
     end;
 }

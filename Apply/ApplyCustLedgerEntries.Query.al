@@ -20,6 +20,10 @@ query 87102 "wan Apply Cust. Applies-to ID"
             {
                 Method = Sum;
             }
+            column(NoOfEntry)
+            {
+                Method = Count;
+            }
         }
     }
 }

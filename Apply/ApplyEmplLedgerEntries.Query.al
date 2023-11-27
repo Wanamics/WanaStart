@@ -20,6 +20,10 @@ query 87100 "wan Apply Empl. Applies-to ID"
             {
                 Method = Sum;
             }
+            column(NoOfEntry)
+            {
+                Method = Count;
+            }
         }
     }
 }
