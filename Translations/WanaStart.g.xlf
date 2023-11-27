@@ -78,6 +78,26 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Account Type - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2538533960 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 2 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 1 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 1964727017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 2 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 2 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2783906506 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 3 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 3 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 3041667371 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 4 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 4 Code - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1608961456 - Field 2180470884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>From Account Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -157,6 +177,11 @@
           <source>VAT Prod. Posting Group</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field VAT Prod. Posting Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3288642988 - Method 238975602 - NamedType 3497088895" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Title must be %1 for column %2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit wanaStart Import FR - Method Append - NamedType TitleErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3288642988 - Method 3201496503 - NamedType 2779639592" size-unit="char" translate="yes" xml:space="preserve">
           <source>FR Tax Audit Import</source>
@@ -532,6 +557,16 @@
           <source>Map Source Codes</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension wanaStart General Journal - Action WanaStartMapSourceCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3015216602 - Control 3320823955 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
+          <source>Specifies the value of the Line No. field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension wanaStart General Journal - Control Line No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3015216602 - Control 2720485332 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
+          <source>Specifies the value of the Source Code field.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension wanaStart General Journal - Control Source Code - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PermissionSet 3090612347 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>WanaStart</source>

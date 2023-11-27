@@ -15,47 +15,50 @@ page 87100 "wanaStart Map Accounts"
             {
                 field("FEC CompteNum"; Rec."From Account No.")
                 {
-                    ApplicationArea = All;
                     Editable = false;
                 }
                 field("FEC CompteAuxNum"; Rec."From SubAccount No.")
                 {
-                    ApplicationArea = All;
                     Editable = false;
                 }
                 field("FEC Account Name"; Rec."From Account Name")
                 {
                     Editable = false;
-                    ApplicationArea = All;
                 }
                 field("Account Type"; Rec."Account Type")
                 {
-                    ApplicationArea = All;
                 }
                 field("Account No."; Rec."Account No.")
                 {
-                    ApplicationArea = All;
                 }
                 field(AccountName; GetAccountName())
                 {
-                    ApplicationArea = All;
                     Caption = 'Account Name';
                 }
                 field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
                 {
-                    ApplicationArea = All;
                 }
                 field("Template Code"; Rec."Template Code")
                 {
-                    ApplicationArea = All;
                 }
                 field("Gen. Posting Type"; Rec."Gen. Posting Type")
                 {
-                    ApplicationArea = All;
                 }
+                field("Dimension 1 Code"; Rec."Dimension 1 Code")
+                {
+                }
+                field("Dimension 2 Code"; Rec."Dimension 2 Code")
+                {
+                }
+                field("Dimension 3 Code"; Rec."Dimension 3 Code")
+                {
+                }
+                field("Dimension 4 Code"; Rec."Dimension 4 Code")
+                {
+                }
+
                 field(Skip; Rec.Skip)
                 {
-                    ApplicationArea = All;
                 }
             }
         }

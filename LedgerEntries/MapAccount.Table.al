@@ -102,6 +102,30 @@ table 87100 "wanaStart Map Account"
         {
             Caption = 'Skip';
         }
+        field(11; "Dimension 1 Code"; Code[20])
+        {
+            CaptionClass = '1,2,1';
+            Caption = 'Dimension 2 Code';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1), Blocked = const(false));
+        }
+        field(12; "Dimension 2 Code"; Code[20])
+        {
+            CaptionClass = '1,2,2';
+            Caption = 'Dimension 2 Code';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(2), Blocked = const(false));
+        }
+        field(13; "Dimension 3 Code"; Code[20])
+        {
+            CaptionClass = '1,2,3';
+            Caption = 'Dimension 3 Code';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(3), Blocked = const(false));
+        }
+        field(14; "Dimension 4 Code"; Code[20])
+        {
+            CaptionClass = '1,2,4';
+            Caption = 'Dimension 4 Code';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(4), Blocked = const(false));
+        }
     }
     keys
     {

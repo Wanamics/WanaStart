@@ -53,6 +53,22 @@
             "enableSqlInformationDebugger": true
         },
         {
+            "name": "SYN Formation",
+            "request": "launch",
+            "server": "https://businesscentral.dynamics.com/",
+            "tenant": "7976175f-bf14-44d1-a0fb-d1307bebb8be",
+            "type": "al",
+            "environmentType": "Sandbox",
+            "environmentName": "Formation",
+            "startupObjectType": "Page",
+            // "startupObjectId": 10870,
+            // "schemaUpdateMode": "ForceSync",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true
+        },
+        {
             "name": "Verernity SandBox",
             "request": "launch",
             "server": "https://businesscentral.dynamics.com/",
