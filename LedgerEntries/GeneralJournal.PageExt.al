@@ -54,19 +54,12 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
             group(WanaStart)
             {
                 Caption = 'WanaStart';
-                action(WanaStartImportSetupFEC)
+                action(WanaStartImportFEC)
                 {
-                    Caption = 'Import FR Tax Audit Setup';
+                    Caption = 'Import FEC';
                     ApplicationArea = All;
-                    Image = ImportCodes;
-                    RunObject = Codeunit "wanaStart Import FR Setup";
-                }
-                action(WanaStartMapAccounts)
-                {
-                    Caption = 'Map Accounts';
-                    ApplicationArea = All;
-                    Image = Accounts;
-                    RunObject = page "wanaStart Map Accounts";
+                    Image = ImportChartOfAccounts;
+                    RunObject = codeunit "wanaStart Import FR";
                 }
                 action(WanaStartMapSourceCode)
                 {
@@ -75,12 +68,20 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
                     Image = JournalSetup;
                     RunObject = page "wanaStart Map Source Codes";
                 }
-                action(WanaStartImportFEC)
+                action(WanaStartMapAccounts)
                 {
-                    Caption = 'Import FR Tax Audit';
+                    Caption = 'Map Accounts';
                     ApplicationArea = All;
-                    Image = ImportChartOfAccounts;
-                    RunObject = codeunit "wanaStart Import FR";
+                    Image = Accounts;
+                    RunObject = page "wanaStart Map Accounts";
+                }
+
+                action(WanaStartGetJournalLines)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Get Lines';
+                    Image = GetLines;
+                    RunObject = codeunit "wanaStart Get Journal Lines";
                 }
                 action(WanaStartApply)
                 {
@@ -92,48 +93,48 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
             }
         }
     }
-    local procedure CreateAccounts(var pGenJournalLine: Record "Gen. Journal Line")
-    var
-        GLAccount: Record "G/L Account";
-        Customer: Record Customer;
-        Vendor: Record Vendor;
-    begin
-        if pGenJournalLine.FindSet() then
-            repeat
-                if pGenJournalLine.Description.IndexOf(' ') < 10 then begin
-                    Case pGenJournalLine."Account Type" of
-                        pGenJournalLine."Account Type"::"G/L Account":
-                            begin
-                                GLAccount.Validate("No.", CopyStr(pGenJournalLine.Description, 1, pGenJournalLine.Description.IndexOf(' ') - 1));
-                                GLAccount.Validate("Name", CopyStr(pGenJournalLine.Description, pGenJournalLine.Description.IndexOf(' ') + 1));
-                                if not GLAccount.Find() then
-                                    GLAccount.Insert(true);
-                                pGenJournalLine.Validate("Account No.", GLAccount."No.");
-                                pGenJournalLine.Description := GLAccount.Name;
-                                pGenJournalLine.Modify();
-                            end;
-                        pGenJournalLine."Account Type"::Customer:
-                            begin
-                                Customer.Validate("No.", CopyStr(pGenJournalLine.Description, 1, pGenJournalLine.Description.IndexOf(' ') - 1));
-                                Customer.Validate("Name", CopyStr(pGenJournalLine.Description, pGenJournalLine.Description.IndexOf(' ') + 1));
-                                if not Customer.Find() then
-                                    Customer.Insert(true);
-                                pGenJournalLine.Validate("Account No.", Customer."No.");
-                                pGenJournalLine.Description := Customer.Name;
-                                pGenJournalLine.Modify();
-                            end;
-                        pGenJournalLine."Account Type"::Vendor:
-                            begin
-                                Vendor.Validate("No.", CopyStr(pGenJournalLine.Description, 1, pGenJournalLine.Description.IndexOf(' ') - 1));
-                                Vendor.Validate("Name", CopyStr(pGenJournalLine.Description, pGenJournalLine.Description.IndexOf(' ') + 1));
-                                if not Vendor.Find() then
-                                    Vendor.Insert(true);
-                                pGenJournalLine.Validate("Account No.", Vendor."No.");
-                                pGenJournalLine.Description := Vendor.Name;
-                                pGenJournalLine.Modify();
-                            end;
-                    End;
-                end;
-            until pGenJournalLine.Next() = 0;
-    end;
+    // local procedure CreateAccounts(var pGenJournalLine: Record "Gen. Journal Line")
+    // var
+    //     GLAccount: Record "G/L Account";
+    //     Customer: Record Customer;
+    //     Vendor: Record Vendor;
+    // begin
+    //     if pGenJournalLine.FindSet() then
+    //         repeat
+    //             if pGenJournalLine.Description.IndexOf(' ') < 10 then begin
+    //                 Case pGenJournalLine."Account Type" of
+    //                     pGenJournalLine."Account Type"::"G/L Account":
+    //                         begin
+    //                             GLAccount.Validate("No.", CopyStr(pGenJournalLine.Description, 1, pGenJournalLine.Description.IndexOf(' ') - 1));
+    //                             GLAccount.Validate("Name", CopyStr(pGenJournalLine.Description, pGenJournalLine.Description.IndexOf(' ') + 1));
+    //                             if not GLAccount.Find() then
+    //                                 GLAccount.Insert(true);
+    //                             pGenJournalLine.Validate("Account No.", GLAccount."No.");
+    //                             pGenJournalLine.Description := GLAccount.Name;
+    //                             pGenJournalLine.Modify();
+    //                         end;
+    //                     pGenJournalLine."Account Type"::Customer:
+    //                         begin
+    //                             Customer.Validate("No.", CopyStr(pGenJournalLine.Description, 1, pGenJournalLine.Description.IndexOf(' ') - 1));
+    //                             Customer.Validate("Name", CopyStr(pGenJournalLine.Description, pGenJournalLine.Description.IndexOf(' ') + 1));
+    //                             if not Customer.Find() then
+    //                                 Customer.Insert(true);
+    //                             pGenJournalLine.Validate("Account No.", Customer."No.");
+    //                             pGenJournalLine.Description := Customer.Name;
+    //                             pGenJournalLine.Modify();
+    //                         end;
+    //                     pGenJournalLine."Account Type"::Vendor:
+    //                         begin
+    //                             Vendor.Validate("No.", CopyStr(pGenJournalLine.Description, 1, pGenJournalLine.Description.IndexOf(' ') - 1));
+    //                             Vendor.Validate("Name", CopyStr(pGenJournalLine.Description, pGenJournalLine.Description.IndexOf(' ') + 1));
+    //                             if not Vendor.Find() then
+    //                                 Vendor.Insert(true);
+    //                             pGenJournalLine.Validate("Account No.", Vendor."No.");
+    //                             pGenJournalLine.Description := Vendor.Name;
+    //                             pGenJournalLine.Modify();
+    //                         end;
+    //                 End;
+    //             end;
+    //         until pGenJournalLine.Next() = 0;
+    // end;
 }

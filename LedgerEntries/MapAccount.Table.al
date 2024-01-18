@@ -126,6 +126,33 @@ table 87100 "wanaStart Map Account"
             Caption = 'Dimension 4 Code';
             TableRelation = "Dimension Value".Code where("Global Dimension No." = const(4), Blocked = const(false));
         }
+        field(100; "No. of Lines"; Integer)
+        {
+            FieldClass = FlowField;
+            CalcFormula =
+                Count("wanaStart Import FR Line"
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No.")));
+            Editable = false;
+            BlankZero = true;
+        }
+        field(101; Amount; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula =
+                sum("wanaStart Import FR Line".Amount
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No.")));
+            Editable = false;
+            BlankZero = true;
+        }
+        field(102; "Has Open Lines"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula =
+                exist("wanaStart Import FR Line"
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), Open = const(true)));
+            Editable = false;
+            BlankZero = true;
+        }
     }
     keys
     {
@@ -276,5 +303,54 @@ table 87100 "wanaStart Map Account"
         Rec.Get(pRec."From Account No.");
         Rec."Account No." := pAccountNo;
         Rec.Modify();
+    end;
+
+    procedure GetAccountName(): Text
+    var
+        GLAccount: Record "G/L Account";
+        Customer: Record Customer;
+        Vendor: Record Vendor;
+        Employee: Record Employee;
+        BankAccount: Record "Bank Account";
+    begin
+        GLAccount.SetLoadFields(Name);
+        Customer.SetLoadFields(Name);
+        Vendor.SetLoadFields(Name);
+        // Employee.SetLoadFields(Name);
+        BankAccount.SetLoadFields(Name);
+        case Rec."Account Type" of
+            Rec."Account Type"::"G/L Account":
+                if GLAccount.Get(Rec."Account No.") then
+                    exit(GLAccount.Name);
+            Rec."Account Type"::Customer:
+                if Customer.Get(Rec."Account No.") then
+                    exit(Customer.Name);
+            Rec."Account Type"::Vendor:
+                if Vendor.Get(Rec."Account No.") then
+                    Exit(Vendor.Name);
+            Rec."Account Type"::Employee:
+                if Employee.Get(Rec."Account No.") then
+                    exit(Employee.FullName());
+            Rec."Account Type"::"Bank Account":
+                if BankAccount.Get(Rec."Account No.") then
+                    exit(BankAccount.Name);
+        end;
+    end;
+
+    procedure GetVATBusPostingGroup(): Code[20]
+    var
+        Customer: Record Customer;
+        Vendor: Record Vendor;
+    begin
+        Customer.SetLoadFields("VAT Bus. Posting Group");
+        Vendor.SetLoadFields("VAT Bus. Posting Group");
+        case Rec."Account Type" of
+            Rec."Account Type"::Customer:
+                if Customer.Get(Rec."Account No.") then
+                    exit(Customer."VAT Bus. Posting Group");
+            Rec."Account Type"::Vendor:
+                if Vendor.Get(Rec."Account No.") then
+                    Exit(Vendor."VAT Bus. Posting Group");
+        end;
     end;
 }

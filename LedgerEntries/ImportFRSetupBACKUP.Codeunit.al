@@ -1,3 +1,4 @@
+#if FALSE
 codeunit 87101 "wanaStart Import FR Setup"
 {
     trigger OnRun()
@@ -110,3 +111,4 @@ codeunit 87101 "wanaStart Import FR Setup"
         end;
     end;
 }
+#endif

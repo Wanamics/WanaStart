@@ -25,15 +25,27 @@ page 87100 "wanaStart Map Accounts"
                 {
                     Editable = false;
                 }
+                field("No. of Lines"; Rec."No. of Lines")
+                {
+                    Visible = false;
+                }
+                field(Amount; Rec.Amount)
+                {
+                }
+                field("Has Open Lines"; Rec."Has Open Lines") { }
                 field("Account Type"; Rec."Account Type")
                 {
                 }
                 field("Account No."; Rec."Account No.")
                 {
                 }
-                field(AccountName; GetAccountName())
+                field(AccountName; Rec.GetAccountName())
                 {
                     Caption = 'Account Name';
+                }
+                field(VATBusPostingGroup; Rec.GetVATBusPostingGroup())
+                {
+                    Caption = 'VAT Bus. Posting Group';
                 }
                 field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
                 {
@@ -56,7 +68,6 @@ page 87100 "wanaStart Map Accounts"
                 field("Dimension 4 Code"; Rec."Dimension 4 Code")
                 {
                 }
-
                 field(Skip; Rec.Skip)
                 {
                 }
@@ -67,14 +78,15 @@ page 87100 "wanaStart Map Accounts"
     {
         area(Processing)
         {
+            // action(ImportFEC)
+            // {
+            //     Caption = 'Import FR Tax Audit File';
+            //     Image = ImportCodes;
+            //     RunObject = Codeunit "wanaStart Import FR";
+            // }
             action(MapAccounts)
             {
                 Caption = 'Map Account Nos.';
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedCategory = Process;
-                PromotedOnly = true;
-
                 trigger OnAction()
                 var
                     lRec: Record "wanaStart Map Account";
@@ -90,32 +102,22 @@ page 87100 "wanaStart Map Accounts"
             action(UpdateAccounts)
             {
                 Caption = 'Set Values';
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedCategory = Process;
-                PromotedOnly = true;
-
                 trigger OnAction()
                 var
                     lRec: Record "wanaStart Map Account";
-                    GetValues: Page "wanaStart Set Accounts";
+                    MapAccountUpdate: Page "wanaStart Map Account Update";
                     ConfirmMsg: Label 'Do-you want to set %1 account(s)?';
                 begin
-                    if GetValues.RunModal() = Action::OK then begin
+                    if MapAccountUpdate.RunModal() = Action::OK then begin
                         CurrPage.SetSelectionFilter(lRec);
                         if Confirm(ConfirmMsg, true, lRec.Count()) then
-                            GetValues.Update(lRec);
+                            MapAccountUpdate.Update(lRec);
                     end;
                 end;
             }
             action(CreateAccounts)
             {
                 Caption = 'Create Accounts';
-                ApplicationArea = All;
-                Promoted = true;
-                PromotedCategory = Process;
-                PromotedOnly = true;
-
                 trigger OnAction()
                 var
                     lRec: Record "wanaStart Map Account";
@@ -128,32 +130,43 @@ page 87100 "wanaStart Map Accounts"
                 end;
             }
         }
+        area(Reporting)
+        {
+            action(CheckVAT)
+            {
+                Caption = 'Check VAT Codeunit';
+                trigger OnAction()
+                begin
+                    Codeunit.Run(Codeunit::"wanaStart Import FR Check VAT")
+                    // Xmlport.Run(Xmlport::"wanaStart ImportFR Check VAT", false, true);
+                end;
+            }
+            action(CheckVAT_XmlPort)
+            {
+                Caption = 'Check VAT XmlPort';
+                trigger OnAction()
+                begin
+                    // Codeunit.Run(Codeunit::"wanaStart Import FR Check VAT")
+                    Xmlport.Run(Xmlport::"wanaStart ImportFR Check VAT");
+                end;
+            }
+        }
+        area(Navigation)
+        {
+            // action(MapSourceCodes)
+            // {
+            //     Caption = 'Map Source Codes';
+            //     Image = JournalSetup;
+            //     RunObject = page "wanaStart Map Source Codes";
+            // }
+            action(Lines)
+            {
+                Caption = 'Lines';
+                Image = LedgerEntries;
+                RunObject = page "wanaStart Import Lines";
+                RunPageLink = CompteNum = field("From Account No."), CompAuxNum = field("From SubAccount No.");
+                ShortcutKey = 'Ctrl+F7';
+            }
+        }
     }
-    local procedure GetAccountName(): Text
-    var
-        GLAccount: Record "G/L Account";
-        Customer: Record Customer;
-        Vendor: Record Vendor;
-        Employee: Record Employee;
-        BankAccount: Record "Bank Account";
-    begin
-        case Rec."Account Type" of
-            Rec."Account Type"::"G/L Account":
-                if GLAccount.Get(Rec."Account No.") then
-                    exit(GLAccount.Name);
-            Rec."Account Type"::Customer:
-                if Customer.Get(Rec."Account No.") then
-                    exit(Customer.Name);
-            Rec."Account Type"::Vendor:
-                if Vendor.Get(Rec."Account No.") then
-                    Exit(Vendor.Name);
-            Rec."Account Type"::Employee:
-                if Employee.Get(Rec."Account No.") then
-                    exit(Employee.FullName());
-            Rec."Account Type"::"Bank Account":
-                if BankAccount.Get(Rec."Account No.") then
-                    exit(BankAccount.Name);
-        end;
-    end;
-
 }

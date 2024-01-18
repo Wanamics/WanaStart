@@ -44,6 +44,13 @@ table 87101 "wanaStart Map Source Code"
         {
             Caption = 'PiecRef as Ext. Doc. No.';
         }
+        field(100; "No. of Lines"; Integer)
+        {
+            FieldClass = FlowField;
+            CalcFormula = Count("wanaStart Import FR Line" where(JournalCode = field("Source Code")));
+            Editable = false;
+            BlankZero = true;
+        }
     }
     keys
     {

@@ -1,6 +1,6 @@
-page 87101 "wanaStart Set Accounts"
+page 87101 "wanaStart Map Account Update"
 {
-    Caption = 'Set';
+    Caption = 'Map Account Update';
     SaveValues = true;
     PageType = StandardDialog; //ConfirmationDialog;
     SourceTable = "wanaStart Map Account";
@@ -20,10 +20,10 @@ page 87101 "wanaStart Set Accounts"
             {
                 ApplicationArea = All;
             }
-            field(Skip; rec.Skip)
-            {
-                ApplicationArea = All;
-            }
+            // field(Skip; rec.Skip)
+            // {
+            //     ApplicationArea = All;
+            // }
         }
     }
 

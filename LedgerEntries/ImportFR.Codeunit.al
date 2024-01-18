@@ -1,6 +1,5 @@
-codeunit 87100 "wanaStart Import FR"
+codeunit 87101 "wanaStart Import FR"
 {
-    TableNo = "Gen. Journal Line";
     trigger OnRun()
     var
         ImportFromExcelTitle: Label 'Import FR Tax Audit';
@@ -9,16 +8,19 @@ codeunit 87100 "wanaStart Import FR"
         iStream: InStream;
         FileName: Text;
         CompanyInformation: Record "Company Information";
-        ConfirmMsg: Label 'Warning, %1 line(s) of this journal will be deleted.';
         ContinueMsg: Label 'Do-you want to continue?';
         StartDateTime: DateTime;
         DoneMsg: Label '%1 lines imported in %2.';
         FileNameMsg: Label 'Warning, File name %1 does not match "%2" %3.';
         Tab: Text[1];
+        DeleteLines: Label 'Do you want to delete %1 previous lines?';
     begin
-        if not Rec.IsEmpty() then
-            if not Confirm(ConfirmMsg + '\' + ContinueMsg, false, Rec.Count()) then
-                error('');
+        if not ImportLine.IsEmpty then
+            if not Confirm(DeleteLines, false, ImportLine.Count) then
+                exit
+            else
+                ImportLine.DeleteAll();
+
         if UploadIntoStream('', '', '', FileName, iStream) then begin
             CompanyInformation.Get();
             CompanyInformation.TestField("VAT Registration No.");
@@ -26,17 +28,14 @@ codeunit 87100 "wanaStart Import FR"
                 if not Confirm(FileNameMsg + '\' + ContinueMsg, false, FileName, CompanyInformation.FieldCaption("VAT Registration No."), CompanyInformation."VAT Registration No.") then
                     Error('');
 
-            Rec.DeleteAll(true);
-
             StartDateTime := CurrentDateTime;
             SwitchTextEncoding(iStream);
-
             CsvBuffer.LockTable();
             Tab[1] := 9;
             CsvBuffer.LoadDataFromStream(iStream, Tab, '"');
-            Import(Rec);
+            Import();
             CsvBuffer.DeleteAll();
-            Message(DoneMsg, Rec.Count(), CurrentDateTime - StartDateTime);
+            Message(DoneMsg, ImportLine."Line No.", CurrentDateTime - StartDateTime);
         end;
     end;
 
@@ -44,193 +43,126 @@ codeunit 87100 "wanaStart Import FR"
         RowNo: Integer;
         ColumnNo: Integer;
         CsvBuffer: Record "CSV Buffer" temporary;
-        Columns: Dictionary of [Integer, Text];
-        MapAccount: Record "wanaStart Map Account";
         MapSourceCode: Record "wanaStart Map Source Code";
+        MapAccount: Record "wanaStart Map Account";
+        ImportLine: Record "wanaStart Import FR Line";
+        JournalLib: Text[100];
+        CompteLib: Text[100];
+        CompAuxLib: Text[100];
 
     local procedure SwitchTextEncoding(var pInStream: InStream)
-    var
-        TempBlob: Codeunit "Temp Blob";
-        oStream: OutStream;
     begin
-        /*
-        TempBlob.CreateOutStream(oStream, TextEncoding::UTF8);
-        CopyStream(oStream, pInStream);
-        TempBlob.CreateInStream(pInStream);
-        */
+        //TODO
     end;
 
-    local procedure Import(pRec: Record "Gen. Journal Line")
+    local procedure Import()
     var
         LineNo: Integer;
         Next: Integer;
-        ProgressMsg: Label 'FR Tax Audit Import';
+        ProgressMsg: Label 'FR Tax Audit Import...';
+        DoneMsg: Label '%1 account(s) to map inserted.';
         ProgressDialog: Codeunit "Excel Buffer Dialog Management";
     begin
-        CsvBuffer.SetFilter("Line No.", '>1');
-        CsvBuffer.SetFilter("Field No.", Select());
+        CsvBuffer.SetFilter(CsvBuffer."Line No.", '>1');
+        // CsvBuffer.SetFilter(CsvBuffer."Field No.", '1..2|5..8');
+        // CsvBuffer.SetFilter(CsvBuffer."Field No.", '1..14');
         ProgressDialog.Open(ProgressMsg);
         if CsvBuffer.FindSet then
             repeat
                 ProgressDialog.SetProgress(CsvBuffer."Line No.");
-                Init(pRec);
+                InitLine();
                 LineNo := CsvBuffer."Line No.";
                 repeat
-                    ImportCell(pRec);
+                    ImportCell();
                     Next := CsvBuffer.Next;
                 until (Next = 0) or (CsvBuffer."Line No." <> LineNo);
-                Insert(pRec);
+                InsertLine();
             until Next = 0;
+        SetVatPercent();
+        ProgressDialog.Close();
     end;
 
-    local procedure Select() ReturnValue: Text
+    local procedure InitLine()
     begin
-        Append(ReturnValue, 1, 'JournalCode');
-        Append(ReturnValue, 3, 'EcritureNum');
-        Append(ReturnValue, 4, 'EcritureDate');
-        Append(ReturnValue, 5, 'CompteNum');
-        Append(ReturnValue, 7, 'CompAuxNum');
-        Append(ReturnValue, 9, 'PieceRef');
-        Append(ReturnValue, 10, 'PieceDate');
-        Append(ReturnValue, 11, 'EcritureLib');
-        Append(ReturnValue, 12, 'Debit');
-        Append(ReturnValue, 13, 'Credit');
-        Append(ReturnValue, 14, 'EcritureLet');
-        ReturnValue += '|19..';
+        ImportLine.Init();
+        ImportLine."Line No." := CsvBuffer."Line No.";
     end;
 
-    local procedure Append(var pSelect: Text; pColumnNo: Integer; pTitle: Text)
-    var
-        TitleErr: Label 'Title must be %1 for column %2';
+    local procedure InsertLine()
     begin
-        if pSelect <> '' then
-            pSelect += '|';
-        pSelect += Format(pColumnNo);
-        if not CsvBuffer.Get(1, pColumnNo) or (CsvBuffer.Value <> pTitle) then
-            Error(TitleErr, pTitle, pColumnNo);
+        if ImportLine.JournalCode <> MapSourceCode."Source Code" then
+            if not MapSourceCode.Get(ImportLine.JournalCode) then begin
+                MapSourceCode.Init();
+                MapSourceCode."From Source Code" := ImportLine.JournalCode;
+                MapSourceCode."From Source Name" := JournalLib;
+                MapSourceCode.Insert();
+            end;
+        if (ImportLine.CompteNum <> MapAccount."From Account No.") or (ImportLine.CompAuxNum <> MapAccount."From SubAccount No.") then
+            if not MapAccount.Get(ImportLine.CompteNum, ImportLine.CompAuxNum) then begin
+                MapAccount.Init();
+                MapAccount."From Account No." := ImportLine.CompteNum;
+                MapAccount."From SubAccount No." := ImportLine.CompAuxNum;
+                if ImportLine.CompAuxNum = '' then
+                    MapAccount."From Account Name" := CompteLib
+                else
+                    MapAccount."From Account Name" := CompAuxLib;
+                MapAccount.Insert();
+            end;
+        ImportLine.Amount := ImportLine.Debit - ImportLine.Credit;
+        ImportLine.Open := (ImportLine.CompAuxNum <> '') and (ImportLine.EcritureLet = '');
+        OnBeforeInsert(ImportLine);
+        ImportLine.Insert();
     end;
 
-    local procedure Init(var pRec: Record "Gen. Journal Line")
-    var
-        GenJournalTemplate: Record "Gen. Journal Template";
-        GenJournalBatch: Record "Gen. Journal Batch";
-    begin
-        pRec.Init;
-        GenJournalTemplate.Get(pRec."Journal Template Name");
-        GenJournalBatch.Get(pRec."Journal Template Name", pRec."Journal Batch Name");
-        pRec."Reason Code" := GenJournalBatch."Reason Code";
-        MapAccount.Init();
-        Clear(Columns);
-    end;
-
-    local procedure Insert(var pRec: Record "Gen. Journal Line")
-    begin
-        if MapAccount.Skip or MapSourceCode.Skip or
-            (MapAccount."Gen. Posting Type" <> MapAccount."Gen. Posting Type"::" ") and
-            (MapAccount."Gen. Posting Type" = MapSourceCode."Gen. Posting Type") then
-            exit;
-        if MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" " then begin
-            pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
-            if IsInvoice(MapSourceCode."Gen. Posting Type", pRec) then
-                pRec.Validate("Document Type", pRec."Document Type"::Invoice)
-            else
-                pRec.Validate("Document Type", pRec."Document Type"::"Credit Memo");
-            if pRec."Account Type" in [pRec."Account Type"::Vendor, prec."Account Type"::Customer] then
-                SetBalanceVAT(pRec);
-            //BalanceDocumentNo := pRec."Document No.";
-        end;
-
-        if pRec."Account No." = '' then
-            pRec.Description := CopyStr('!' + MapAccount."From Account No." + '|' + MapAccount."From SubAccount No." + '!' + pRec.Description, 1, MaxStrLen(prec.Description));
-
-        if not (pRec."Account Type" in [pRec."Account Type"::Customer, pRec."Account Type"::Vendor]) then
-            pRec."Applies-to ID" := '';
-
-        // if ((pRec."Account Type" = pRec."Account Type"::Vendor) or (pRec."Bal. Account Type" = pRec."Account Type"::Vendor)) and
-        //     (PurchaseSetup."Ext. Doc. No. Mandatory")
-        // or
-        //    ((pRec."Account Type" = pRec."Account Type"::Customer) or (pRec."Bal. Account Type" = pRec."Account Type"::Customer)) and
-        //     (SalesSetup."Ext. Doc. No. Mandatory") then
-        //     pRec.TestField("External Document No."); // := pRec."Document No.";
-        if (pRec."Account Type" = pRec."Account Type"::Vendor) and
-            (pRec."External Document No." <> '') and
-            (pRec."Document Type" in [pRec."Document Type"::Invoice, pRec."Document Type"::"Credit Memo"]) then
-            SetUniqueExternalDocumentNo(pRec);
-        pRec."Line No." += 10000;
-        OnBeforeInsert(pRec, Columns);
-        pRec.Insert(true);
-        MapDimensions(pRec);
-        OnAfterInsert(pRec, Columns);
-    end;
-
-    local procedure ToDecimal(pCell: Text) ReturnValue: Decimal
-    begin
-        Evaluate(ReturnValue, pCell);
-    end;
-
-    local procedure ToDate(pCell: Text) ReturnValue: Date
-    begin
-        if not Evaluate(ReturnValue, pCell.Substring(7, 2) + pCell.Substring(5, 2) + pCell.Substring(1, 4)) then
-            Evaluate(ReturnValue, pCell);
-    end;
-
-    local procedure ImportCell(var pRec: Record "Gen. Journal Line");
-    var
-        GLAccount: Record "G/L Account";
+    local procedure ImportCell();
     begin
         case CsvBuffer."Field No." of
-            1: // JournalCode
-                pRec.Validate("Source Code", ToSourceCode(CsvBuffer.Value));
-            // 2: // JournalLib
-            //     ;
-            3: // EcritureNum
-                pRec.Validate("Document No.", CopyStr(CsvBuffer.Value, 1, MaxStrLen(pRec."Document No.")));
-            4: // EcritureDate
-                pRec.Validate("Posting Date", ToDate(CsvBuffer.Value));
-            5: // CompteNum
-                MapAccount."From Account No." := CsvBuffer.Value;
-            // 6: // CompteLib
-            //     ;
-            7: // CompteAuxNum
-                MapAccount."From SubAccount No." := CsvBuffer.Value;
-            // 8: // CompteAuxLib
-            //     ;
-            9: // PieceRef
-                begin
-                    ToAccount(pRec);
-                    if MapSourceCode."Start" then
-                        pRec.Validate("External Document No.", CopyStr(CsvBuffer.Value, 1, MaxStrLen(pRec."External Document No.")))
-                    else
-                        pRec.Validate("Document No.", CopyStr(CsvBuffer.Value, 1, MaxStrLen(pRec."Document No.")));
-                end;
-            10: // PieceDate
-                pRec.Validate("Document Date", ToDate(CsvBuffer.Value));
-            11: // EcritureLib
-                //if pRec.Description = '' then
-                pRec.Validate(Description, CopyStr(CsvBuffer.Value, 1, MaxStrLen(pRec.Description)));
-            //else
-            //    pRec.Description := CopyStr(pRec.Description + CsvBuffer.Value, 1, MaxStrLen(pRec.Description));
-            12: // Debit
-                pRec.Validate("Debit Amount", ToDecimal(CsvBuffer.Value));
-            13: // Credit
+            1:
+                ImportLine.JournalCode := CsvBuffer.Value;
+            2:
+                JournalLib := CsvBuffer.Value;
+            3:
+                ImportLine.EcritureNum := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.EcritureNum));
+            4:
+                ImportLine.EcritureDate := ToDate(CsvBuffer.Value);
+            5:
+                ImportLine.CompteNum := CsvBuffer.Value;
+            6:
+                CompteLib := CsvBuffer.Value;
+            7:
+                ImportLine.CompAuxNum := CsvBuffer.Value;
+            8:
+                CompAuxLib := CsvBuffer.Value;
+            9:
+                ImportLine.PieceRef := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.PieceRef));
+            10:
+                ImportLine.PieceDate := ToDate(CsvBuffer.Value);
+            11:
+                ImportLine.EcritureLib := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.EcritureLib));
+            12:
+                ImportLine.Debit := ToDecimal(CsvBuffer.Value);
+            13:
                 case CsvBuffer.Value of
                     'D':
                         ;
                     'C':
-                        pRec.Validate("Credit Amount", pRec."Debit Amount")
+                        begin
+                            ImportLine.Credit := ImportLine.Debit;
+                            ImportLine.Debit := 0;
+                        end;
                     else
-                        pRec.Validate("Credit Amount", ToDecimal(CsvBuffer.Value));
+                        ImportLine.Credit := ToDecimal(CsvBuffer.Value);
                 end;
-            14: // EcritureLet
-                pRec.Validate("Applies-to ID", CopyStr(CsvBuffer.Value, 1, MaxStrLen(pRec."Applies-to ID")));
-            // 15: // DateLet
-            //     ;
-            // 16: // ValidDate
-            //     ;
-            // 17:// MontantDev
-            //     ;
-            // 18: // Idevise
-            //     ;
+            14:
+                ImportLine.EcritureLet := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.EcritureLet));
+            15:
+                ImportLine.DateLet := ToDate(CsvBuffer.Value);
+            16:
+                ImportLine.ValidDate := ToDate(CsvBuffer.Value);
+            17:
+                ImportLine.MontantDev := ToDecimal(CsvBuffer.Value);
+            18:
+                ImportLine.Idevise := CsvBuffer.Value;
             // //[
             // 19:
             //     pRec.Validate("External Document No.", CopyStr(CsvBuffer.Value, 1, MaxStrLen(pRec."External Document No.")));
@@ -242,114 +174,65 @@ codeunit 87100 "wanaStart Import FR"
             //     pRec.Validate("Shortcut Dimension 2 Code", CsvBuffer.Value);
             // //]
             else
-                // OnAfterImportCell(pRec, CsvBuffer);
-                Columns.Add(CsvBuffer."Field No.", CsvBuffer.Value);
+                OnAfterImportCell(ImportLine, CsvBuffer);
         end;
     end;
 
-    local procedure ToSourceCode(pCode: Code[10]): Code[10]
+    local procedure ToDecimal(pCell: Text) ReturnValue: Decimal
     begin
-        if pCode <> MapSourceCode."From Source Code" then
-            MapSourceCode.Get(pCode);
-        exit(MapSourceCode."Source Code");
+        if pCell = '' then
+            exit(0);
+        Evaluate(ReturnValue, pCell);
     end;
 
-    local procedure ToAccount(var pRec: Record "Gen. Journal Line")
+    local procedure ToDate(pCell: Text) ReturnValue: Date
     begin
-        if MapAccount.Get(MapAccount."From Account No.", MapAccount."From SubAccount No.") and
-            (MapAccount."Account No." <> '') then begin
-            pRec.Validate("Account Type", MapAccount."Account Type");
-            pRec.Validate("Account No.", MapAccount."Account No.");
-        end;
+        if pCell = '' then
+            exit(0D);
+        if not Evaluate(ReturnValue, pCell.Substring(7, 2) + pCell.Substring(5, 2) + pCell.Substring(1, 4)) then
+            Evaluate(ReturnValue, pCell);
     end;
 
-    local procedure IsInvoice(pGenPostingType: enum "General Posting Type"; pRec: Record "Gen. Journal Line"): Boolean
-    begin
-        case pGenPostingType of
-            pGenPostingType::Purchase:
-                exit((pRec."Account Type" = pRec."Account type"::Vendor) xor (pRec.Amount >= 0));
-            pGenPostingType::Sale:
-                exit((pRec."Account Type" = pRec."Account type"::Customer) xor (pRec.Amount <= 0));
-        end;
-    end;
-
-    local procedure SetBalanceVAT(var pRec: Record "Gen. Journal Line")
-    begin
-        pRec.Validate("Bal. Gen. Posting Type", MapSourceCode."Gen. Posting Type");
-        case pRec."Account Type" of
-            pRec."Account Type"::Customer:
-                SetCustomerVATBusPostingGroup(pRec);
-            pRec."Account Type"::Vendor:
-                SetVendorVATBusPostingGroup(pRec);
-        end;
-        if MapAccount."VAT Prod. Posting Group" <> '' then
-            pRec.Validate("Bal. VAT Prod. Posting Group", MapAccount."VAT Prod. Posting Group")
-        else
-            if MapSourceCode."VAT Prod. Posting Group" <> '' then
-                pRec.Validate("Bal. VAT Prod. Posting Group", MapSourceCode."VAT Prod. Posting Group");
-        pRec.TestField("Bal. VAT Prod. Posting Group");
-    end;
-
-    local procedure SetCustomerVATBusPostingGroup(var pRec: Record "Gen. Journal Line");
+    local procedure SetVATPercent()
     var
-        Customer: Record Customer;
+        ImportLine: Record "wanaStart Import FR Line";
     begin
-        Customer.SetLoadFields("VAT Bus. Posting Group");
-        if Customer.Get(pRec."Account No.") then
-            pRec.Validate("Bal. VAT Bus. Posting Group", Customer."VAT Bus. Posting Group");
-    end;
-
-    local procedure SetVendorVATBusPostingGroup(var pRec: Record "Gen. Journal Line");
-    var
-        Vendor: Record Vendor;
-    begin
-        Vendor.SetLoadFields("VAT Bus. Posting Group");
-        if Vendor.Get(pRec."Account No.") then
-            pRec.Validate("Bal. VAT Bus. Posting Group", Vendor."VAT Bus. Posting Group");
-    end;
-
-    local procedure SetUniqueExternalDocumentNo(var pRec: Record "Gen. Journal Line")
-    var
-        lRec: Record "Gen. Journal Line";
-        i: Integer;
-    begin
-        lRec.SetRange("Journal Template Name", pRec."Journal Template Name");
-        lRec.SetRange("Journal Batch Name", pRec."Journal Batch Name");
-        lRec.SetRange("Account Type", pRec."Account Type");
-        lRec.SetRange("Account No.", prec."Account No.");
-        lRec.SetRange("External Document No.", pRec."External Document No.");
-        if lRec.FindSet() then
+        ImportLine.SetFilter(CompAuxNum, '<>%1', '');
+        // ImportLine.SetRange(Open, true);
+        if ImportLine.FindSet() then
             repeat
-                i += 1;
-                pRec."External Document No." := lRec."External Document No." + '.' + format(i);
-                lRec.SetRange("External Document No.", pRec."External Document No.");
-            until lRec.IsEmpty();
+                ImportLine."VAT %" := VATPercent((ImportLine));
+                if ImportLine."VAT %" <> 0 then
+                    ImportLine.Modify();
+            until ImportLine.Next() = 0;
     end;
 
-    local procedure MapDimensions(var pRec: Record "Gen. Journal Line"): Boolean
+    local procedure VATPercent(Rec: Record "wanaStart Import FR Line"): Decimal
     var
-        DimensionSetId: Integer;
+        ImportLine: Record "wanaStart Import FR Line";
     begin
-        DimensionSetId := pRec."Dimension Set ID";
-        if MapAccount."Dimension 1 Code" <> '' then
-            pRec.ValidateShortcutDimCode(1, MapAccount."Dimension 1 Code");
-        if MapAccount."Dimension 2 Code" <> '' then
-            pRec.ValidateShortcutDimCode(2, MapAccount."Dimension 2 Code");
-        if MapAccount."Dimension 3 Code" <> '' then
-            pRec.ValidateShortcutDimCode(3, MapAccount."Dimension 3 Code");
-        if MapAccount."Dimension 4 Code" <> '' then
-            pRec.ValidateShortcutDimCode(4, MapAccount."Dimension 4 Code");
-        if pRec."Dimension Set ID" <> DimensionSetId then
-            pRec.Modify(true);
+        if Rec.CompAuxNum = '' then
+            exit;
+        ImportLine.SetCurrentKey(JournalCode, PieceRef, EcritureNum);
+        ImportLine.SetRange(JournalCode, Rec.JournalCode);
+        ImportLine.SetRange(EcritureDate, Rec.EcritureDate);
+        ImportLine.SetRange(EcritureNum, Rec.EcritureNum);
+        ImportLine.SetRange(PieceRef, Rec.PieceRef);
+        ImportLine.SetFilter(CompteNum, '445*');
+        ImportLine.CalcSums(Amount);
+        if Rec.Amount + ImportLine.Amount = 0 then
+            exit(0)
+        else
+            exit(Abs(ImportLine.Amount / (Rec.Amount + ImportLine.Amount) * 100));
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeInsert(var pRec: Record "Gen. Journal Line"; var pColumns: Dictionary of [Integer, Text])
+    local procedure OnAfterImportCell(var ImportLine: Record "wanaStart Import FR Line"; var CsvBuffer: Record "CSV Buffer")
     begin
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnAfterInsert(var pRec: Record "Gen. Journal Line"; var pColumns: Dictionary of [Integer, Text])
+    local procedure OnBeforeInsert(var ImportLine: Record "wanaStart Import FR Line")
     begin
     end;
 }

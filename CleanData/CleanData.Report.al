@@ -33,6 +33,9 @@ report 87109 "wanaStart Clean Data"
         tabledata "Bank Account Statement" = MD, // 275
         tabledata "Bank Account Statement Line" = MD, // 276
         tabledata "Phys. Inventory Ledger Entry" = MD, // 281
+        tabledata "Issued Reminder Header" = MD, // 297
+        tabledata "Issued Reminder Line" = MD, // 298
+        tabledata "Reminder/Fin. Charge Entry" = MD, // 300
         tabledata "Reservation Entry" = MD, // 337
         tabledata "Item Application Entry" = MD, // 339
         tabledata "Item Application Entry History" = MD, // 343
@@ -437,6 +440,7 @@ report 87109 "wanaStart Clean Data"
         PurchRcptLine: Record "Purch. Rcpt. Line";
         PurchInvHeader: Record "Purch. Inv. Header";
         PurchCrMemoHeader: Record "Purch. Cr. Memo Hdr.";
+        IssuedReminderHeader: Record "Issued Reminder Header";
         Job: Record "Job";
         AssembleToOrderLink: Record "Assemble-to-Order Link";
         Opportunity: Record Opportunity;
@@ -524,6 +528,13 @@ report 87109 "wanaStart Clean Data"
                     PurchCrMemoHeader.SetRange("No. Printed", 0);
                     PurchCrMemoHeader.ModifyAll("No. Printed", -1);
                 end;
+
+            Database::"Issued Reminder Header": // 297
+                begin
+                    IssuedReminderHeader.SetRange("No. Printed", 0);
+                    IssuedReminderHeader.ModifyAll("No. Printed", -1);
+                end;
+
             Database::Job: // 167
                 Job.ModifyAll(Status, Job.Status::Completed);
             Database::"Assembly Header": // 900
