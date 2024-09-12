@@ -24,16 +24,19 @@ codeunit 87106 "wanaStart Get Journal Lines"
         MapSourceCode: Record "wanaStart Map Source Code";
         VATPostingSetup: Record "VAT Posting Setup";
         UnrealizedVAT: Boolean;
+        xImportLine: Record "wanaStart Import FR Line";
+        Suffix: Integer;
 
     local procedure GetLines(pRec: Record "Gen. Journal Line")
     var
-        ProgressMsg: Label 'FR Tax Audit Import';
+        ProgressMsg: Label 'Get Journal Lines';
         ProgressDialog: Codeunit "Excel Buffer Dialog Management";
         ImportLine: Record "wanaStart Import FR Line";
         Default: Record "Gen. Journal Line";
     begin
         Default := pRec;
         ProgressDialog.Open(ProgressMsg);
+
         if ImportLine.FindSet then
             repeat
                 ProgressDialog.SetProgress(ImportLine."Line No.");
@@ -59,76 +62,76 @@ codeunit 87106 "wanaStart Get Journal Lines"
     local procedure Set(var pRec: Record "Gen. Journal Line"; ImportLine: Record "wanaStart Import FR Line")
     begin
         pRec.Init();
-        pRec."Line No." := ImportLine."Line No." * 10000;
+        pRec."Line No." := ImportLine."Line No." * 10000 + ImportLine."Split Line No.";
         pRec.Validate("Account Type", MapAccount."Account Type");
         pRec.Validate("Account No.", MapAccount."Account No.");
         pRec."Source Code" := MapSourceCode."Source Code";
         pRec.Validate("Posting Date", ImportLine.EcritureDate);
-        if MapSourceCode.Start then begin
-            pRec.Validate("Document No.", ImportLine.EcritureNum);
-            pRec.Validate("External Document No.", ImportLine.PieceRef)
-        end else
-            pRec.Validate("Document No.", ImportLine.PieceRef);
-        // if (pRec."Document No." <> xDocumentNo) or (xPieceRef = '') then begin
-        //     xDocumentNo := pRec."Document No.";
-        //     xSuffix := 0;
-        // end else begin
-        //     if CsvBuffer.Value <> xPieceRef then
-        //         xSuffix += 1;
-        //     if xSuffix > 0 then
-        //         pRec.Validate("Document No.", pRec."Document No." + '.' + Format(xSuffix));
-        // end;
-        // xPieceRef := CsvBuffer.Value;
 
-        if MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" " then begin
-            if IsInvoice(MapSourceCode."Gen. Posting Type", ImportLine) then
-                pRec.Validate("Document Type", pRec."Document Type"::Invoice)
-            else
-                pRec.Validate("Document Type", pRec."Document Type"::"Credit Memo");
-            if pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer] then begin
-                GetVATPostingSetup(pRec);
-                UnrealizedVAT := ImportLine.Open and (VATPostingSetup."VAT %" <> 0) and (VATPostingSetup."Unrealized VAT Type" = VATPostingSetup."Unrealized VAT Type"::Percentage);
-                if UnrealizedVAT then begin
-                    pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
-                    // SetBalanceVAT(pRec);
-                    pRec.Validate("Bal. Gen. Posting Type", MapSourceCode."Gen. Posting Type");
-                    pRec.Validate("Bal. VAT Bus. Posting Group", VATPostingSetup."VAT Bus. Posting Group");
-                    pRec.Validate("Bal. VAT Prod. Posting Group", VATPostingSetup."VAT Prod. Posting Group")
+        Case MapSourceCode."Document No." of
+            MapSourceCode."Document No."::EcritureNum:
+                pRec.Validate("Document No.", ImportLine.EcritureNum);
+            MapSourceCode."Document No."::PieceRef:
+                pRec.Validate("Document No.", ImportLine.PieceRef);
+            MapSourceCode."Document No."::"From Line":
+                begin
+                    ImportLine.TestField("Document No.");
+                    pRec.Validate("Document No.", ImportLine."Document No.");
                 end
-                // else
-                //     pRec."Sales/Purch. (LCY)" := ImportLine.Amount / (1 + VATPostingSetup."VAT %" / 100);
-            end
-            else
-                if UnrealizedVAT then
-                    pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
+        end;
+        Case MapSourceCode."External Document No." of
+            MapSourceCode."External Document No."::EcritureNum:
+                pRec.Validate("External Document No.", ImportLine.EcritureNum);
+            MapSourceCode."External Document No."::PieceRef:
+                pRec.Validate("External Document No.", ImportLine.PieceRef);
+            MapSourceCode."External Document No."::None:
+                ;
         end;
 
-        pRec.Validate(Amount, ImportLine.Amount);
-        if not UnrealizedVAT and (pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer]) then
-            pRec."Sales/Purch. (LCY)" := ImportLine.Amount / (1 + VATPostingSetup."VAT %" / 100);
+        if (ImportLine."Split Line No." <> 0) and
+            (pRec."External Document No." <> '') and
+            (pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer]) then
+            pRec.Validate("External Document No.", pRec."External Document No." + '.' + Format(ImportLine."Split Line No."));
 
+        if MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" " then begin
+            if pRec."Account Type" <> pRec."Account Type"::Employee then
+                if IsInvoice(MapSourceCode."Gen. Posting Type", ImportLine) then
+                    pRec.Validate("Document Type", pRec."Document Type"::Invoice)
+                else
+                    pRec.Validate("Document Type", pRec."Document Type"::"Credit Memo");
+        end;
+
+        if (pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer]) and
+            ((MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" ") or (ImportLine."VAT Prod. Posting Group" <> '')) then begin
+            GetVATPostingSetup(pRec, ImportLine);
+            UnrealizedVAT := ImportLine.Open and /*(VATPostingSetup."VAT %" <> 0) and */(VATPostingSetup."Unrealized VAT Type" = VATPostingSetup."Unrealized VAT Type"::Percentage);
+            if UnrealizedVAT then begin
+                // if ImportLine."VAT Prod. Posting Group" <> '' then
+                //     pRec.Validate("Document No.", CopyStr(pRec."Document No." + '/' + ImportLine."VAT Prod. Posting Group", 1, MaxStrLen(pRec."Document No.")));
+                pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
+                // pRec.Validate("Bal. Gen. Posting Type", MapSourceCode."Gen. Posting Type");
+                if pRec."Account Type" = pRec."Account Type"::Vendor then
+                    pRec.Validate("Bal. Gen. Posting Type", pRec."Bal. Gen. Posting Type"::Purchase)
+                else
+                    pRec.Validate("Bal. Gen. Posting Type", pRec."Bal. Gen. Posting Type"::Sale);
+                pRec.Validate("Bal. VAT Bus. Posting Group", VATPostingSetup."VAT Bus. Posting Group");
+                pRec.Validate("Bal. VAT Prod. Posting Group", VATPostingSetup."VAT Prod. Posting Group")
+            end;
+        end else
+            if UnrealizedVAT and (MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" ") then
+                pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
+
+        pRec.Validate(Amount, ImportLine.Amount);
         pRec.Validate("Document Date", ImportLine.PieceDate);
         if pRec."Account No." = '' then
             pRec.Description := CopyStr('!' + MapAccount."From Account No." + '|' + MapAccount."From SubAccount No." + '!' + pRec.Description, 1, MaxStrLen(pRec.Description))
         else
             pRec.Validate(Description, ImportLine.EcritureLib);
-        if (ImportLine.EcritureLet <> '') and (pRec."Account Type" in [pRec."Account Type"::Customer, pRec."Account Type"::Vendor]) then
-            pRec.Validate("Applies-to ID", ImportLine.EcritureLet);
-
-
-        // if ((pRec."Account Type" = pRec."Account Type"::Vendor) or (pRec."Bal. Account Type" = pRec."Account Type"::Vendor)) and
-        //     (PurchaseSetup."Ext. Doc. No. Mandatory")
-        // or
-        //    ((pRec."Account Type" = pRec."Account Type"::Customer) or (pRec."Bal. Account Type" = pRec."Account Type"::Customer)) and
-        //     (SalesSetup."Ext. Doc. No. Mandatory") then
-        //     pRec.TestField("External Document No."); // := pRec."Document No.";
-        //TODO
-        /*
-        if (pRec."Account Type" = pRec."Account Type"::Vendor) and
-            (pRec."External Document No." <> '') and
-            (pRec."Document Type" in [pRec."Document Type"::Invoice, pRec."Document Type"::"Credit Memo"]) then
-            SetUniqueExternalDocumentNo(pRec);
-        */
+        if pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer] then begin
+            pRec."Sales/Purch. (LCY)" := ImportLine.Amount + ImportLine."VAT Amount";
+            if ImportLine.EcritureLet <> '' then
+                pRec.Validate("Applies-to ID", ImportLine.EcritureLet);
+        end;
     end;
 
     local procedure IsInvoice(pGenPostingType: enum "General Posting Type"; ImportLine: Record "wanaStart Import FR Line"): Boolean
@@ -141,78 +144,26 @@ codeunit 87106 "wanaStart Get Journal Lines"
         end;
     end;
 
-    local procedure GetVATPostingSetup(pRec: Record "Gen. Journal Line")
+    local procedure GetVATPostingSetup(pRec: Record "Gen. Journal Line"; pImportLine: Record "wanaStart Import FR Line")
     var
         VPS: Record "VAT Posting Setup";
     begin
-        if MapAccount."VAT Prod. Posting Group" <> '' then
-            VPS."VAT Prod. Posting Group" := MapAccount."VAT Prod. Posting Group"
+        if pImportLine."VAT Prod. Posting Group" <> '' then
+            VPS."VAT Prod. Posting Group" := pImportLine."VAT Prod. Posting Group"
         else
-            VPS."VAT Prod. Posting Group" := MapSourceCode."VAT Prod. Posting Group";
+            if MapAccount."VAT Prod. Posting Group" <> '' then
+                VPS."VAT Prod. Posting Group" := MapAccount."VAT Prod. Posting Group"
+            else
+                VPS."VAT Prod. Posting Group" := MapSourceCode."VAT Prod. Posting Group";
+        // if VPS."VAT Prod. Posting Group" = '' then 
+        //     Clear(VATPostingSetup)
+        // else begin
         VPS."VAT Bus. Posting Group" := MapAccount.GetVATBusPostingGroup();
         if (VPS."VAT Bus. Posting Group" <> VATPostingSetup."VAT Bus. Posting Group") or
             (VPS."VAT Prod. Posting Group" <> VATPostingSetup."VAT Prod. Posting Group") then
             VATPostingSetup.Get(VPS."VAT Bus. Posting Group", VPS."VAT Prod. Posting Group");
+        // end;
     end;
-
-    // local procedure SetBalanceVAT(var pRec: Record "Gen. Journal Line")
-    // var
-    //     VATBusPostingGroup: Code[20];
-    // begin
-    // pRec.Validate("Bal. Gen. Posting Type", MapSourceCode."Gen. Posting Type");
-    // case pRec."Account Type" of
-    //     pRec."Account Type"::Customer:
-    //         SetCustomerVATBusPostingGroup(pRec);
-    //     pRec."Account Type"::Vendor:
-    //         SetVendorVATBusPostingGroup(pRec);
-    // end;
-    // if MapAccount."VAT Prod. Posting Group" <> '' then
-    //     pRec.Validate("Bal. VAT Prod. Posting Group", MapAccount."VAT Prod. Posting Group")
-    // else
-    //     if MapSourceCode."VAT Prod. Posting Group" <> '' then
-    //         pRec.Validate("Bal. VAT Prod. Posting Group", MapSourceCode."VAT Prod. Posting Group");
-    // pRec.TestField("Bal. VAT Prod. Posting Group");
-    //     pRec.Validate("Bal. VAT Bus. Posting Group", VATPostingSetup."VAT Bus. Posting Group");
-    //     pRec.Validate("Bal. VAT Prod. Posting Group", VATPostingSetup."VAT Prod. Posting Group")
-    // end;
-
-    // local procedure SetCustomerVATBusPostingGroup(var pRec: Record "Gen. Journal Line");
-    // var
-    //     Customer: Record Customer;
-    // begin
-    //     Customer.SetLoadFields("VAT Bus. Posting Group");
-    //     if Customer.Get(pRec."Account No.") then
-    //         pRec.Validate("Bal. VAT Bus. Posting Group", Customer."VAT Bus. Posting Group");
-    // end;
-
-    // local procedure SetVendorVATBusPostingGroup(var pRec: Record "Gen. Journal Line");
-    // var
-    //     Vendor: Record Vendor;
-    // begin
-    //     Vendor.SetLoadFields("VAT Bus. Posting Group");
-    //     if Vendor.Get(pRec."Account No.") then
-    //         pRec.Validate("Bal. VAT Bus. Posting Group", Vendor."VAT Bus. Posting Group");
-    // end;
-
-    /*TODO
-    local procedure SetUniqueExternalDocumentNo(var pRec: Record "Gen. Journal Line")
-    var
-        lRec: Record "Gen. Journal Line";
-        i: Integer;
-    begin
-        lRec.SetRange("Journal Template Name", pRec."Journal Template Name");
-        lRec.SetRange("Journal Batch Name", pRec."Journal Batch Name");
-        lRec.SetRange("Account Type", pRec."Account Type");
-        lRec.SetRange("Account No.", prec."Account No.");
-        lRec.SetRange("External Document No.", pRec."External Document No.");
-        if lRec.FindSet() then
-            repeat
-                i += 1;
-                pRec."External Document No." := lRec."External Document No." + '.' + format(i);
-                lRec.SetRange("External Document No.", pRec."External Document No.");
-            until lRec.IsEmpty();
-    end;
-    */
 
     local procedure MapDimensions(var pRec: Record "Gen. Journal Line"): Boolean
     var

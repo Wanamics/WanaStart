@@ -4,7 +4,8 @@ page 87106 "wanaStart Import Lines"
     Caption = 'Import Lines';
     PageType = List;
     SourceTable = "wanaStart Import FR Line";
-    Editable = false;
+    UsageCategory = Administration;
+    InsertAllowed = false;
 
     layout
     {
@@ -12,78 +13,38 @@ page 87106 "wanaStart Import Lines"
         {
             repeater(General)
             {
-                field("Line No."; Rec."Line No.")
+                field("Line No."; Rec."Line No.") { Visible = false; }
+                field(JournalCode; Rec.JournalCode) { }
+                field(EcritureNum; Rec.EcritureNum) { Editable = true; }
+                field(EcritureDate; Rec.EcritureDate) { }
+                field(CompteNum; Rec.CompteNum) { }
+                field(CompAuxNum; Rec.CompAuxNum) { }
+                field(PieceRef; Rec.PieceRef) { }
+                field(PieceDate; Rec.PieceDate) { }
+                field(EcritureLib; Rec.EcritureLib) { }
+                field(EcritureLet; Rec.EcritureLet) { Visible = false; }
+                field(Debit; Rec.Debit) { Visible = false; }
+                field(Credit; Rec.Credit) { Visible = false; }
+                field(Amount; Rec.Amount) { }
+                field("VAT Amount"; Rec."VAT Amount") { Visible = false; }
+                field("VAT %"; Rec."VAT %") { }
+                field(Open; Rec.Open) { Visible = false; }
+                field("VAT Bus. Posting Group"; MapAccount.GetVATBusPostingGroup())
                 {
-                    Width = 5;
+                    Caption = 'VAT Bus. Posting Group';
+                    DrillDown = true;
+                    trigger OnDrillDown()
+                    begin
+                        MapAccount.ShowAccount();
+                    end;
                 }
-                field(JournalCode; Rec.JournalCode)
-                {
-                    Width = 5;
-                }
-                field(EcritureNum; Rec.EcritureNum)
-                {
-                    Width = 6;
-                }
-                field(EcritureDate; Rec.EcritureDate)
-                {
-                    Width = 6;
-                }
-                field(CompteNum; Rec.CompteNum)
-                {
-                    Width = 8;
-                }
-                field(CompAuxNum; Rec.CompAuxNum)
-                {
-                    Width = 8;
-                }
-                field(PieceRef; Rec.PieceRef)
-                {
-                    Width = 8;
-                }
-                field(Debit; Rec.Debit)
-                {
-                    Visible = false;
-                    Width = 8;
-                }
-                field(Credit; Rec.Credit)
-                {
-                    Visible = false;
-                    Width = 8;
-                }
-                field(Amount; Rec.Amount)
-                {
-                    Width = 8;
-                }
-                // field("Vat Amount"; VATAmount)
-                // {
-                //     BlankZero = true;
-                //     Width = 8;
-                // }
-                field("VAT %"; Rec."VAT %")
-                {
-                    Width = 5;
-                }
-                field(Open; Rec.Open)
-                {
-                    Visible = false;
-                }
-                field(PieceDate; Rec.PieceDate)
-                {
-                    Width = 6;
-                    Visible = false;
-                }
-                field(EcritureLib; Rec.EcritureLib)
-                {
-                }
-                field(EcritureLet; Rec.EcritureLet)
-                {
-                    Visible = false;
-                }
+                field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group") { }
+                field("Document No."; Rec."Document No.") { Visible = false; }
             }
         }
         area(FactBoxes)
         {
-            part(Details; "wan Import Lines Factbox")
+            part(Details; "wan Import Lines Details")
             {
                 Caption = 'Details';
                 ApplicationArea = All;
@@ -93,28 +54,64 @@ page 87106 "wanaStart Import Lines"
                     EcritureDate = field(EcritureDate),
                     PieceRef = field(PieceRef);
             }
+            part(CheckVAT; "wan Import Lines Check VAT")
+            {
+                Caption = 'Check VAT';
+                ApplicationArea = All;
+                SubPageLink =
+                    "Line No." = field("Line No."),
+                    "Split Line No." = field("Split Line No.");
+            }
         }
     }
-    // // actions
-    // // {
-    // //     area(Navigation)
-    // //     {
-    // //         action(ShowDocument)
-    // //         {
-    // //             Caption = 'Show Document';
-    // //             Image = ShowList;
-    // //             RunObject = page "wanaStart Import Lines";
-    // //             RunPageLink =
-    // //                 JournalCode = field(JournalCode),
-    // //                 EcritureNum = field(EcritureNum),
-    // //                 EcritureDate = field(EcritureDate),
-    // //                 PieceRef = field(PieceRef);
-    // //         }
-    // //     }
-    // }
+    actions
+    {
+        area(Processing)
+        {
+            action(ImportFEC)
+            {
+                Caption = 'Import FEC';
+                ApplicationArea = All;
+                Image = ImportChartOfAccounts;
+                RunObject = codeunit "wanaStart Import FR";
+            }
+            action(MapSourceCode)
+            {
+                Caption = 'Map Source Codes';
+                ApplicationArea = All;
+                Image = JournalSetup;
+                RunObject = page "wanaStart Map Source Codes";
+            }
+            action(MapAccounts)
+            {
+                Caption = 'Map Accounts';
+                ApplicationArea = All;
+                Image = Accounts;
+                RunObject = page "wanaStart Map Accounts";
+            }
+            action(Split)
+            {
+                Caption = 'Split';
+                Image = Split;
+                trigger OnAction()
+                begin
+                    Codeunit.Run(Codeunit::"wanaStart Import Line Split", Rec);
+                end;
+            }
+        }
+        area(Promoted)
+        {
+            actionref(ImportFECPromoted; ImportFEC) { }
+            actionref(MapSourceCodePromoted; MapSourceCode) { }
+            actionref(MapAccountsPromoted; MapAccounts) { }
+            actionref(SplitPromoted; Split) { }
+        }
+    }
+    var
+        MapAccount: Record "wanaStart Map Account";
 
-    // var
-    //     VATPercent: Decimal;
-    //     VATAmount: Decimal;
-
+    trigger OnAfterGetRecord()
+    begin
+        if MapAccount.Get(Rec.CompteNum, Rec.CompAuxNum) then;
+    end;
 }

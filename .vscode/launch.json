@@ -45,7 +45,7 @@
             "environmentType": "Sandbox",
             "environmentName": "DevSyneido",
             "startupObjectType": "Page",
-            "startupObjectId": 39,
+            "startupObjectId": 5628,
             // "schemaUpdateMode": "ForceSync",
             "breakOnError": true,
             "launchBrowser": true,

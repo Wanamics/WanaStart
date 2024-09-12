@@ -12,8 +12,8 @@ permissionset 87100 "WANASTART"
         tabledata "wanaStart Import FR Line" = RIMD,
         report "wanaStart Check Direct Posting" = X,
         report "wanaStart Clean Data" = X,
-        // codeunit "wanaStart Gen. Journal Excel" = X,
-        // codeunit "wanaStart Import FR Setup" = X,
+    // codeunit "wanaStart Gen. Journal Excel" = X,
+    // codeunit "wanaStart Import FR Setup" = X,
         report "wan Apply Cust. Applies-to ID" = X,
         report "wan Apply Vendor Applies-to ID" = X,
         codeunit "wanaStart Apply Applies-to ID" = X,
@@ -24,5 +24,13 @@ permissionset 87100 "WANASTART"
         page "wanaStart Map Account Update" = X,
         page "wanaStart Map Source Codes" = X,
         query "wan Apply Cust. Applies-to ID" = X,
-        query "wan Apply Vendor Applies-to ID" = X;
+        query "wan Apply Vendor Applies-to ID" = X,
+        report "wan Apply Empl. Applies-to ID" = X,
+        report "wan Export G/L Entries - M & A" = X,
+        codeunit "wanaStart Get Journal Lines" = X,
+        codeunit "wanaStart Import Line Split" = X,
+        page "wan Import Lines Check VAT" = X,
+        page "wan Import Lines Details" = X,
+        page "wanaStart Import Lines" = X,
+        query "wan Apply Empl. Applies-to ID" = X;
 }

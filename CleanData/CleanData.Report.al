@@ -20,6 +20,7 @@ report 87109 "wanaStart Clean Data"
         tabledata "Purch. Rcpt. Line" = M, // 121
         tabledata "Purch. Inv. Header" = M, // 122
         tabledata "Purch. Cr. Memo Hdr." = M, // 124
+        tabledata "Incoming Document" = M, // 130
         tabledata "Job Ledger Entry" = MD, // 169
         tabledata "Posted Gen. Journal Line" = D, // 181
         tabledata "Posted Gen. Journal Batch" = D, // 182
@@ -78,6 +79,8 @@ report 87109 "wanaStart Clean Data"
         tabledata "Warranty Ledger Entry" = MD, // 5908
         tabledata "Service Register" = MD, // 5934
         tabledata "Service Document Register" = MD, // 5936
+        tabledata "Return Receipt Header" = M, // 6660
+                                               // tabledata "Return Receipt Line" = M, // 6661
         tabledata "Warehouse Entry" = MD, // 7312
         tabledata "Warehouse Register" = D, // 7313
         tabledata "Shipment Invoiced" = D, // 10825
@@ -129,17 +132,11 @@ report 87109 "wanaStart Clean Data"
                     ApplicationArea = All;
                     Caption = 'Jobs';
                 }
-                field(CleanBuffer; CleanOption[TableType::Buffer])
-                {
-                    ApplicationArea = All;
-                    Caption = 'Buffer';
-                }
-            }
-        }
-        actions
-        {
-            area(processing)
-            {
+                // field(CleanBuffer; CleanOption[TableType::Buffer])
+                // {
+                //     ApplicationArea = All;
+                //     Caption = 'Buffer';
+                // }
             }
         }
         trigger OnOpenPage()
@@ -278,6 +275,7 @@ report 87109 "wanaStart Clean Data"
         CleanTable(Database::"Purch. Inv. Line", TableType::Posted, true); // 123
         CleanTable(Database::"Purch. Cr. Memo Hdr.", TableType::Posted, true); // 124
         CleanTable(Database::"Purch. Cr. Memo Line", TableType::Posted, true); // 125
+        CleanTable(Database::"Incoming Document", TableType::Document, false); // 130
         CleanTable(Database::"Resource Group", TableType::Master, true); // 152
         CleanTable(Database::Resource, TableType::Master, true); // 156
         CleanTable(Database::Job, TableType::Job, true); // 167
@@ -296,7 +294,7 @@ report 87109 "wanaStart Clean Data"
         CleanTable(Database::"Requisition Line", TableType::Journal, true); // 246
         CleanTable(Database::"G/L Entry - VAT Entry Link", TableType::Entry, true); // 253
         CleanTable(Database::"VAT Entry", TableType::Entry, true); // 254
-        CleanTable(Database::"Intrastat Jnl. Line", TableType::Journal, true); // 263
+        // CleanTable(Database:: "Intrastat Jnl. Line", TableType::Journal, true); // 263
         CleanTable(Database::"Bank Account", TableType::Master, true); // 270
         CleanTable(Database::"Bank Account Ledger Entry", TableType::Entry, true); // 271
         CleanTable(Database::"Check Ledger Entry", TableType::Entry, true); // 272
@@ -441,6 +439,7 @@ report 87109 "wanaStart Clean Data"
         PurchInvHeader: Record "Purch. Inv. Header";
         PurchCrMemoHeader: Record "Purch. Cr. Memo Hdr.";
         IssuedReminderHeader: Record "Issued Reminder Header";
+        IncomingDocument: Record "Incoming Document";
         Job: Record "Job";
         AssembleToOrderLink: Record "Assemble-to-Order Link";
         Opportunity: Record Opportunity;
@@ -528,7 +527,14 @@ report 87109 "wanaStart Clean Data"
                     PurchCrMemoHeader.SetRange("No. Printed", 0);
                     PurchCrMemoHeader.ModifyAll("No. Printed", -1);
                 end;
-
+            Database::"Incoming Document": // 130
+                begin
+                    IncomingDocument.SetRange(Posted, true);
+                    IncomingDocument.ModifyAll(Posted, false);
+                    IncomingDocument.Reset();
+                    IncomingDocument.SetFilter(Status, '<>%1', IncomingDocument.Status::New);
+                    IncomingDocument.ModifyAll(Status, IncomingDocument.Status::New);
+                end;
             Database::"Issued Reminder Header": // 297
                 begin
                     IssuedReminderHeader.SetRange("No. Printed", 0);

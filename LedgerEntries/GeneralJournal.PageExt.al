@@ -2,7 +2,7 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
 {
     layout
     {
-        addlast(Control120)
+        addlast(Control1)
         {
             field("Source Code"; Rec."Source Code")
             {
@@ -82,6 +82,7 @@ pageextension 87100 "wanaStart General Journal" extends "General Journal"
                     Caption = 'Get Lines';
                     Image = GetLines;
                     RunObject = codeunit "wanaStart Get Journal Lines";
+                    // RunObject = report "wanaStart Get Journal Lines";
                 }
                 action(WanaStartApply)
                 {

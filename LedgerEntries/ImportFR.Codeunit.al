@@ -30,12 +30,12 @@ codeunit 87101 "wanaStart Import FR"
 
             StartDateTime := CurrentDateTime;
             SwitchTextEncoding(iStream);
-            CsvBuffer.LockTable();
+            // CsvBuffer.LockTable();
             Tab[1] := 9;
             CsvBuffer.LoadDataFromStream(iStream, Tab, '"');
             Import();
             CsvBuffer.DeleteAll();
-            Message(DoneMsg, ImportLine."Line No.", CurrentDateTime - StartDateTime);
+            Message(DoneMsg, ImportLine."Line No." - 1, CurrentDateTime - StartDateTime);
         end;
     end;
 
@@ -49,6 +49,8 @@ codeunit 87101 "wanaStart Import FR"
         JournalLib: Text[100];
         CompteLib: Text[100];
         CompAuxLib: Text[100];
+        Helper: Codeunit "wan Helper";
+        TypeHelper: Codeunit "Type Helper";
 
     local procedure SwitchTextEncoding(var pInStream: InStream)
     begin
@@ -115,6 +117,8 @@ codeunit 87101 "wanaStart Import FR"
     end;
 
     local procedure ImportCell();
+    var
+        v: Variant;
     begin
         case CsvBuffer."Field No." of
             1:
@@ -124,7 +128,9 @@ codeunit 87101 "wanaStart Import FR"
             3:
                 ImportLine.EcritureNum := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.EcritureNum));
             4:
-                ImportLine.EcritureDate := ToDate(CsvBuffer.Value);
+                // ImportLine.EcritureDate := Helper.yyyyddmmToDate(CsvBuffer.Value);
+                if TypeHelper.Evaluate(v, CsvBuffer.Value, 'yyyyMMdd', '') then
+                    ImportLine.EcritureDate := v;
             5:
                 ImportLine.CompteNum := CsvBuffer.Value;
             6:
@@ -136,11 +142,11 @@ codeunit 87101 "wanaStart Import FR"
             9:
                 ImportLine.PieceRef := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.PieceRef));
             10:
-                ImportLine.PieceDate := ToDate(CsvBuffer.Value);
+                ImportLine.PieceDate := Helper.yyyyddmmToDate(CsvBuffer.Value);
             11:
                 ImportLine.EcritureLib := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.EcritureLib));
             12:
-                ImportLine.Debit := ToDecimal(CsvBuffer.Value);
+                ImportLine.Debit := Helper.ToDecimal(CsvBuffer.Value);
             13:
                 case CsvBuffer.Value of
                     'D':
@@ -151,16 +157,16 @@ codeunit 87101 "wanaStart Import FR"
                             ImportLine.Debit := 0;
                         end;
                     else
-                        ImportLine.Credit := ToDecimal(CsvBuffer.Value);
+                        ImportLine.Credit := Helper.ToDecimal(CsvBuffer.Value);
                 end;
             14:
                 ImportLine.EcritureLet := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine.EcritureLet));
             15:
-                ImportLine.DateLet := ToDate(CsvBuffer.Value);
+                ImportLine.DateLet := Helper.yyyyddmmToDate(CsvBuffer.Value);
             16:
-                ImportLine.ValidDate := ToDate(CsvBuffer.Value);
+                ImportLine.ValidDate := Helper.yyyyddmmToDate(CsvBuffer.Value);
             17:
-                ImportLine.MontantDev := ToDecimal(CsvBuffer.Value);
+                ImportLine.MontantDev := Helper.ToDecimal(CsvBuffer.Value);
             18:
                 ImportLine.Idevise := CsvBuffer.Value;
             // //[
@@ -178,52 +184,37 @@ codeunit 87101 "wanaStart Import FR"
         end;
     end;
 
-    local procedure ToDecimal(pCell: Text) ReturnValue: Decimal
-    begin
-        if pCell = '' then
-            exit(0);
-        Evaluate(ReturnValue, pCell);
-    end;
-
-    local procedure ToDate(pCell: Text) ReturnValue: Date
-    begin
-        if pCell = '' then
-            exit(0D);
-        if not Evaluate(ReturnValue, pCell.Substring(7, 2) + pCell.Substring(5, 2) + pCell.Substring(1, 4)) then
-            Evaluate(ReturnValue, pCell);
-    end;
-
     local procedure SetVATPercent()
     var
         ImportLine: Record "wanaStart Import FR Line";
     begin
         ImportLine.SetFilter(CompAuxNum, '<>%1', '');
-        // ImportLine.SetRange(Open, true);
         if ImportLine.FindSet() then
             repeat
-                ImportLine."VAT %" := VATPercent((ImportLine));
-                if ImportLine."VAT %" <> 0 then
+                ImportLine.Validate("VAT Amount", VATAmount(ImportLine));
+                if ImportLine."VAT Amount" <> 0 then
                     ImportLine.Modify();
             until ImportLine.Next() = 0;
     end;
 
-    local procedure VATPercent(Rec: Record "wanaStart Import FR Line"): Decimal
+    local procedure VATAmount(var Rec: Record "wanaStart Import FR Line"): Decimal;
     var
-        ImportLine: Record "wanaStart Import FR Line";
+        ImportLine2: Record "wanaStart Import FR Line";
     begin
-        if Rec.CompAuxNum = '' then
+        // if MapSourceCode."VAT Account No. Filter" = '' then
+        // exit;
+        ImportLine2.SetCurrentKey(JournalCode, PieceRef, EcritureNum);
+        ImportLine2.SetRange(JournalCode, Rec.JournalCode);
+        ImportLine2.SetRange(EcritureDate, Rec.EcritureDate);
+        ImportLine2.SetRange(EcritureNum, Rec.EcritureNum);
+        ImportLine2.SetRange(PieceRef, Rec.PieceRef);
+        ImportLine2.SetFilter(CompAuxNum, '<>%1', '');
+        if ImportLine2.Count > 1 then
             exit;
-        ImportLine.SetCurrentKey(JournalCode, PieceRef, EcritureNum);
-        ImportLine.SetRange(JournalCode, Rec.JournalCode);
-        ImportLine.SetRange(EcritureDate, Rec.EcritureDate);
-        ImportLine.SetRange(EcritureNum, Rec.EcritureNum);
-        ImportLine.SetRange(PieceRef, Rec.PieceRef);
-        ImportLine.SetFilter(CompteNum, '445*');
-        ImportLine.CalcSums(Amount);
-        if Rec.Amount + ImportLine.Amount = 0 then
-            exit(0)
-        else
-            exit(Abs(ImportLine.Amount / (Rec.Amount + ImportLine.Amount) * 100));
+        ImportLine2.SetRange(CompAuxNum);
+        ImportLine2.SetFilter(CompteNum, '445*'); //MapSourceCode."VAT Account No. Filter"); 
+        ImportLine2.CalcSums(Amount);
+        exit(ImportLine2.Amount);
     end;
 
     [IntegrationEvent(false, false)]

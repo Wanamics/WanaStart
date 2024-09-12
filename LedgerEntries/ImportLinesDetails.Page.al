@@ -1,7 +1,7 @@
-page 87103 "wan Import Lines Factbox"
+page 87103 "wan Import Lines Details"
 {
     ApplicationArea = All;
-    Caption = 'Import Lines Factbox';
+    Caption = 'Import Lines Details';
     PageType = CardPart;
     SourceTable = "wanaStart Import FR Line";
 

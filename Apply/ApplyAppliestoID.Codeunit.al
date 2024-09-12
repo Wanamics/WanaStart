@@ -7,10 +7,13 @@ codeunit 87104 "wanaStart Apply Applies-to ID"
 
     trigger OnRun()
     var
+        ConfirmLbl: Label 'Do-you want to Apply Customer, Vendor and Employee entries by Applies-to Id?';
         ApplyCustLedgerEntries: Report "wan Apply Cust. Applies-to ID";
         ApplyVendLedgerEntries: Report "wan Apply Vendor Applies-to ID";
         ApplyEmplLedgerEntries: Report "wan Apply Empl. Applies-to ID";
     begin
+        if not Confirm(ConfirmLbl, false) then
+            exit;
         ApplyCustLedgerEntries.UseRequestPage(false);
         ApplyCustLedgerEntries.RunModal();
         ApplyVendLedgerEntries.UseRequestPage(false);

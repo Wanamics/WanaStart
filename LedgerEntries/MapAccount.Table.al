@@ -128,6 +128,7 @@ table 87100 "wanaStart Map Account"
         }
         field(100; "No. of Lines"; Integer)
         {
+            Caption = 'No. of Lines';
             FieldClass = FlowField;
             CalcFormula =
                 Count("wanaStart Import FR Line"
@@ -137,6 +138,7 @@ table 87100 "wanaStart Map Account"
         }
         field(101; Amount; Decimal)
         {
+            Caption = 'Amount';
             FieldClass = FlowField;
             CalcFormula =
                 sum("wanaStart Import FR Line".Amount
@@ -144,14 +146,49 @@ table 87100 "wanaStart Map Account"
             Editable = false;
             BlankZero = true;
         }
-        field(102; "Has Open Lines"; Boolean)
+        field(102; "No. of Open Lines"; Integer)
         {
+            Caption = 'No. of Open Lines';
             FieldClass = FlowField;
             CalcFormula =
-                exist("wanaStart Import FR Line"
+                count("wanaStart Import FR Line"
                     where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), Open = const(true)));
             Editable = false;
             BlankZero = true;
+            Width = 5;
+        }
+        field(103; "Amount Incl. VAT"; Decimal)
+        {
+            Caption = 'Amount Incl. VAT';
+            FieldClass = FlowField;
+            CalcFormula =
+                sum("wanaStart Import FR Line".Amount
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), "Gen. Posting Type" = filter("Purchase" | "Sale")));
+            Editable = false;
+            BlankZero = true;
+        }
+        field(104; "VAT Amount"; Decimal)
+        {
+            Caption = 'VAT Amount';
+            FieldClass = FlowField;
+            CalcFormula =
+                sum("wanaStart Import FR Line"."VAT Amount"
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), "Gen. Posting Type" = filter("Purchase" | "Sale")));
+            Editable = false;
+            BlankZero = true;
+        }
+        field(105; "VAT %"; Decimal)
+        {
+            Caption = 'VAT %';
+            Editable = false;
+            Width = 5;
+        }
+        field(106; "G/L Acc. VAT Prod. P. G."; Code[20])
+        {
+            Caption = 'G/L Acc. VAT Prod. Posting Group';
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = lookup("G/L Account"."VAT Prod. Posting Group" where("No." = field("Account No.")));
         }
     }
     keys
@@ -182,21 +219,21 @@ table 87100 "wanaStart Map Account"
 
             CsvBuffer.LOCKTABLE;
             CsvBuffer.LoadDataFromStream(IStream, '|', '"');
-            AnalyzeData();
+            Load();
             CsvBuffer.DeleteAll();
         end;
     end;
 
-    local procedure AnalyzeData()
+    local procedure Load()
     var
         lLineNo: Integer;
         lNext: Integer;
         lCount: Integer;
         lProgress: Integer;
         lDialog: Dialog;
-        ltAnalyzing: Label 'Analyzing Data...\\';
+        ProgressLbl: Label 'Loading...\\';
     begin
-        lDialog.Open(ltAnalyzing + '@1@@@@@@@@@@@@@@@@@@@@@@@@@\');
+        lDialog.Open(ProgressLbl + '@1@@@@@@@@@@@@@@@@@@@@@@@@@\');
         lDialog.Update(1, 0);
         CsvBuffer.SetFilter(CsvBuffer."Line No.", '>1');
         CsvBuffer.SetRange(CsvBuffer."Field No.", 5, 8);
@@ -350,7 +387,45 @@ table 87100 "wanaStart Map Account"
                     exit(Customer."VAT Bus. Posting Group");
             Rec."Account Type"::Vendor:
                 if Vendor.Get(Rec."Account No.") then
-                    Exit(Vendor."VAT Bus. Posting Group");
+                    exit(Vendor."VAT Bus. Posting Group");
         end;
+    end;
+
+    procedure ShowAccount()
+    var
+        Customer: Record Customer;
+        Vendor: Record Vendor;
+    begin
+        Rec.TestField("Account No.");
+        case Rec."Account Type" of
+            Rec."Account Type"::Customer:
+                begin
+                    Customer.Get(Rec."Account No.");
+                    Page.RunModal(Page::"Customer Card", Customer, Customer.FieldNo("VAT Bus. Posting Group"));
+                end;
+            Rec."Account Type"::Vendor:
+                begin
+                    Vendor.Get(Rec."Account No.");
+                    Page.RunModal(Page::"Vendor Card", Vendor, Vendor.FieldNo("VAT Bus. Posting Group"));
+                end;
+        end;
+    end;
+    // procedure GetGLAccountVATProdPostingGroup(): Code[20]
+    // var
+    //     GLAccount: Record "G/L Account";
+    // begin
+    //     GLAccount.SetLoadFields("VAT Prod. Posting Group");
+    //     if GLAccount.Get(Rec."Account No.") then
+    //         exit(GLAccount."VAT Prod. Posting Group");
+    // end;
+
+    procedure ShowGLAccountCard()
+    var
+        GLAccount: Record "G/L Account";
+    begin
+        TestField("Account Type", Rec."Account Type"::"G/L Account");
+        TestField("Account No.");
+        GLAccount.Get("Account No.");
+        Page.RunModal(Page::"G/L Account Card", GLAccount, GLAccount.FieldNo("VAT Prod. Posting Group"));
     end;
 }
