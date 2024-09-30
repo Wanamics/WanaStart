@@ -301,7 +301,8 @@ report 87101 "wan Export G/L Entries - M & A"
         //]
         );
 
-        GLRegister.SetLoadFields("No.", "From Entry No.", "To Entry No.", "Creation Date");
+        // GLRegister.SetLoadFields("No.", "From Entry No.", "To Entry No.", "Creation Date");
+        GLRegister.SetLoadFields("No.", "From Entry No.", "To Entry No.", SystemCreatedAt);
 
         Customer.SetLoadFields("No.", Name, "Customer Posting Group");
         CustomerPostingGroup.SetLoadFields("Receivables Account");
@@ -739,7 +740,8 @@ report 87101 "wan Export G/L Entries - M & A"
 
         WriteGLEntryToFile(
           GLRegister."No.",
-          GLRegister."Creation Date",
+        //   GLRegister."Creation Date",
+          GLRegister.SystemCreatedAt,
           PartyNo,
           PartyName,
           FCYAmount,
@@ -797,7 +799,8 @@ report 87101 "wan Export G/L Entries - M & A"
           '||' + CRLF);
     end;
 
-    local procedure WriteGLEntryToFile(GLRegisterNo: Integer; GLRegisterCreationDate: Date; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
+    // local procedure WriteGLEntryToFile(GLRegisterNo: Integer; GLRegisterCreationDate: Date; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
+    local procedure WriteGLEntryToFile(GLRegisterNo: Integer; GLRegisterCreationDate: DateTime; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
     begin
         GLEntry.CalcFields(GLEntry."G/L Account Name");
 
@@ -820,7 +823,8 @@ report 87101 "wan Export G/L Entries - M & A"
           FormatAmount(GLEntry."Credit Amount") + '|' +
           DocNoSet + '|' +
           GetFormattedDate(DateApplied) + '|' +
-          GetFormattedDate(GLRegisterCreationDate) + '|' +
+        //   GetFormattedDate(GLRegisterCreationDate) + '|' +
+          GetFormattedDate(DT2Date(GLRegisterCreationDate)) + '|' +
           FCYAmount + '|' +
           //[
           //CurrencyCode + CRLF);

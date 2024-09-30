@@ -37,7 +37,8 @@ codeunit 87100 "wan Import Fixed Assets"
     local procedure SetDefault(var pRec: Record "Gen. Journal Line")
     var
         GenJournalTemplate: Record "Gen. Journal Template";
-        NoSeriesManagement: Codeunit NoSeriesManagement;
+        // NoSeriesManagement: Codeunit NoSeriesManagement;
+        NoSeries: Codeunit "No. Series";
     begin
         pRec.ShowShortcutDimCode(ShortcutDimCode);
         pRec."Journal Template Name" := GenJournalBatch."Journal Template Name";
@@ -46,8 +47,9 @@ codeunit 87100 "wan Import Fixed Assets"
         pRec."Source Code" := GenJournalTemplate."Source Code";
         pRec."Reason Code" := GenJournalBatch."Reason Code";
         pRec."Posting No. Series" := GenJournalBatch."Posting No. Series";
-        pRec."Document No." := NoSeriesManagement.TryGetNextNo(GenJournalBatch."No. Series", WorkDate());
-        pRec.TestField("Document No.");
+        // pRec."Document No." := NoSeriesManagement.TryGetNextNo(GenJournalBatch."No. Series", WorkDate());
+        pRec."Document No." := NoSeries.PeekNextNo(GenJournalBatch."No. Series", WorkDate());
+        // pRec.TestField("Document No.");
         pRec.Validate("Account Type", pRec."Account Type"::"Fixed Asset");
         pRec.Validate("Posting Date", WorkDate());
     end;
