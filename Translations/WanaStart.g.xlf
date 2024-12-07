@@ -73,6 +73,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control StartingDate - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Report 2574194418 - Control 1625677715 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether the transaction number is used as the progressive number in the audit file. If you select the option, the transaction number is used as the progressive number. If you do not select the option, the general ledger register number is used as the progressive number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control UseTransactionNoControl - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 2574194418 - Control 1625677715 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Transaction No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control UseTransactionNoControl - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Report 2574194418 - Control 771000370 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the Document No. Prefix (to identify entries from a merged company).</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -82,6 +92,51 @@
           <source>Document No. Prefix</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanDocumentNoPrefix - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 2574194418 - Control 3156747290 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies if open customer and vendor ledger entries must be detailled.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanOpeningDetails - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 2574194418 - Control 3156747290 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opening Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanOpeningDetails - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export Open Entries</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Method 695780001 - NamedType 2033492750" size-unit="char" translate="yes" xml:space="preserve">
+          <source>""#%&amp;*:&lt;&gt;?\/{|}~</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Method GetFileName - NamedType InvalidWindowsChrStringTxt</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Control 1070872126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Journal Batch Name"</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control JournalBatchName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Control 1744706346 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Journal Template Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control JournalTemplateName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Control 861194076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opening Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control OpeningDate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 727168257 - Control 634145750 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opening DocumentNo</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control OpeningDocumentNo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2676737549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Check Direct Posting Buf.</source>

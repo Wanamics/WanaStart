@@ -8,7 +8,7 @@ using Microsoft.Finance.GeneralLedger.Ledger;
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Finance.Dimension;
 using Microsoft.Finance.GeneralLedger.Journal;
-codeunit 87131 "WanaStart Exp. G/L Entries M&A"
+codeunit 87139 "WanaStart Exp. G/L Entries M&A"
 {
     SingleInstance = true;
 
@@ -68,13 +68,15 @@ codeunit 87131 "WanaStart Exp. G/L Entries M&A"
                     ClosedByEntryNo := GetClosedByEntryNo(EmployeeLedgerEntry."Entry No.", EmployeeLedgerEntry.Open, EmployeeLedgerEntry."Closed by Entry No.");
                 end;
         end;
-        pText += '|' +
-            ExternalDocumentNo + '|' +
-            format(ClosedByEntryNo) + '|' +
-            format(pGLEntry."Dimension Set ID") + '|' +
-            pGLEntry."Global Dimension 1 Code" + '|' +
-            pGLEntry."Global Dimension 2 Code" +
-            Dimensions(pGLEntry."Source Type", pGLEntry."Dimension Set ID");
+        pText := AppendColumns(ExternalDocumentNo, ClosedByEntryNo, pGLEntry."Dimension Set ID");
+    end;
+
+    local procedure AppendColumns(pExternalDocumentNo: Code[35]; pClosedByEntryNo: Integer; pDimensionSetId: Integer): Text
+    begin
+        exit('|' + pExternalDocumentNo
+            + '|' + format(pClosedByEntryNo)
+            //       '|' +// format(pDimensionSetID)
+            + '|' + Dimensions(/*pGLEntry."Source Type", */pDimensionSetID));
     end;
 
     local procedure GetClosedByEntryNo(pEntryNo: Integer; pOpen: Boolean; pClosedByEntryNo: Integer): Integer
@@ -86,14 +88,14 @@ codeunit 87131 "WanaStart Exp. G/L Entries M&A"
                 exit(pEntryNo);
     end;
 
-    local procedure Dimensions(pSourceType: Enum "Gen. Journal Source Type"; pDimensionSetId: Integer) ReturnValue: Text
+    local procedure Dimensions(/*pSourceType: Enum "Gen. Journal Source Type";*/ pDimensionSetId: Integer) ReturnValue: Text
     var
         i: Integer;
         DimensionSetEntry: Record "Dimension Set Entry";
     begin
-        if (pDimensionSetId = 0) or (pSourceType <> pSourceType::" ") then
-            exit('||||||');
-        for i := 3 to 8 do begin
+        // if (pDimensionSetId = 0) or (pSourceType <> pSourceType::" ") then
+        //     exit('||||||');
+        for i := 1 to 8 do begin
             ReturnValue += '|';
             if ShortcutDimCode[i] <> '' then
                 if DimensionSetEntry.Get(pDimensionSetId, ShortcutDimCode[i]) then

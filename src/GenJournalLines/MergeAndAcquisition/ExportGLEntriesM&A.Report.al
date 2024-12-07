@@ -19,11 +19,12 @@ using Microsoft.Foundation.Company;
 using Microsoft.Purchases.Payables;
 using Microsoft.Purchases.Vendor;
 using Microsoft.Sales.Customer;
+using Microsoft.Finance.ReceivablesPayables;
 using Microsoft.Sales.Receivables;
 using System.Reflection;
 using System.Utilities;
 
-report 87101 "WanaStart Exp. G/L Entries M&A"
+report 87139 "WanaStart Exp. G/L Entries M&A"
 // #if not CLEAN23
 {
     ApplicationArea = Basic, Suite;
@@ -55,8 +56,35 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
                 begin
                     if not GLAccount."Detailed Balance" then
                         CurrReport.Break();
+                    //[
+                    if wanOpeningDetails then
+                        CurrReport.Break();
+                    //]
                 end;
             }
+            //[
+            dataitem(CustLedgerEntry; "Cust. Ledger Entry")
+            {
+                DataItemTableView = sorting("Entry No.") where(Open = const(true));
+
+                trigger OnPreDataItem()
+                begin
+                    if not GLAccount."Detailed Balance" then
+                        CurrReport.Break();
+                    if not wanOpeningDetails then
+                        CurrReport.Break();
+                end;
+
+                trigger OnAfterGetRecord()
+                var
+                    CVLEB: Record "CV Ledger Entry Buffer";
+                begin
+                    CVLEB.CopyFromCustLedgEntry(CustLedgerEntry);
+                    WriteOpenEntry(CVLEB, GetReceivablesAccount(CustLedgerEntry."Customer Posting Group"));
+                end;
+
+            }
+            //]
             dataitem(Vendor; Vendor)
             {
                 DataItemTableView = sorting("No.");
@@ -70,8 +98,34 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
                 begin
                     if not GLAccount."Detailed Balance" then
                         CurrReport.Break();
+                    //[
+                    if wanOpeningDetails then
+                        CurrReport.Break();
+                    //]
                 end;
             }
+            //[
+            dataitem(VendLedgerEntry; "Vendor Ledger Entry")
+            {
+                DataItemTableView = sorting("Entry No.") where(Open = const(true));
+
+                trigger OnPreDataItem()
+                begin
+                    if not GLAccount."Detailed Balance" then
+                        CurrReport.Break();
+                    if not wanOpeningDetails then
+                        CurrReport.Break();
+                end;
+
+                trigger OnAfterGetRecord()
+                var
+                    CVLEB: Record "CV Ledger Entry Buffer";
+                begin
+                    CVLEB.CopyFromVendLedgEntry(VendLedgerEntry);
+                    WriteOpenEntry(CVLEB, GetPayablesAccount(VendLedgerEntry."Vendor Posting Group"));
+                end;
+            }
+            //]
             dataitem("Bank Account"; "Bank Account")
             {
                 DataItemTableView = sorting("No.");
@@ -85,8 +139,36 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
                 begin
                     if not GLAccount."Detailed Balance" then
                         CurrReport.Break();
+                    //[
+                    if wanOpeningDetails then
+                        CurrReport.Break();
+                    //]
                 end;
             }
+            /*
+            //[
+            dataitem(BankAccountLedgerEntry; "Bank Account Ledger Entry")
+            {
+                DataItemTableView = sorting("Entry No.") where(Open = const(true));
+
+                trigger OnPreDataItem()
+                begin
+                    if not GLAccount."Detailed Balance" then
+                        CurrReport.Break();
+                    if not wanOpeningDetails then
+                        CurrReport.Break();
+                end;
+
+                trigger OnAfterGetRecord()
+                var
+                    CVLEB: Record "CV Ledger Entry Buffer";
+                begin
+                    CVLEB.CopyFromVendLedgEntry(VendLedgerEntry);
+                    WriteOpenEntry(CVLEB, GetBankAccount(CustLedgerEntry."Customer Posting Group"));
+                end;
+            }
+            //]
+            */
             dataitem("Integer"; "Integer")
             {
                 DataItemTableView = sorting(Number) where(Number = const(1));
@@ -180,12 +262,26 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
                         TableRelation = "Source Code";
                         ToolTip = 'Specifies the source code to be used if there is no code specified in the G/L entry.';
                     }
+                    field(UseTransactionNoControl; UseTransactionNo)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'Use Transaction No.';
+                        ToolTip = 'Specifies whether the transaction number is used as the progressive number in the audit file. If you select the option, the transaction number is used as the progressive number. If you do not select the option, the general ledger register number is used as the progressive number.';
+                    }
+                    //[
                     field(wanDocumentNoPrefix; wanDocumentNoPrefix)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Document No. Prefix';
                         ToolTip = 'Specifies the Document No. Prefix (to identify entries from a merged company).';
                     }
+                    field(wanOpeningDetails; wanOpeningDetails)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'Opening Details';
+                        ToolTip = 'Specifies if open customer and vendor ledger entries must be detailled.';
+                    }
+                    //]
                 }
             }
         }
@@ -242,7 +338,6 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
         // FeatureTelemetry.LogUptake('1000HO2', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::Discovered);
     end;
 
-
     var
         GLRegister: Record "G/L Register";
         CustomerPostingGroup: Record "Customer Posting Group";
@@ -277,8 +372,10 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
         OpeningBalance: Decimal;
         DetailedBalance: Decimal;
         DefaultSourceCode: Code[10];
+        UseTransactionNo: Boolean;
         //[
         wanDocumentNoPrefix: Code[10];
+        wanOpeningDetails: Boolean;
     //     wanVendorLedgerEntry: Record "Vendor Ledger Entry";
     //     wanCustLedgerEntry: Record "Cust. Ledger Entry";
     //     wanEmployeeLedgerEntry: Record "Employee Ledger Entry";
@@ -694,6 +791,13 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
         exit(GLEntry."Source Code");
     end;
 
+    local procedure GetProgressiveNo(var GLRegister: Record "G/L Register"; var GLEntry: Record "G/L Entry"): Integer
+    begin
+        if UseTransactionNo then
+            exit(GLEntry."Transaction No.");
+        exit(GLRegister."No.");
+    end;
+
     local procedure ProcessGLEntry()
     var
         BankAccountLedgerEntry: Record "Bank Account Ledger Entry";
@@ -760,7 +864,7 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
         FindGLRegister(GLEntry."Entry No.");
 
         WriteGLEntryToFile(
-          GLRegister."No.",
+          GetProgressiveNo(GLRegister, GLEntry),
           GLRegister."Creation Date",
         //   GLRegister.SystemCreatedAt,
           PartyNo,
@@ -820,15 +924,14 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
           '||' + CRLF);
     end;
 
-    local procedure WriteGLEntryToFile(GLRegisterNo: Integer; GLRegisterCreationDate: Date; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
-    // local procedure WriteGLEntryToFile(GLRegisterNo: Integer; GLRegisterCreationDate: DateTime; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
+    local procedure WriteGLEntryToFile(ProgressiveNo: Integer; GLRegisterCreationDate: Date; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
     begin
         GLEntry.CalcFields(GLEntry."G/L Account Name");
 
         OutStreamObj.WriteText(
           GetSourceCode() + '|' +
           GetSourceCodeDesc(GetSourceCode()) + '|' +
-          Format(GLRegisterNo) + '|' +
+          Format(ProgressiveNo) + '|' +
           GetFormattedDate(GLEntry."Posting Date") + '|' +
           GLEntry."G/L Account No." + '|' +
           GLEntry."G/L Account Name" + '|' +
@@ -928,78 +1031,9 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
           GetFormattedDate(StartingDate) +
         //[
         //   '||' +CRLF);
-          '||' +
-          '|' + // ExternalDocumentNo
-          '|' + // ClosedByEntryNo
-          '||||||||' + // Dimensions[1..8]
-          CRLF);
+          '||' + AppendColumns(GLEntry) + CRLF);
         //]
     end;
-
-#if FALSE
-    local procedure wanColumns(): Text
-    var
-        wanVendorLedgerEntry: Record "Vendor Ledger Entry";
-        wanCustLedgerEntry: Record "Cust. Ledger Entry";
-        wanEmployeeLedgerEntry: Record "Employee Ledger Entry";
-        ExternalDocumentNo: Code[35];
-        ClosedByEntryNo: Integer;
-    begin
-        case GLEntry."Source Type" of
-            GLEntry."Source Type"::Vendor:
-                begin
-                    if wanVendorLedgerEntry.Get(GLEntry."Entry No.") then begin
-                        ExternalDocumentNo := wanVendorLedgerEntry."External Document No.";
-                        ClosedByEntryNo := GetClosedByEntryNo(wanVendorLedgerEntry."Entry No.", wanVendorLedgerEntry.Open, wanVendorLedgerEntry."Closed by Entry No.");
-                    end;
-                end;
-            GLEntry."Source Type"::Customer:
-                if wanCustLedgerEntry.Get(GLEntry."Entry No.") then begin
-                    ExternalDocumentNo := wanCustLedgerEntry."External Document No.";
-                    ClosedByEntryNo := wanCustLedgerEntry."Closed by Entry No.";
-                    ClosedByEntryNo := GetClosedByEntryNo(wanCustLedgerEntry."Entry No.", wanCustLedgerEntry.Open, wanCustLedgerEntry."Closed by Entry No.");
-                end;
-            GLEntry."Source Type"::Employee:
-                if wanEmployeeLedgerEntry.Get(GLEntry."Entry No.") then begin
-                    ClosedByEntryNo := wanEmployeeLedgerEntry."Closed by Entry No.";
-                    ClosedByEntryNo := GetClosedByEntryNo(wanEmployeeLedgerEntry."Entry No.", wanEmployeeLedgerEntry.Open, wanEmployeeLedgerEntry."Closed by Entry No.");
-                end;
-        end;
-        exit(
-            ExternalDocumentNo + '|' +
-            format(ClosedByEntryNo) + '|' +
-            // GLEntry."Global Dimension 1 Code" + '|' +
-            // GLEntry."Global Dimension 2 Code"
-            Dimensions(GLEntry."Source Type", GLEntry."Dimension Set ID") +
-            AppendCustomColumns(GLEntry)
-            );
-    end;
-
-    local procedure Dimensions(pSourceType: Enum "Gen. Journal Source Type"; pDimensionSetId: Integer) ReturnValue: Text
-    var
-        i: Integer;
-        DimensionSetEntry: Record "Dimension Set Entry";
-
-    begin
-        if (pDimensionSetId = 0) or (pSourceType <> pSourceType::" ") then
-            exit('||||||||');
-        for i := 1 to 8 do begin
-            ReturnValue += '|';
-            if ShortcutDimCode[i] <> '' then
-                if DimensionSetEntry.Get(pDimensionSetId, ShortcutDimCode[i]) then
-                    ReturnValue += DimensionSetEntry."Dimension Value Code";
-        end;
-    end;
-
-    local procedure GetClosedByEntryNo(pEntryNo: Integer; pOpen: Boolean; pClosedByEntryNo: Integer): Integer
-    begin
-        if pClosedByEntryNo <> 0 then
-            exit(pClosedByEntryNo)
-        else
-            if not pOpen then
-                exit(pEntryNo);
-    end;
-#endif
 
     local procedure AppendHeaders() ReturnValue: Text
     begin
@@ -1009,6 +1043,35 @@ report 87101 "WanaStart Exp. G/L Entries M&A"
     local procedure AppendColumns(pGLEntry: Record "G/L Entry") ReturnValue: Text
     begin
         OnAppendColumns(pGLEntry, ReturnValue);
+    end;
+
+    local procedure WriteOpenEntry(CVLEB: Record "CV Ledger Entry Buffer"; GLAccountNo: Code[20])
+    begin
+        OutStreamObj.WriteText(
+          CVLEB."Source Code" + '|' +
+          '' + '|' +
+          '0|' +
+          GetFormattedDate(CVLEB."Posting Date") + '|' +
+          GLAccountNo + '|' +
+          /*GLEntry."G/L Account Name" +*/ '|' +
+          Format(CVLEB."CV No.") + '|' +
+          '' + '|' + // CV Name
+        //[
+          wanDocumentNoPrefix +
+        //]
+          CVLEB."Document No." + '|' +
+          GetFormattedDate(CVLEB."Document Date") + '|' +
+          CVLEB.Description + '|' +
+          FormatAmount(CVLEB."Debit Amount (LCY)") + '|' +
+          FormatAmount(CVLEB."Credit Amount (LCY)") + '|' +
+          //????   DocNoSet + '|' +
+          /*GetFormattedDate(DateApplied) +*/ '|' +
+          /*GetFormattedDate(GLRegisterCreationDate) +*/ '|' +
+          FormatAmount(CVLEB.Amount) + '|' +
+          //[
+          //CurrencyCode + CRLF);
+          CVLEB."Currency Code" + CRLF);
+        //]
     end;
 
     [IntegrationEvent(false, false)]
