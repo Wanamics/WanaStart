@@ -2,7 +2,7 @@
   "id": "64b9e44f-3f19-4fec-9a69-dcdcf1ead0ed",
   "name": "WanaStart",
   "publisher": "Wanamics",
-  "version": "21.0.0.49",
+  "version": "21.0.0.53",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -24,7 +24,7 @@
     "allowDownloadingSource": true,
     "includeSourceInSymbolFile": true
   },
-  "runtime": "14.0",
+  "runtime": "13.0",
   "features": [
     "NoImplicitWith",
     "TranslationFile", 

@@ -1,3 +1,4 @@
+#if FALSE
 // Copy from report 10885 "Export G/L Entries - Tax Audit"
 // + DocumentNoPrefix 
 // + columns "External Document No.", "Closed by Entry No." for Vendor & Customer Ledger Entries
@@ -19,10 +20,16 @@ using Microsoft.Purchases.Payables;
 using Microsoft.EServices.EDocument;
 using Microsoft.Sales.Customer;
 using Microsoft.Sales.Receivables;
+using Microsoft.FixedAssets.Setup;
+using Microsoft.FixedAssets.Journal;
+using Microsoft.FixedAssets.Depreciation;
+using Microsoft.FixedAssets.FixedAsset;
 using System.Reflection;
 using System.Utilities;
 using Microsoft.Finance.Dimension;
 using Microsoft.Finance.GeneralLedger.Setup;
+using Microsoft.FixedAssets.Ledger;
+using Microsoft.Finance.GeneralLedger.Ledger;
 
 report 87132 "WanaStart Open Entries"
 {
@@ -40,13 +47,15 @@ report 87132 "WanaStart Open Entries"
             DataItemTableView = sorting("Customer No.", Open) where(Open = const(true));
             trigger OnPreDataItem()
             begin
-                CustLedgerEntry.SetLoadFields("Customer No.", "Customer Name", "Transaction No.", "Posting Date", "Document Type", "Document No.", "Customer Posting Group", Description, "Transaction No.", "Debit Amount (LCY)", "Credit Amount (LCY)", "Currency Code", "Amount (LCY)");
+                if CustomerBalAccountNo = '' then
+                    CurrReport.Break();
+                // SetLoadFields("Customer No.", "Customer Name", "Transaction No.", "Posting Date", "Document Type", "Document No.", "Customer Posting Group", Description, "Transaction No.", "Debit Amount (LCY)", "Credit Amount (LCY)", "Currency Code", "Amount (LCY)", "Dimension Set ID");
             end;
 
             trigger OnAfterGetRecord()
             begin
-                if CustLedgerEntry."Customer Posting Group" <> CustomerPostingGroup.Code then begin
-                    CustomerPostingGroup.Get(CustLedgerEntry."Customer Posting Group");
+                if "Customer Posting Group" <> CustomerPostingGroup.Code then begin
+                    CustomerPostingGroup.Get("Customer Posting Group");
                     if CustomerPostingGroup."Receivables Account" <> GLAccount."No." then
                         GLAccount.Get(CustomerPostingGroup."Receivables Account");
                 end;
@@ -60,13 +69,15 @@ report 87132 "WanaStart Open Entries"
 
             trigger OnPreDataItem()
             begin
-                VendorLedgerEntry.SetLoadFields("Vendor No.", "Vendor Name", "Transaction No.", "Posting Date", "Document Type", "Document No.", "Vendor Posting Group", Description, "Transaction No.", "Debit Amount (LCY)", "Credit Amount (LCY)", "Currency Code", "Amount (LCY)");
+                if VendorBalAccountNo = '' then
+                    CurrReport.Break();
+                // SetLoadFields("Vendor No.", "Vendor Name", "Transaction No.", "Posting Date", "Document Type", "Document No.", "Vendor Posting Group", Description, "Transaction No.", "Debit Amount (LCY)", "Credit Amount (LCY)", "Currency Code", "Amount (LCY)", "Dimension Set ID");
             end;
 
             trigger OnAfterGetRecord()
             begin
-                if VendorLedgerEntry."Vendor Posting Group" <> VendorPostingGroup.Code then begin
-                    VendorPostingGroup.Get(VendorLedgerEntry."Vendor Posting Group");
+                if "Vendor Posting Group" <> VendorPostingGroup.Code then begin
+                    VendorPostingGroup.Get("Vendor Posting Group");
                     if VendorPostingGroup."Payables Account" <> GLAccount."No." then
                         GLAccount.Get(VendorPostingGroup."Payables Account");
                 end;
@@ -78,6 +89,8 @@ report 87132 "WanaStart Open Entries"
             DataItemTableView = sorting("No.");
             trigger OnPreDataItem()
             begin
+                if BankBalAccountNo = '' then
+                    CurrReport.Break();
                 if BankAccountLedgerEntry.GetFilter("Bank Account No.") <> '' then
                     BankAccount.SetFilter("No.", BankAccountLedgerEntry.GetFilter("Bank Account No."));
             end;
@@ -92,7 +105,7 @@ report 87132 "WanaStart Open Entries"
                         GLAccount.Get(BankAccountPostingGroup."G/L Account No.");
                 end;
 
-                ClosedBankAccLedgerEntry.SetLoadFields("Bank Account No.", Open, Amount);
+                // ClosedBankAccLedgerEntry.SetLoadFields("Bank Account No.", Open, Amount);
                 ClosedBankAccLedgerEntry.SetRange("Bank Account No.", BankAccount."No.");
                 ClosedBankAccLedgerEntry.SetRange(Open, false);
                 ClosedBankAccLedgerEntry.CalcSums(Amount);
@@ -115,7 +128,9 @@ report 87132 "WanaStart Open Entries"
 
             trigger OnPreDataItem()
             begin
-                BankAccountLedgerEntry.SetLoadFields("Bank Account No.", "Transaction No.", "Posting Date", "Document Type", "Document No.", "Bank Acc. Posting Group", Description, "Transaction No.", "Debit Amount (LCY)", "Credit Amount (LCY)", "Currency Code", Amount);
+                if BankBalAccountNo = '' then
+                    CurrReport.Break();
+                // SetLoadFields("Bank Account No.", "Transaction No.", "Posting Date", "Document Type", "Document No.", "Bank Acc. Posting Group", Description, "Transaction No.", "Debit Amount (LCY)", "Credit Amount (LCY)", "Currency Code", Amount, "Dimension Set ID");
             end;
 
             trigger OnAfterGetRecord()
@@ -126,6 +141,90 @@ report 87132 "WanaStart Open Entries"
                         GLAccount.Get(BankAccountPostingGroup."G/L Account No.");
                 end;
                 AddBankAccountLedgerEntry(BankAccountLedgerEntry);
+            end;
+        }
+        dataitem("Fixed Asset"; "Fixed Asset")
+        {
+            RequestFilterFields = "No.";
+            dataitem("FA Ledger Entry"; "FA Ledger Entry")
+            {
+                DataItemTableView =
+                    sorting("FA No.", "Depreciation Book Code", "FA Posting Date")
+                    where("FA Posting Type" = const("FA Posting Type"::"Acquisition Cost"));
+                trigger OnPreDataItem()
+                begin
+                    if FABalAccountNo = '' then
+                        CurrReport.Break();
+                    // "FA Ledger Entry".SetLoadFields("FA No.", "Depreciation Book Code", Amount, "Posting Date", "Document Date", "External Document No.", "Dimension Set ID");
+                end;
+
+                trigger OnAfterGetRecord()
+                begin
+                    AddFALedgerEntry("FA Ledger Entry");
+                end;
+            }
+
+            trigger OnPreDataItem()
+            begin
+                if FABalAccountNo = '' then
+                    CurrReport.Break();
+                FASetup.Get();
+                // "Fixed Asset".SetLoadFields("No.", Description);
+                // FADepreciationBook.SetLoadFields("Acquisition Date", Description, "Acquisition Cost", Depreciation);
+                FADepreciationBook.CalcFields("Acquisition Cost", Depreciation);
+            end;
+
+            trigger OnAfterGetRecord()
+            var
+                GenJournalLine: Record "Gen. Journal Line";
+            begin
+                if not FADepreciationBook.Get("No.", FASetup."Default Depr. Book") then
+                    CurrReport.Skip();
+                GenJournalLine."Posting Date" := FADepreciationBook."Acquisition Date";
+                // GenJournalLine."Document Date" := ;
+                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                GenJournalLine."Account No." := "No.";
+                GenJournalLine."Document No." := OpeningDocumentNo;
+                GenJournalLine.Description := Description;
+                GenJournalLine.Validate("Depreciation Book Code", FADepreciationBook."Depreciation Book Code");
+                GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::"Acquisition Cost";
+                GenJournalLine.Validate(Amount, FADepreciationBook."Acquisition Cost");
+                // GenJournalLine."Dimension Set ID" := "Dimension Set ID";
+                GenJournalLine.CreateDimFromDefaultDim(GenJournalLine.FieldNo("Account No."));
+                GenJournalLine."Incoming Document Entry No." := GetIncomingDocumentNo(GenJournalLine);
+                AddLine(GenJournalLine, Description, FABalAccountNo);
+
+                GenJournalLine."Posting Date" := OpeningDate;
+                GenJournalLine."Document No." := OpeningDocumentNo;
+                GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Depreciation;
+                GenJournalLine.Validate(Amount, FADepreciationBook.Depreciation);
+                AddLine(GenJournalLine, Description, FABalAccountNo);
+            end;
+        }
+        dataitem("G/L Account"; "G/L Account")
+        {
+            dataitem("G/L Entry"; "G/L Entry")
+            {
+                trigger OnPreDataItem()
+                begin
+
+                end;
+
+                trigger OnAfterGetRecord()
+                begin
+
+                end;
+
+            }
+            trigger OnPreDataItem()
+            begin
+
+            end;
+
+            trigger OnAfterGetRecord()
+            begin
+                if not "Direct Posting" then
+                    CurrReport.Skip();
             end;
         }
     }
@@ -149,28 +248,45 @@ report 87132 "WanaStart Open Entries"
                     {
                         Caption = 'Opening DocumentNo';
                     }
-                    field(JournalTemplateName; GenJournalLine."Journal Template Name")
+                    field(JournalTemplateName; GenJournalBatch."Journal Template Name")
                     {
                         Caption = 'Journal Template Name';
                         TableRelation = "Gen. Journal Template" where(Type = const(General), Recurring = const(false));
                         trigger OnValidate()
                         begin
-                            GenJournalLine."Journal Batch Name" := '';
+                            GenJournalBatch."Name" := '';
                         end;
                     }
-                    field(JournalBatchName; GenJournalLine."Journal Batch Name")
+                    field(JournalBatchName; GenJournalBatch."Name")
                     {
                         Caption = 'Journal Batch Name"';
                         TableRelation = "Gen. Journal Batch".Name;
                         trigger OnLookup(var Text: Text): Boolean
-                        var
-                            GenJournalBatch: Record "Gen. Journal Batch";
                         begin
-                            GenJournalLine.TestField("Journal Template Name");
-                            GenJournalBatch.SetRange("Journal Template Name", GenJournalLine."Journal Template Name");
-                            if Page.Runmodal(0, GenJournalBatch) = Action::LookupOK then
-                                GenJournalLine."Journal Batch Name" := GenJournalBatch.Name;
+                            GenJournalBatch.TestField("Journal Template Name");
+                            GenJournalBatch.SetRange("Journal Template Name", GenJournalBatch."Journal Template Name");
+                            if Page.Runmodal(0, GenJournalBatch) = Action::LookupOK then;
                         end;
+                    }
+                    field(CustomerBalAccount; CustomerBalAccountNo)
+                    {
+                        Caption = 'Customer Bal. Account No.';
+                        TableRelation = "G/L Account" where("Direct Posting" = const(true));
+                    }
+                    field(VendorBalAccount; VendorBalAccountNo)
+                    {
+                        Caption = 'Vendor Bal. Account No.';
+                        TableRelation = "G/L Account" where("Direct Posting" = const(true));
+                    }
+                    field(BankBalAccount; BankBalAccountNo)
+                    {
+                        Caption = 'Bank Bal. Account No.';
+                        TableRelation = "G/L Account" where("Direct Posting" = const(true));
+                    }
+                    field(FABalAccount; FABalAccountNo)
+                    {
+                        Caption = 'F.A. Bal. Account No.';
+                        TableRelation = "G/L Account" where("Direct Posting" = const(true));
                     }
                 }
             }
@@ -178,17 +294,18 @@ report 87132 "WanaStart Open Entries"
     }
 
     trigger OnPreReport()
+    var
+        GenJournalLine: Record "Gen. Journal Line";
     begin
         Tab[1] := 9;
         CRLF := TypeHelper.CRLFSeparator();
 
-        if GenJournalLine."Journal Batch Name" = '' then begin
+        if GenJournalBatch.Name = '' then begin
             TempBlob.CreateOutStream(OutStreamObj);
             WriteHeader();
         end else begin
-            GenJournalLine.TestField("Journal Batch Name");
-            GenJournalLine.SetRange("Journal Template Name", GenJournalLine."Journal Template Name");
-            GenJournalLine.SetRange("Journal Batch Name", GenJournalLine."Journal Batch Name");
+            GenJournalLine.SetRange("Journal Template Name", GenJournalBatch."Journal Template Name");
+            GenJournalLine.SetRange("Journal Batch Name", GenJournalBatch.Name);
             if not GenJournalLine.IsEmpty() then
                 GenJournalLine.FieldError("Journal Batch Name", 'must be empty');
         end;
@@ -196,7 +313,7 @@ report 87132 "WanaStart Open Entries"
 
     trigger OnPostReport()
     begin
-        if GenJournalLine."Journal Batch Name" = '' then begin
+        if GenJournalBatch.Name = '' then begin
             ToFileName := GetFileName();
             TempBlob.CreateInStream(InStreamObj);
             DownloadFromStream(InStreamObj, '', '', '', ToFileName);
@@ -215,10 +332,19 @@ report 87132 "WanaStart Open Entries"
         GLAccount: Record "G/L Account";
         OpeningDate: Date;
         OpeningDocumentNo: Code[20];
-        GenJournalLine: Record "Gen. Journal Line";
+        // GenJournalLine: Record "Gen. Journal Line";
+        GenJournalBatch: Record "Gen. Journal Batch";
+        LineNo: Integer;
+        ShortcutDimCode: array[8] of Code[20];
         CustomerPostingGroup: Record "Customer Posting Group";
+        CustomerBalAccountNo: Code[20];
         VendorPostingGroup: Record "Vendor Posting Group";
+        VendorBalAccountNo: Code[20];
         BankAccountPostingGroup: Record "Bank Account Posting Group";
+        BankBalAccountNo: Code[20];
+        FABalAccountNo: Code[20];
+        FASetup: Record "FA Setup";
+        FADepreciationBook: Record "FA Depreciation Book";
 
     local procedure GetFileName(): Text[250]
     var
@@ -277,8 +403,6 @@ report 87132 "WanaStart Open Entries"
         OnAppendColumns(pGenJournalLine, ReturnValue);
     end;
 
-    var
-        ShortcutDimCode: array[8] of Code[20];
     // [IntegrationEvent(false, false)]
     // local procedure OnAfterSetLoadFields(
     //     var CustLedgerEntry: Record "Cust. Ledger Entry";
@@ -356,7 +480,10 @@ report 87132 "WanaStart Open Entries"
     end;
 
     local procedure AddCustomerLedgerEntry(var pLedgerEntry: Record "Cust. Ledger Entry")
+    var
+        GenJournalLine: Record "Gen. Journal Line";
     begin
+        GenJournalLine."Source Code" := pLedgerEntry."Source Code";
         GenJournalLine."Posting Date" := pLedgerEntry."Posting Date";
         GenJournalLine."Account Type" := "Gen. Journal Account Type"::Customer;
         GenJournalLine."Account No." := pLedgerEntry."Customer No.";
@@ -371,12 +498,19 @@ report 87132 "WanaStart Open Entries"
         GenJournalLine."External Document No." := pLedgerEntry."External Document No.";
         GenJournalLine."Dimension Set ID" := pLedgerEntry."Dimension Set ID";
         GenJournalLine."Incoming Document Entry No." := GetIncomingDocumentNo(GenJournalLine);
-        AddLine(GenJournalLine, pLedgerEntry."Customer Name");
+        GenJournalLine."Payment Method Code" := pLedgerEntry."Payment Method Code";
+        // GenJournalLine."Recipient Bank Account" := pLedgerEntry."Bank Account Code";
+        GenJournalLine."Posting Group" := CustomerPostingGroup.Code;
+        GenJournalLine."Salespers./Purch. Code" := pLedgerEntry."Salesperson Code";
+        GenJournalLine."Sales/Purch. (LCY)" := pLedgerEntry."Sales (LCY)";
+        AddLine(GenJournalLine, pLedgerEntry."Customer Name", CustomerBalAccountNo);
     end;
 
     local procedure AddVendorLedgerEntry(var pLedgerEntry: Record "Vendor Ledger Entry")
+    var
+        GenJournalLine: Record "Gen. Journal Line";
     begin
-        GenJournalLine."Line No." += 1;
+        GenJournalLine."Source Code" := pLedgerEntry."Source Code";
         GenJournalLine."Posting Date" := pLedgerEntry."Posting Date";
         GenJournalLine."Account Type" := "Gen. Journal Account Type"::Vendor;
         GenJournalLine."Account No." := pLedgerEntry."Vendor No.";
@@ -391,22 +525,49 @@ report 87132 "WanaStart Open Entries"
         GenJournalLine."External Document No." := pLedgerEntry."External Document No.";
         GenJournalLine."Dimension Set ID" := pLedgerEntry."Dimension Set ID";
         GenJournalLine."Incoming Document Entry No." := GetIncomingDocumentNo(GenJournalLine);
-        AddLine(GenJournalLine, pLedgerEntry."Vendor Name");
+        GenJournalLine."Payment Method Code" := pLedgerEntry."Payment Method Code";
+        // GenJournalLine."Recipient Bank Account" := pLedgerEntry."Bank Account Code";
+        GenJournalLine."Posting Group" := CustomerPostingGroup.Code;
+        GenJournalLine."Salespers./Purch. Code" := pLedgerEntry."Purchaser Code";
+        GenJournalLine."Sales/Purch. (LCY)" := pLedgerEntry."Purchase (LCY)";
+        AddLine(GenJournalLine, pLedgerEntry."Vendor Name", VendorBalAccountNo);
     end;
 
-    local procedure AddBankAccountLedgerEntry(var pBankAccountLedgerEntry: Record "Bank Account Ledger Entry");
+    local procedure AddBankAccountLedgerEntry(var pLedgerEntry: Record "Bank Account Ledger Entry");
+    var
+        GenJournalLine: Record "Gen. Journal Line";
     begin
-        GenJournalLine."Posting Date" := pBankAccountLedgerEntry."Posting Date";
-        GenJournalLine."Document Date" := pBankAccountLedgerEntry."Document Date";
+        GenJournalLine."Source Code" := pLedgerEntry."Source Code";
+        GenJournalLine."Posting Date" := pLedgerEntry."Posting Date";
+        GenJournalLine."Document Date" := pLedgerEntry."Document Date";
         GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Bank Account";
-        GenJournalLine."Account No." := pBankAccountLedgerEntry."Bank Account No.";
-        GenJournalLine."Document No." := pBankAccountLedgerEntry."Document No.";
-        GenJournalLine.Description := pBankAccountLedgerEntry.Description;
-        GenJournalLine.Validate(Amount, pBankAccountLedgerEntry.Amount);
-        GenJournalLine."External Document No." := pBankAccountLedgerEntry."External Document No.";
-        GenJournalLine."Dimension Set ID" := pBankAccountLedgerEntry."Dimension Set ID";
+        GenJournalLine."Account No." := pLedgerEntry."Bank Account No.";
+        GenJournalLine."Document No." := pLedgerEntry."Document No.";
+        GenJournalLine.Description := pLedgerEntry.Description;
+        GenJournalLine.Validate(Amount, pLedgerEntry.Amount);
+        GenJournalLine."External Document No." := pLedgerEntry."External Document No.";
+        GenJournalLine."Dimension Set ID" := pLedgerEntry."Dimension Set ID";
         GenJournalLine."Incoming Document Entry No." := GetIncomingDocumentNo(GenJournalLine);
-        AddLine(GenJournalLine, BankAccount.Name)
+        AddLine(GenJournalLine, BankAccount.Name, BankBalAccountNo);
+    end;
+
+    local procedure AddFALedgerEntry(var pLedgerEntry: Record "FA Ledger Entry");
+    var
+        GenJournalLine: Record "Gen. Journal Line";
+    begin
+        GenJournalLine."Source Code" := pLedgerEntry."Source Code";
+        GenJournalLine."Posting Date" := pLedgerEntry."Posting Date";
+        GenJournalLine."Document Date" := pLedgerEntry."Document Date";
+        GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+        GenJournalLine."Account No." := pLedgerEntry."FA No.";
+        GenJournalLine."Depreciation Book Code" := pLedgerEntry."Depreciation Book Code";
+        GenJournalLine."Document No." := pLedgerEntry."Document No.";
+        GenJournalLine.Description := pLedgerEntry.Description;
+        GenJournalLine.Validate(Amount, pLedgerEntry.Amount);
+        GenJournalLine."External Document No." := pLedgerEntry."External Document No.";
+        GenJournalLine."Dimension Set ID" := pLedgerEntry."Dimension Set ID";
+        GenJournalLine."Incoming Document Entry No." := GetIncomingDocumentNo(GenJournalLine);
+        AddLine(GenJournalLine, BankAccount.Name, BankBalAccountNo);
     end;
 
     local procedure GetIncomingDocumentNo(var pGenJournalLine: Record "Gen. Journal Line"): Integer
@@ -420,22 +581,24 @@ report 87132 "WanaStart Open Entries"
             exit(IncomingDocument."Entry No.");
     end;
 
-    local procedure AddLine(var pGenJournalLine: Record "Gen. Journal Line"; pName: Text)
+    local procedure AddLine(var pGenJournalLine: Record "Gen. Journal Line"; pName: Text; pBalAccountNo: Code[20])
     begin
         if pGenJournalLine.Amount = 0 then
             exit;
-        if GenJournalLine."Journal Batch Name" = '' then
-            WriteText(GenJournalLine, pName)
+        if pGenJournalLine."Journal Batch Name" = '' then
+            WriteText(pGenJournalLine, pName)
         else begin
-            GenJournalLine."Line No." += 1;
-            GenJournalLine.Insert();
+            LineNo += 1;
+            pGenJournalLine."Line No." := LineNo;
+            pGenJournalLine."Bal. Account No." := pBalAccountNo;
+            pGenJournalLine.Insert();
         end;
     end;
 
     local procedure WriteText(var pGenJournalLine: Record "Gen. Journal Line"; pName: Text)
     begin
         OutStreamObj.WriteText(
-            '' // JournalCode
+            pGenJournalLine."Source Code" // JournalCode
             + Tab // JournalLib
             + Tab + '0' // EcritureNum
             + Tab + ToString(pGenJournalLine."Posting Date") // EcritureDate
@@ -457,3 +620,4 @@ report 87132 "WanaStart Open Entries"
             + CRLF);
     end;
 }
+#endif

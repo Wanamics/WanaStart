@@ -10,8 +10,10 @@ codeunit 87130 "WanaStart ConfigPackage Events"
     Permissions =
         tabledata "Sales Invoice Header" = IM,
         tabledata "Sales Invoice Line" = IM,
+        tabledata "Sales Shipment Header" = IM,
         tabledata "Purch. Inv. Header" = IM,
         tabledata "Purch. Inv. Line" = IM,
+        tabledata "Purch. Rcpt. Header" = IM,
         tabledata "Sales Cr.Memo Header" = IM,
         tabledata "Sales Cr.Memo Line" = IM,
         tabledata "Purch. Cr. Memo Hdr." = IM,
@@ -41,8 +43,10 @@ codeunit 87130 "WanaStart ConfigPackage Events"
             exit(pNumber in [
                     Database::"Sales Invoice Header",
                     Database::"Sales Invoice Line",
+                    Database::"Sales Shipment Header",
                     Database::"Purch. Inv. Header",
                     Database::"Purch. Inv. Line",
+                    Database::"Purch. Rcpt. Header",
                     Database::"Sales Cr.Memo Header",
                     Database::"Sales Cr.Memo Line",
                     Database::"Purch. Cr. Memo Hdr.",

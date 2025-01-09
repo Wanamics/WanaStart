@@ -32,13 +32,15 @@ codeunit 87104 "WanaStart Apply Applies-to ID"
         EmployeeLedgerEntry.ModifyAll("Applies-to ID", '');
     end;
 
+
+#if FALSE
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", OnBeforeRunWithCheck, '', false, false)]
     local procedure OnBeforeRunWithCheck()
     var
         AllObj: Record AllObj;
         TempGenJournalLine: Record "Gen. Journal Line" temporary;
         WanApplyNotInstalledLbl: Label 'WanApply extension not installed.';
-        AppliesToIdWillNotBeAppliedLbl: Label '"%1" will not be applied', Comment = '%1: fieldcaption("Applies-to ID")';
+        AppliesToIdWillNotBeAppliedLbl: Label '"%1" will not be applied', Comment = '%1: FieldCaption("Applies-to ID")';
         ContinueLbl: Label 'Do you want to continue?';
     begin
         if AllObj.Get(AllObj."Object Type"::Codeunit, 87477) and // WanApply Codeunit::"wanApply Cust. Applies Events"
@@ -46,8 +48,9 @@ codeunit 87104 "WanaStart Apply Applies-to ID"
             AllObj.Get(AllObj."Object Type"::Codeunit, 87479) then // WanApply Codeunit::"wanApply Employee Applies Events"
             exit;
         if not Confirm(WanApplyNotInstalledLbl + '\' + AppliesToIdWillNotBeAppliedLbl + '\' + ContinueLbl, false, TempGenJournalLine.FieldCaption("Applies-to ID")) then
-            error('');
+            Error('');
     end;
+#endif
 
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", OnBeforeCustLedgEntryInsert, '', false, false)]
     // local procedure OnBeforeCustLedgEntryInsert(var CustLedgerEntry: Record "Cust. Ledger Entry"; GenJournalLine: Record "Gen. Journal Line"; GLRegister: Record "G/L Register")

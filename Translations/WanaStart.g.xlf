@@ -103,41 +103,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanOpeningDetails - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Report 727168257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Export Open Entries</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 727168257 - Method 695780001 - NamedType 2033492750" size-unit="char" translate="yes" xml:space="preserve">
-          <source>""#%&amp;*:&lt;&gt;?\/{|}~</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Method GetFileName - NamedType InvalidWindowsChrStringTxt</note>
-        </trans-unit>
-        <trans-unit id="Report 727168257 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Options</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control Options - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 727168257 - Control 1070872126 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Journal Batch Name"</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control JournalBatchName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 727168257 - Control 1744706346 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Journal Template Name</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control JournalTemplateName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 727168257 - Control 861194076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Opening Date</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control OpeningDate - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 727168257 - Control 634145750 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Opening DocumentNo</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Open Entries - Control OpeningDocumentNo - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 2676737549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Check Direct Posting Buf.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -577,21 +542,6 @@
           <source>VAT Prod. Posting Group</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field VAT Prod. Posting Group - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3992644840 - Method 2678235551 - NamedType 2958873029" size-unit="char" translate="yes" xml:space="preserve">
-          <source>WanApply extension not installed.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Apply Applies-to ID - Method OnBeforeRunWithCheck - NamedType WanApplyNotInstalledLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3992644840 - Method 2678235551 - NamedType 1508367569" size-unit="char" translate="yes" xml:space="preserve">
-          <source>"%1" will not be applied</source>
-          <note from="Developer" annotates="general" priority="2">%1: fieldcaption("Applies-to ID")</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Apply Applies-to ID - Method OnBeforeRunWithCheck - NamedType AppliesToIdWillNotBeAppliedLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3992644840 - Method 2678235551 - NamedType 348515413" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do you want to continue?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Apply Applies-to ID - Method OnBeforeRunWithCheck - NamedType ContinueLbl</note>
         </trans-unit>
         <trans-unit id="Codeunit 3992644840 - Method 1665861916 - NamedType 3764383116" size-unit="char" translate="yes" xml:space="preserve">
           <source>Do-you want to Apply Customer, Vendor and Employee entries by Applies-to Id?</source>

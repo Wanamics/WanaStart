@@ -7,7 +7,6 @@ using Microsoft.HumanResources.Payables;
 using Microsoft.Finance.GeneralLedger.Ledger;
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Finance.Dimension;
-using Microsoft.Finance.GeneralLedger.Journal;
 codeunit 87139 "WanaStart Exp. G/L Entries M&A"
 {
     SingleInstance = true;
