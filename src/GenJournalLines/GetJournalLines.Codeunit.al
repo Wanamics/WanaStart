@@ -129,9 +129,16 @@ codeunit 87106 "WanaStart Get Journal Lines"
             pRec.Validate(Description, ImportLine.EcritureLib);
         if pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer] then begin
             pRec."Sales/Purch. (LCY)" := ImportLine.Amount + ImportLine."VAT Amount";
-            if ImportLine.EcritureLet <> '' then
-                pRec.Validate("Applies-to ID", ImportLine.EcritureLet);
+            // if ImportLine.EcritureLet <> '' then
+            //     pRec.Validate("Applies-to ID", ImportLine.EcritureLet);
         end;
+
+        if (pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer]) and
+            (ImportLine."_Applies-to ID" <> '') then
+            pRec.Validate("Applies-to ID", ImportLine."_Applies-to ID");
+        pRec.Validate("External Document No.", ImportLine."_External Document No.");
+        pRec."Shortcut Dimension 1 Code" := ImportLine."_Shortcut Dimension 1 Code";
+        pRec."Shortcut Dimension 2 Code" := ImportLine."_Shortcut Dimension 2 Code";
     end;
 
     local procedure IsInvoice(pGenPostingType: enum "General Posting Type"; ImportLine: Record "WanaStart Import FR Line"): Boolean

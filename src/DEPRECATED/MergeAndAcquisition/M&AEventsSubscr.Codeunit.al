@@ -1,4 +1,4 @@
-
+#if FALSE
 namespace Wanamics.WanaStart;
 
 using Microsoft.Purchases.Payables;
@@ -7,7 +7,7 @@ using Microsoft.HumanResources.Payables;
 using Microsoft.Finance.GeneralLedger.Ledger;
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Finance.Dimension;
-codeunit 87139 "WanaStart Exp. G/L Entries M&A"
+codeunit 87133 "WanaStart M&A Events Subscr."
 {
     SingleInstance = true;
 
@@ -17,7 +17,7 @@ codeunit 87139 "WanaStart Exp. G/L Entries M&A"
         EmployeeLedgerEntry: Record "Employee Ledger Entry";
         ShortcutDimCode: array[8] of Code[20];
 
-    [EventSubscriber(ObjectType::Report, Report::"WanaStart Exp. G/L Entries M&A", OnAfterSetLoadFields, '', false, false)]
+    [EventSubscriber(ObjectType::Report, Report::"WanaStart M&A Exp. G/L Entries", OnAfterSetLoadFields, '', false, false)]
     local procedure OnAfterSetLoadFields(var GLEntry: Record "G/L Entry")
     var
         GLSetup: Record "General Ledger Setup";
@@ -31,7 +31,7 @@ codeunit 87139 "WanaStart Exp. G/L Entries M&A"
         DimMgt.GetGLSetup(ShortcutDimCode);
     end;
 
-    [EventSubscriber(ObjectType::Report, Report::"WanaStart Exp. G/L Entries M&A", OnAppendHeaders, '', false, false)]
+    [EventSubscriber(ObjectType::Report, Report::"WanaStart M&A Exp. G/L Entries", OnAppendHeaders, '', false, false)]
     local procedure OnAppendHeaders(var pText: Text)
     var
         i: Integer;
@@ -41,7 +41,7 @@ codeunit 87139 "WanaStart Exp. G/L Entries M&A"
             pText += '|' + ShortcutDimCode[i];
     end;
 
-    [EventSubscriber(ObjectType::Report, Report::"WanaStart Exp. G/L Entries M&A", OnAppendColumns, '', false, false)]
+    [EventSubscriber(ObjectType::Report, Report::"WanaStart M&A Exp. G/L Entries", OnAppendColumns, '', false, false)]
     local procedure OnAppendColumns(pGLEntry: Record "G/L Entry"; var pText: Text);
     var
         ExternalDocumentNo: Code[35];
@@ -101,4 +101,25 @@ codeunit 87139 "WanaStart Exp. G/L Entries M&A"
                     ReturnValue += DimensionSetEntry."Dimension Value Code";
         end;
     end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"WanaStart Import FR", OnAfterImportCell, '', false, false)]
+    // local procedure OnAfterImportCell(var ImportLine: Record "WanaStart Import FR Line"; var CsvBuffer: Record "CSV Buffer")
+    // begin
+    //     case CsvBuffer."Field No." of
+    //         19:
+    //             ImportLine."_External Document No." := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine."_External Document No."));
+    //         20:
+    //             ImportLine."_Applies-to ID" := CopyStr(CsvBuffer.Value, 1, MaxStrLen(ImportLine."_Applies-to ID"));
+    //         21:
+    //             ImportLine."_Shortcut Dimension 1 Code" := CsvBuffer.Value;
+    //         22:
+    //             ImportLine."_Shortcut Dimension 2 Code" := CsvBuffer.Value;
+    //     end;
+    // end;
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"WanaStart Import FR", OnBeforeInsert, '', false, false)]
+    // local procedure OnBeforeInsert(var ImportLine: Record "WanaStart Import FR Line")
+    // begin
+    // end;
 }
+#endif

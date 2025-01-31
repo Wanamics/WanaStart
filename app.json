@@ -2,7 +2,7 @@
   "id": "64b9e44f-3f19-4fec-9a69-dcdcf1ead0ed",
   "name": "WanaStart",
   "publisher": "Wanamics",
-  "version": "21.0.0.53",
+  "version": "21.0.0.54",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -11,7 +11,21 @@
   "url": "https://www.wanamics.fr/wanastart/",
   "contextSensitiveHelpUrl":"https://www.wanamics.fr/wanastart/",
   "logo": "Wanamics90x90.png",
-  "dependencies": [],
+  "dependencies": [
+    {
+      "id": "e98078ff-1f85-442b-828f-9f73ce6c4e22",
+      "publisher": "Microsoft",
+      "name": "FEC Audit File",
+      "version": "25.2.27733.28023"
+    }
+    ,
+    {
+      "id": "a41b0c3e-bf1c-4c97-ad1b-b430a3933ada",
+      "publisher": "Microsoft",
+      "name": "Audit File Export",
+      "version": "25.2.27733.28023"
+    }
+  ],
   "screenshots": [],
   "platform": "21.0.0.0",
   "application": "21.0.0.0",
@@ -24,7 +38,7 @@
     "allowDownloadingSource": true,
     "includeSourceInSymbolFile": true
   },
-  "runtime": "13.0",
+  "runtime": "14.0",
   "features": [
     "NoImplicitWith",
     "TranslationFile", 

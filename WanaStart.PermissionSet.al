@@ -21,7 +21,7 @@ permissionset 87100 "WANASTART"
         page "WanaStart Map Accounts" = X,
         page "WanaStart Map Account Update" = X,
         page "WanaStart Map Source Codes" = X,
-        report "WanaStart Exp. G/L Entries M&A" = X,
+        // report "WanaStart M&A Exp. G/L Entries" = X,
         codeunit "WanaStart Get Journal Lines" = X,
         codeunit "WanaStart Import Line Split" = X,
         page "WanaStart Import Check VAT" = X,

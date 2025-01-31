@@ -19,24 +19,24 @@
         //     "enableSqlInformationDebugger": true
         // }
         // ,
-        {
-            "name": "DevAdB",
-            "request": "launch",
-            "type": "al",
-            "server": "https://businesscentral.dynamics.com/",
-            "tenant": "e72de8e0-5832-4947-96d8-0ffa425380ff",
-            "environmentType": "Sandbox",
-            "environmentName": "DevAdB",
-            "port": 7049,
-            "authentication": "AAD",
-            "breakOnError": "ExcludeTry",
-            "breakOnRecordWrite": false,
-            // "schemaUpdateMode": "ForceSync",
-            "startupObjectType": "Page",
-            // "startupObjectId": 7015,
-            "launchBrowser": true
-        }
-        ,
+        // {
+        //     "name": "DevAdB",
+        //     "request": "launch",
+        //     "type": "al",
+        //     "server": "https://businesscentral.dynamics.com/",
+        //     "tenant": "e72de8e0-5832-4947-96d8-0ffa425380ff",
+        //     "environmentType": "Sandbox",
+        //     "environmentName": "DevAdB",
+        //     "port": 7049,
+        //     "authentication": "AAD",
+        //     "breakOnError": "ExcludeTry",
+        //     "breakOnRecordWrite": false,
+        //     // "schemaUpdateMode": "ForceSync",
+        //     "startupObjectType": "Page",
+        //     // "startupObjectId": 7015,
+        //     "launchBrowser": true
+        // }
+        // ,
         // {
         //     "name": "GRV Development",
         //     "request": "launch",
@@ -62,8 +62,8 @@
             "type": "al",
             "environmentType": "Sandbox",
             "environmentName": "DevSyneido",
-            "startupObjectType": "Report",
-            // "startupObjectId": ,
+            "startupObjectType": "Page",
+            // "startupObjectId": 87105,
             // "schemaUpdateMode": "ForceSync",
             "breakOnError": true,
             "launchBrowser": true,

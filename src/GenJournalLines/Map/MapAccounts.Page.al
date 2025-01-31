@@ -38,6 +38,7 @@ page 87100 "WanaStart Map Accounts"
                 field("VAT %"; Rec."VAT %")
                 {
                     Width = 5;
+                    BlankZero = true;
                     DrillDown = true;
                     trigger OnDrillDown()
                     var

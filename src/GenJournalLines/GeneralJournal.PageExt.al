@@ -31,6 +31,22 @@ pageextension 87100 "WanaStart General Journal" extends "General Journal"
                     ApplicationArea = All;
                     Image = ImportChartOfAccounts;
                     RunObject = codeunit "WanaStart Import FR";
+                    // trigger OnAction()
+                    // var
+                    //     ImportFRLine: Record "wanaStart Import FR Line";
+                    //     StartDateTime: DateTime;
+                    //     DoneMsg: Label '%1 lines imported in %2.';
+                    //     DeleteLines: Label 'Do you want to delete %1 previous lines?';
+                    // begin
+                    //     if not ImportFRLine.IsEmpty then
+                    //         if not Confirm(DeleteLines, false, ImportFRLine.Count) then
+                    //             exit
+                    //         else
+                    //             Rec.DeleteAll();
+                    //     StartDateTime := CurrentDateTime;
+                    //     Xmlport.Run(Xmlport::"Import FEC+", false, true, Rec);
+                    //     Message(DoneMsg, ImportFRLine.Count, CurrentDateTime - StartDateTime);
+                    // end;
                 }
                 action(WanaStartMapSourceCode)
                 {

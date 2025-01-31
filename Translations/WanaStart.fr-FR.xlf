@@ -1007,7 +1007,7 @@
         </trans-unit>
         <trans-unit id="Report 2574194418 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Export G/L Entries - Merge &amp; Aquisition</source>
-          <target>Export écritures (FEC enrichi)</target>
+          <target>Fusion &amp; Aquisition (FEC+)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Property Caption</note>
         </trans-unit>

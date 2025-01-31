@@ -1,3 +1,4 @@
+#if FALSE
 // Copy from report 10885 "Export G/L Entries - Tax Audit"
 // + DocumentNoPrefix 
 // + columns "External Document No.", "Closed by Entry No." for Vendor & Customer Ledger Entries
@@ -24,7 +25,7 @@ using Microsoft.Sales.Receivables;
 using System.Reflection;
 using System.Utilities;
 
-report 87139 "WanaStart Exp. G/L Entries M&A"
+report 87139 "WanaStart M&A Exp. G/L Entries"
 // #if not CLEAN23
 {
     ApplicationArea = Basic, Suite;
@@ -300,7 +301,10 @@ report 87139 "WanaStart Exp. G/L Entries M&A"
         // FeatureTelemetry.LogUptake('1000HO4', FRGeneralLedgerTok, Enum::"Feature Uptake Status"::"Used");
         ToFileName := GetFileName();
 
-        TempBlob.CreateInStream(InStreamObj);
+        //[
+        // TempBlob.CreateInStream(InStreamObj);
+        TempBlob.CreateInStream(InStreamObj, TextEncoding::UTF8);
+        //]
 
         DownloadFromStream(InStreamObj, '', '', '', ToFileName);
 
@@ -328,7 +332,10 @@ report 87139 "WanaStart Exp. G/L Entries M&A"
             Error(NoEntriestoExportErr);
 
         CRLF := TypeHelper.CRLFSeparator();
-        TempBlob.CreateOutStream(OutStreamObj);
+        //[
+        // TempBlob.CreateOutStream(OutStreamObj);
+        TempBlob.CreateOutStream(OutStreamObj, TextEncoding::UTF8);
+        //]
 
         WriteHeader();
     end;
@@ -1089,4 +1096,4 @@ report 87139 "WanaStart Exp. G/L Entries M&A"
     begin
     end;
 }
-// #endif
+#endif

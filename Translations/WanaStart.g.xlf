@@ -3,105 +3,55 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="WanaStart">
     <body>
       <group id="body">
-        <trans-unit id="Report 2574194418 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Export G/L Entries - Merge &amp; Aquisition</source>
+        <trans-unit id="Codeunit 2603355027 - NamedType 1877971069" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Master Data and G/L Entries</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Export Data Handling M&amp;A - NamedType CustomDataTxt</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - NamedType 2033492750" size-unit="char" translate="yes" xml:space="preserve">
-          <source>""#%&amp;*:&lt;&gt;?\/{|}~</source>
+        <trans-unit id="Codeunit 3170793201 - NamedType 1696908038" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creating FEC audit file\</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - NamedType InvalidWindowsChrStringTxt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType CreateFileTxt</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - NamedType 1757578926" size-unit="char" translate="yes" xml:space="preserve">
-          <source>You must enter an Ending Date.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - NamedType MissingEndingDateErr</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - NamedType 2562886535" size-unit="char" translate="yes" xml:space="preserve">
-          <source>You must enter a Starting Date.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - NamedType MissingStartingDateErr</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - NamedType 3607931179" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 3170793201 - NamedType 3607931179" size-unit="char" translate="yes" xml:space="preserve">
           <source>There are no entries to export within the defined filter. The file was not created.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - NamedType NoEntriestoExportErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType NoEntriestoExportErr</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Options</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control Options - Property Caption</note>
+        <trans-unit id="Codeunit 3170793201 - NamedType 4043817024" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processing transactions: #1###</source>
+          <note from="Developer" annotates="general" priority="2">#1 - percent of processed G/L Entries</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType ProcessTransactionsTxt</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 2298711184 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the source code to be used if there is no code specified in the G/L entry.</source>
+        <trans-unit id="XmlPort 864910206 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>FEC M&amp;A</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control DefaultSourceCodeControl - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort FEC M&amp;A - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 2298711184 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Default Source Code</source>
+        <trans-unit id="EnumExtension 2324962439 - EnumValue 2878805827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 1217862704">
+          <source>WanaMerge</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control DefaultSourceCodeControl - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension Export Format M&amp;A - EnumValue WanaMerge - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 3592094765 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the last date to include in the time interval that you export entries for.</source>
+        <trans-unit id="Table 2944520266 - Field 1095620362 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+          <source>_Applies-to Id</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control EndingDate - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _Applies-to ID - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 3592094765 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Ending Date</source>
+        <trans-unit id="Table 2944520266 - Field 3869156894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+          <source>_External Document No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control EndingDate - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _External Document No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 1524235287 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies if you want to include opening balances in the audit report file. The balances are calculated as of the date before the first date of the period covered by the report.</source>
+        <trans-unit id="Table 2944520266 - Field 3358261293 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+          <source>Shortcut Dimension 1 Code"</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control Include Opening Balances - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _Shortcut Dimension 1 Code - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 1524235287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Include Opening Balances</source>
+        <trans-unit id="Table 2944520266 - Field 1229148556 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+          <source>Shortcut Dimension 2 Code"</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control Include Opening Balances - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 543275552 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the first date for the time period covered in this audit.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control StartingDate - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 543275552 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Starting Date</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control StartingDate - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 1625677715 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies whether the transaction number is used as the progressive number in the audit file. If you select the option, the transaction number is used as the progressive number. If you do not select the option, the general ledger register number is used as the progressive number.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control UseTransactionNoControl - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 1625677715 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Use Transaction No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control UseTransactionNoControl - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 771000370 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the Document No. Prefix (to identify entries from a merged company).</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanDocumentNoPrefix - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 771000370 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Document No. Prefix</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanDocumentNoPrefix - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 3156747290 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies if open customer and vendor ledger entries must be detailled.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanOpeningDetails - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Report 2574194418 - Control 3156747290 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Opening Details</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Exp. G/L Entries M&amp;A - Control wanOpeningDetails - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _Shortcut Dimension 2 Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2676737549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Check Direct Posting Buf.</source>
@@ -598,40 +548,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import Fixed Assets - Method Process - NamedType AnalyzingLbl</note>
         </trans-unit>
-        <trans-unit id="Codeunit 1805109772 - Method 3201496503 - NamedType 2779639592" size-unit="char" translate="yes" xml:space="preserve">
-          <source>FR Tax Audit Import...</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method Import - NamedType ProgressMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1805109772 - Method 3201496503 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 account(s) to map inserted.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method Import - NamedType DoneMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1805109772 - Method 1665861916 - NamedType 804005424" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import FR Tax Audit</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method OnRun - NamedType ImportFromExcelTitle</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1805109772 - Method 1665861916 - NamedType 3713533041" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Text Files (*.txt)</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method OnRun - NamedType ExcelFileCaption</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1805109772 - Method 1665861916 - NamedType 3431447212" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to continue?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method OnRun - NamedType ContinueMsg</note>
-        </trans-unit>
         <trans-unit id="Codeunit 1805109772 - Method 1665861916 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 lines imported in %2.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method OnRun - NamedType DoneMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 1805109772 - Method 1665861916 - NamedType 2203411852" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning, File name %1 does not match "%2" %3.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Import FR - Method OnRun - NamedType FileNameMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 1805109772 - Method 1665861916 - NamedType 4289051840" size-unit="char" translate="yes" xml:space="preserve">
           <source>Do you want to delete %1 previous lines?</source>
