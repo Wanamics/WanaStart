@@ -8,6 +8,7 @@ xmlport 87102 "FEC M&A"
     FieldDelimiter = '<None>';
     FieldSeparator = '|';
     Format = VariableText;
+    TextEncoding = UTF8; //??   
 
     schema
     {

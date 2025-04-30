@@ -1,5 +1,5 @@
-#if FALSE
-namespace Wanamics.WanaStart;
+// #if FALSE
+namespace Wanamics.Start.MergeAndAcquisition;
 
 using Microsoft.Purchases.Payables;
 using Microsoft.Sales.Receivables;
@@ -122,4 +122,4 @@ codeunit 87133 "WanaStart M&A Events Subscr."
     // begin
     // end;
 }
-#endif
+// #endif

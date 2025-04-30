@@ -1,4 +1,4 @@
-#if FALSE
+// #if FALSE
 // Copy from report 10885 "Export G/L Entries - Tax Audit"
 // + DocumentNoPrefix 
 // + columns "External Document No.", "Closed by Entry No." for Vendor & Customer Ledger Entries
@@ -8,7 +8,7 @@
 // - Obsolete & if not CLEAN23
 
 // namespace Microsoft.Finance.AuditFileExport;
-namespace Wanamics.WanaStart;
+namespace Wanamics.Start.MergeAndAcquisition;
 
 using Microsoft.Bank.BankAccount;
 using Microsoft.Bank.Ledger;
@@ -286,14 +286,6 @@ report 87139 "WanaStart M&A Exp. G/L Entries"
                 }
             }
         }
-
-        actions
-        {
-        }
-    }
-
-    labels
-    {
     }
 
     trigger OnPostReport()
@@ -383,9 +375,6 @@ report 87139 "WanaStart M&A Exp. G/L Entries"
         //[
         wanDocumentNoPrefix: Code[10];
         wanOpeningDetails: Boolean;
-    //     wanVendorLedgerEntry: Record "Vendor Ledger Entry";
-    //     wanCustLedgerEntry: Record "Cust. Ledger Entry";
-    //     wanEmployeeLedgerEntry: Record "Employee Ledger Entry";
     //     ShortcutDimCode: array[8] of Code[20];
     //]
 
@@ -1096,4 +1085,4 @@ report 87139 "WanaStart M&A Exp. G/L Entries"
     begin
     end;
 }
-#endif
+// #endif

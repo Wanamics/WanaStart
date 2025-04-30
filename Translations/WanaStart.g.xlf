@@ -23,6 +23,106 @@
           <note from="Developer" annotates="general" priority="2">#1 - percent of processed G/L Entries</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType ProcessTransactionsTxt</note>
         </trans-unit>
+        <trans-unit id="Report 4269844626 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export G/L Entries - Merge &amp; Aquisition</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - NamedType 2033492750" size-unit="char" translate="yes" xml:space="preserve">
+          <source>""#%&amp;*:&lt;&gt;?\/{|}~</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - NamedType InvalidWindowsChrStringTxt</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - NamedType 1757578926" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You must enter an Ending Date.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - NamedType MissingEndingDateErr</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - NamedType 2562886535" size-unit="char" translate="yes" xml:space="preserve">
+          <source>You must enter a Starting Date.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - NamedType MissingStartingDateErr</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - NamedType 3607931179" size-unit="char" translate="yes" xml:space="preserve">
+          <source>There are no entries to export within the defined filter. The file was not created.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - NamedType NoEntriestoExportErr</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 2298711184 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the source code to be used if there is no code specified in the G/L entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control DefaultSourceCodeControl - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 2298711184 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Default Source Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control DefaultSourceCodeControl - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 3592094765 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the last date to include in the time interval that you export entries for.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control EndingDate - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 3592094765 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control EndingDate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 1524235287 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies if you want to include opening balances in the audit report file. The balances are calculated as of the date before the first date of the period covered by the report.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control Include Opening Balances - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 1524235287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Include Opening Balances</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control Include Opening Balances - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 543275552 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the first date for the time period covered in this audit.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control StartingDate - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 543275552 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control StartingDate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 1625677715 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether the transaction number is used as the progressive number in the audit file. If you select the option, the transaction number is used as the progressive number. If you do not select the option, the general ledger register number is used as the progressive number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control UseTransactionNoControl - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 1625677715 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Use Transaction No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control UseTransactionNoControl - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 771000370 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the Document No. Prefix (to identify entries from a merged company).</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control wanDocumentNoPrefix - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 771000370 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Document No. Prefix</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control wanDocumentNoPrefix - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 3156747290 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies if open customer and vendor ledger entries must be detailled.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control wanOpeningDetails - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 4269844626 - Control 3156747290 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opening Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control wanOpeningDetails - Property Caption</note>
+        </trans-unit>
         <trans-unit id="XmlPort 864910206 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>FEC M&amp;A</source>
           <note from="Developer" annotates="general" priority="2"></note>

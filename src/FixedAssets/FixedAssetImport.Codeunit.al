@@ -98,9 +98,9 @@ codeunit 87100 "WanaStart Import Fixed Assets"
             FADepreciationBook.Validate("Depreciation Book Code", FASetup."Default Depr. Book");
             FADepreciationBook.Validate("FA Posting Group", ImportBuffer."FA Posting Group");
             FADepreciationBook.Validate("Depreciation Method", ImportBuffer."Depreciation Method");
+            FADepreciationBook.Validate("Depreciation Starting Date", ImportBuffer."Depreciation Starting Date");
             FADepreciationBook.Validate("No. of Depreciation Years", ImportBuffer."No. of Depreciation Years");
             FADepreciationBook.Validate("Declining-Balance %", ImportBuffer."Declining-Balance %");
-            FADepreciationBook.Validate("Depreciation Starting Date", ImportBuffer."Depreciation Starting Date");
             FADepreciationBook.Insert(true);
         end;
     end;
@@ -123,7 +123,7 @@ codeunit 87100 "WanaStart Import Fixed Assets"
             Rec."Line No." := ImportBuffer."Row No." * 10000 + 1;
             Rec.Validate(Amount, -ImportBuffer.Depreciation);
             Rec.Validate("FA Posting Type", Rec."FA Posting Type"::Depreciation);
-            Rec.Validate("Bal. Account No.", '');
+            Rec.Validate("Bal. Account No.", GenJournalBatch."Bal. Account No.");
             Rec.Insert(true);
         end;
     end;
