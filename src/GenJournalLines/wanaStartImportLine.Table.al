@@ -1,8 +1,8 @@
-table 87106 "wanaStart Import FR Line"
+table 87106 "wanaStart Import Line"
 {
-    Caption = 'Import FR Line';
+    Caption = 'Import Line';
     DataClassification = ToBeClassified;
-    DrillDownPageId = "WanaStart Import Lines";
+    DrillDownPageId = WanaStart;
 
     fields
     {
@@ -110,13 +110,13 @@ table 87106 "wanaStart Import FR Line"
             Width = 8;
             trigger OnValidate()
             begin
-                Rec.Debit := 0;
+                Debit := 0;
                 Rec.Credit := 0;
-                if Rec.Amount > 0 then
-                    Rec.Debit := Rec.Amount
+                if Amount > 0 then
+                    Debit := Amount
                 else
-                    Rec.Credit := -Rec.Amount;
-                Validate("VAT Amount", Amount * (1 - (1 / (1 + "VAT %"))));
+                    Rec.Credit := -Amount;
+                Validate("VAT Amount", -Amount * (1 - (1 / (1 + "VAT %" / 100))));
             end;
         }
         field(101; Open; Boolean)
@@ -128,25 +128,29 @@ table 87106 "wanaStart Import FR Line"
         field(102; "VAT Amount"; Decimal)
         {
             Caption = 'VAT Amount';
+            Editable = false;
             BlankZero = true;
             Width = 8;
             trigger OnValidate()
             begin
-                if Amount + "VAT Amount" = 0 then
-                    "VAT %" := 0
-                else
-                    "VAT %" := Round(-"VAT Amount" / (Amount + "VAT Amount") * 100, 0.01);
+                // if Amount + "VAT Amount" = 0 then
+                //     "VAT %" := 0
+                // else
+                //     "VAT %" := Round(-"VAT Amount" / (Amount + "VAT Amount") * 100, 0.01);
+                "VAT Account Amt. %" := VATRate("VAT Amount", Amount);
+                Validate("VAT Amount Diff.");
             end;
         }
         field(103; "VAT %"; Decimal)
         {
             Caption = 'VAT %';
+            Editable = false;
             BlankZero = true;
             DecimalPlaces = 1 : 2;
             Width = 5;
             trigger OnValidate()
             begin
-                "VAT Amount" := Round(-Amount * (1 - 1 / (1 + "VAT %" / 100)));
+                Validate("VAT Amount", Round(-Amount * (1 - 1 / (1 + "VAT %" / 100))));
             end;
         }
         field(104; "Split Line No."; Integer)
@@ -163,7 +167,7 @@ table 87106 "wanaStart Import FR Line"
             trigger OnValidate()
             begin
                 Rec.TestField(CompAuxNum);
-                Rec.TestField(Open);
+                CalcVAT();
             end;
         }
         field(106; "Document No."; Code[50])
@@ -171,10 +175,46 @@ table 87106 "wanaStart Import FR Line"
             Caption = 'Document No.';
             Width = 8;
         }
-        field(107; "Gen. Posting Type"; Enum "General Posting Type")
+        field(107; "Posting Type"; Enum "WanaStart Posting Type")
         {
-            Caption = 'Gen. Posting Type';
+            Caption = 'Posting Type';
+            Width = 5;
+        }
+        field(108; "No VAT"; Boolean)
+        {
+            Caption = 'No VAT';
+            Width = 5;
+        }
+        field(109; "VAT Account Amount"; Decimal)
+        {
+            Caption = 'VAT Account Amount';
+            Editable = false;
+            BlankZero = true;
+            Width = 8;
+            trigger OnValidate()
+            begin
+                Validate("VAT Amount Diff.");
+                "VAT Account Amt. %" := VATRate("VAT Account Amount", Amount);
+            end;
+        }
+        field(110; "VAT Account Amt. %"; Decimal)
+        {
+            Caption = 'VAT Account Amt. %';
+            Editable = false;
+            BlankZero = true;
+            DecimalPlaces = 1 : 2;
+            Width = 5;
+        }
+        field(111; "VAT Amount Diff."; Decimal)
+        {
+            Caption = 'VAT Amount Diff.';
+            Editable = false;
+            BlankZero = true;
             Width = 6;
+            trigger OnValidate()
+            begin
+                "VAT Amount Diff." := "VAT Account Amount" - "VAT Amount";
+            end;
         }
     }
     keys
@@ -189,12 +229,53 @@ table 87106 "wanaStart Import FR Line"
 
     trigger OnDelete()
     var
-        Rec2: Record "WanaStart Import FR Line";
+        Rec2: Record "wanaStart Import Line";
     begin
         Rec.TestField("Split Line No.");
         Rec2.Get("Line No.", 0);
         Rec2.Validate(Amount, Rec2.Amount + Rec.Amount);
         Rec2.Validate("VAT Amount", Rec2."VAT Amount" + Rec."VAT Amount");
         Rec2.Modify(true);
+    end;
+
+    var
+        MapSourceCode: Record "wanaStart Map Source Code";
+        MapAccount: Record "wanaStart Map Account";
+        VATPostingSetup: Record "VAT Posting Setup";
+
+    local procedure CalcVAT()
+    var
+        TempVATPostingSetup: Record "VAT Posting Setup";
+    begin
+        if Rec.JournalCode <> MapSourceCode."Source Code" then
+            MapSourceCode.Get(Rec.JournalCode);
+        if (Rec.CompteNum <> MapAccount."From Account No.") or (Rec.CompAuxNum <> MapAccount."From SubAccount No.") then
+            MapAccount.Get(Rec.CompteNum, Rec.CompAuxNum);
+        TempVATPostingSetup."VAT Bus. Posting Group" := MapAccount.GetVATBusPostingGroup();
+        case true of
+            Rec."VAT Prod. Posting Group" <> '':
+                TempVATPostingSetup."VAT Prod. Posting Group" := Rec."VAT Prod. Posting Group";
+            MapAccount."VAT Prod. Posting Group" <> '':
+                TempVATPostingSetup."VAT Prod. Posting Group" := MapAccount."VAT Prod. Posting Group"
+            else
+                TempVATPostingSetup."VAT Prod. Posting Group" := MapSourceCode."VAT Prod. Posting Group";
+        end;
+        if (VATPostingSetup."VAT Bus. Posting Group" <> TempVATPostingSetup."VAT Bus. Posting Group") or
+                (VATPostingSetup."VAT Prod. Posting Group" <> TempVATPostingSetup."VAT Prod. Posting Group") then
+            VATPostingSetup.Get(TempVATPostingSetup."VAT Bus. Posting Group", TempVATPostingSetup."VAT Prod. Posting Group");
+        if VATPostingSetup."VAT Calculation Type" = VATPostingSetup."VAT Calculation Type"::"Reverse Charge VAT" then
+            VATPostingSetup."VAT %" := 0;
+        if VATPostingSetup."VAT %" <> Rec."VAT %" then begin
+            Rec.Validate("VAT %", VATPostingSetup."VAT %");
+            Rec.Modify(true);
+        end;
+    end;
+
+    local procedure VATRate(pVATAmount: Decimal; pAmountInclVAT: Decimal): Decimal
+    begin
+        if pAmountInclVAT + pVATAmount = 0 then
+            exit(0)
+        else
+            exit(Round(-pVATAmount / (pAmountInclVAT + pVATAmount) * 100, 0.01));
     end;
 }

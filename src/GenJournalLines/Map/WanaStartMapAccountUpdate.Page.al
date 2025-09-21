@@ -20,7 +20,7 @@ page 87101 "WanaStart Map Account Update"
             {
                 ApplicationArea = All;
             }
-            // field(Skip; rec.Skip)
+            // field("Skip"; rec.Skip)
             // {
             //     ApplicationArea = All;
             // }

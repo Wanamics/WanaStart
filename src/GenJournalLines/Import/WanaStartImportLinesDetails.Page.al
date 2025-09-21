@@ -3,7 +3,7 @@ page 87103 "WanaStart Import Lines Details"
     ApplicationArea = All;
     Caption = 'Import Lines Details';
     PageType = CardPart;
-    SourceTable = "WanaStart Import FR Line";
+    SourceTable = "wanaStart Import Line";
 
     layout
     {

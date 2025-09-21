@@ -1,3 +1,7 @@
+namespace Wanamics.WanaStart;
+
+using Microsoft.Finance.VAT.Setup;
+using Microsoft.Finance.GeneralLedger.Account;
 page 87100 "WanaStart Map Accounts"
 {
     ApplicationArea = All;
@@ -32,6 +36,12 @@ page 87100 "WanaStart Map Accounts"
                 field(Amount; Rec.Amount)
                 {
                 }
+                field("Balance at Date"; Rec."Balance at Date")
+                {
+                }
+                field("Net Change"; Rec."Net Change")
+                {
+                }
                 field("No. of Open Lines"; Rec."No. of Open Lines") { }
                 field("Amount Incl. VAT"; Rec."Amount Incl. VAT") { Visible = false; }
                 field("VAT Amount"; Rec."VAT Amount") { Visible = false; }
@@ -42,19 +52,19 @@ page 87100 "WanaStart Map Accounts"
                     DrillDown = true;
                     trigger OnDrillDown()
                     var
-                        ImportLine: Record "WanaStart Import FR Line";
+                        ImportLine: Record "wanaStart Import Line";
                     begin
                         ImportLine.SetRange(CompteNum, Rec."From Account No.");
                         ImportLine.SetRange(CompAuxNum, Rec."From SubAccount No.");
                         case Rec."Account Type" of
                             Rec."Account Type"::Vendor:
-                                ImportLine.SetRange("Gen. Posting Type", ImportLine."Gen. Posting Type"::Purchase);
+                                ImportLine.SetRange("Posting Type", ImportLine."Posting Type"::Purchase);
                             Rec."Account Type"::Customer:
-                                ImportLine.SetRange("Gen. Posting Type", ImportLine."Gen. Posting Type"::Sale);
+                                ImportLine.SetRange("Posting Type", ImportLine."Posting Type"::Sale);
                             else
                                 Rec.FieldError("Account Type");
                         end;
-                        Page.RunModal(page::"WanaStart Import Lines", ImportLine);
+                        Page.RunModal(Page::WanaStart, ImportLine);
                     end;
                 }
                 field("Account Type"; Rec."Account Type")
@@ -70,7 +80,7 @@ page 87100 "WanaStart Map Accounts"
                 field(VATBusPostingGroup; Rec.GetVATBusPostingGroup())
                 {
                     Caption = 'VAT Bus. Posting Group';
-                    Width = 8;
+                    Width = 5;
                     DrillDown = true;
 
                     trigger OnDrillDown()
@@ -98,7 +108,7 @@ page 87100 "WanaStart Map Accounts"
                 field("G/L Acc. Prod. Posting Group"; Rec."G/L Acc. VAT Prod. P. G.")
                 {
                 }
-                field("Gen. Posting Type"; Rec."Gen. Posting Type")
+                field("WanaStart Source Posting Type"; Rec."WanaStart Source Posting Type")
                 {
                 }
                 field("Dimension 1 Code"; Rec."Dimension 1 Code")
@@ -117,7 +127,7 @@ page 87100 "WanaStart Map Accounts"
                 {
                     Visible = false;
                 }
-                field(Skip; Rec.Skip)
+                field("Skip"; Rec.Skip)
                 {
                 }
             }
@@ -238,7 +248,7 @@ page 87100 "WanaStart Map Accounts"
             {
                 Caption = 'Lines';
                 Image = LedgerEntries;
-                RunObject = page "WanaStart Import Lines";
+                RunObject = page WanaStart;
                 RunPageLink = CompteNum = field("From Account No."), CompAuxNum = field("From SubAccount No.");
                 ShortcutKey = 'Ctrl+F7';
             }

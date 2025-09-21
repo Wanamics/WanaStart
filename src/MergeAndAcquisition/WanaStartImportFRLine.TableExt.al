@@ -1,6 +1,6 @@
-namespace WanaStart.WanaStart;
+namespace Wanamics.WanaStart;
 
-tableextension 87100 "WanaStart Import FR Line" extends "WanaStart Import FR Line"
+tableextension 87100 "WanaStart Import FR Line" extends "wanaStart Import Line"
 {
     fields
     {
@@ -13,6 +13,7 @@ tableextension 87100 "WanaStart Import FR Line" extends "WanaStart Import FR Lin
         {
             Caption = '_Applies-to Id';
             DataClassification = ToBeClassified;
+            ObsoleteState = Removed;
         }
         field(87102; "_Shortcut Dimension 1 Code"; Code[20])
         {

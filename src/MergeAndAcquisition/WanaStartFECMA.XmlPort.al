@@ -1,20 +1,20 @@
 namespace Wanamics.Start.MergeAndAcquisition;
 
 using System.Reflection;
-xmlport 87102 "FEC M&A"
+xmlport 87102 "WanaStart FEC M&A"
 {
     Caption = 'FEC M&A';
     Direction = Import;
     FieldDelimiter = '<None>';
     FieldSeparator = '|';
     Format = VariableText;
-    TextEncoding = UTF8; //??   
+    TextEncoding = UTF8;
 
     schema
     {
         textelement(Root)
         {
-            tableelement(ImportFRLine; "wanaStart Import FR Line")
+            tableelement(ImportLine; "wanaStart Import Line")
             {
                 textelement(JournalCode) { }
                 textelement(JournalLib) { }
@@ -35,13 +35,15 @@ xmlport 87102 "FEC M&A"
                 textelement(MontantDevise) { }
                 textelement(IDevise) { }
                 textelement(_ExternalDocumentNo) { MinOccurs = Zero; }
-                textelement(_AppliesToID) { MinOccurs = Zero; }
+                // textelement(_AppliesToID) { MinOccurs = Zero; }
                 textelement(_ShortcutDimension1Code) { MinOccurs = Zero; }
                 textelement(_ShortcutDimension2Code) { MinOccurs = Zero; }
 
                 trigger OnPreXmlItem()
                 begin
-                    currXMLport.Skip();
+                    // currXMLport.Skip();
+                    // if ImportLine.FindLast() then
+                    //     LineNo := ImportLine."Line No.";
                 end;
 
                 trigger OnBeforeInsertRecord()
@@ -51,7 +53,7 @@ xmlport 87102 "FEC M&A"
                         currXMLport.Skip();
                     end;
                     LineNo += 1;
-                    ImportFRLine."Line No." := LineNo;
+                    ImportLine."Line No." := LineNo;
                     if JournalCode <> MapSourceCode."Source Code" then
                         if not MapSourceCode.Get(JournalCode) then begin
                             MapSourceCode.Init();
@@ -59,9 +61,9 @@ xmlport 87102 "FEC M&A"
                             MapSourceCode."From Source Name" := JournalLib;
                             MapSourceCode.Insert();
                         end;
-                    ImportFRLine.JournalCode := JournalCode;
-                    ImportFRLine.EcritureNum := EcritureNum;
-                    ImportFRLine.EcritureDate := ToDate(EcritureDate);
+                    ImportLine.JournalCode := JournalCode;
+                    ImportLine.EcritureNum := EcritureNum;
+                    ImportLine.EcritureDate := ToDate(EcritureDate);
                     if (CompteNum <> MapAccount."From Account No.") or (CompAuxNum <> MapAccount."From SubAccount No.") then
                         if not MapAccount.Get(CompteNum, CompAuxNum) then begin
                             MapAccount.Init();
@@ -73,41 +75,48 @@ xmlport 87102 "FEC M&A"
                                 MapAccount."From Account Name" := CompAuxLib;
                             MapAccount.Insert();
                         end;
-                    ImportFRLine.CompteNum := CompteNum;
-                    ImportFRLine.CompAuxNum := CompAuxNum;
-                    ImportFRLine.EcritureNum := EcritureNum;
-                    ImportFRLine.PieceRef := PieceRef;
-                    ImportFRLine.PieceDate := ToDate(PieceDate);
-                    ImportFRLine.EcritureDate := ToDate(EcritureDate);
-                    ImportFRLine.EcritureLib := EcritureLib;
-                    ImportFRLine.Debit := ToDecimal(Debit);
+                    ImportLine.CompteNum := CompteNum;
+                    ImportLine.CompAuxNum := CompAuxNum;
+                    ImportLine.EcritureNum := EcritureNum;
+                    ImportLine.PieceRef := PieceRef;
+                    ImportLine.PieceDate := ToDate(PieceDate);
+                    ImportLine.EcritureDate := ToDate(EcritureDate);
+                    ImportLine.EcritureLib := EcritureLib;
+                    ImportLine.Debit := ToDecimal(Debit);
                     if Credit = 'C' then
-                        ImportFRLine.Credit := -ToDecimal(Debit)
+                        ImportLine.Credit := -ToDecimal(Debit)
                     else
-                        ImportFRLine.Credit := ToDecimal(Credit);
-                    ImportFRLine.EcritureLet := CopyStr(EcritureLet, 1, MaxStrLen(ImportFRLine.EcritureLet));
-                    ImportFRLine.DateLet := ToDate(DateLet);
-                    ImportFRLine.ValidDate := ToDate(ValidDate);
-                    ImportFRLine.MontantDev := ToDecimal(MontantDevise);
-                    ImportFRLine.IDevise := IDevise;
-                    ImportFRLine."_External Document No." := _ExternalDocumentNo;
-                    ImportFRLine."_Applies-to ID" := _AppliesToID;
-                    ImportFRLine."_Shortcut Dimension 1 Code" := _ShortcutDimension1Code;
-                    ImportFRLine."_Shortcut Dimension 2 Code" := _ShortcutDimension2Code;
+                        ImportLine.Credit := ToDecimal(Credit);
+                    ImportLine.EcritureLet := CopyStr(EcritureLet, 1, MaxStrLen(ImportLine.EcritureLet));
+                    ImportLine.DateLet := ToDate(DateLet);
+                    ImportLine.ValidDate := ToDate(ValidDate);
+                    ImportLine.MontantDev := ToDecimal(MontantDevise);
+                    ImportLine.IDevise := IDevise;
+                    ImportLine."_External Document No." := _ExternalDocumentNo;
+                    // ImportLine."_Applies-to ID" := _AppliesToID;
+                    ImportLine."_Shortcut Dimension 1 Code" := _ShortcutDimension1Code;
+                    ImportLine."_Shortcut Dimension 2 Code" := _ShortcutDimension2Code;
 
-                    ImportFRLine.Amount := ImportFRLine.Debit - ImportFRLine.Credit;
-                    ImportFRLine.Open := (ImportFRLine.CompAuxNum <> '') and (ImportFRLine.EcritureLet = '');
-                    if ImportFRLine.CompAuxNum <> '' then
-                        ImportFRLine.Validate("VAT Amount", VATAmount(ImportFRLine));
+                    ImportLine.Amount := ImportLine.Debit - ImportLine.Credit;
+                    ImportLine.Open := (ImportLine.CompAuxNum <> '') and (ImportLine.EcritureLet = '');
+                    if ImportLine.CompAuxNum <> '' then
+                        ImportLine.Validate("VAT Amount", VATAmount(ImportLine));
                 end;
             }
         }
     }
+
+    trigger OnPreXmlPort()
+    begin
+        if ImportLine.FindLast() then
+            LineNo := ImportLine."Line No.";
+    end;
+
     var
         FirstlineSkipped: Boolean;
         LineNo: Integer;
         MapSourceCode: Record "WanaStart Map Source Code";
-        MapAccount: Record "WanaStart Map Account";
+        MapAccount: Record Wanamics.WanaStart."wanaStart Map Account";
         TypeHelper: Codeunit "Type Helper";
 
     procedure ToDecimal(pText: Text) ReturnValue: Decimal
@@ -125,23 +134,23 @@ xmlport 87102 "FEC M&A"
         ReturnValue := v;
     end;
 
-    local procedure VATAmount(var Rec: Record "WanaStart Import FR Line"): Decimal;
+    local procedure VATAmount(var Rec: Record "wanaStart Import Line"): Decimal;
     var
-        ImportFRLine2: Record "WanaStart Import FR Line";
+        ImportLine2: Record "wanaStart Import Line";
     begin
         // if MapSourceCode."VAT Account No. Filter" = '' then
         // exit;
-        ImportFRLine2.SetCurrentKey(JournalCode, PieceRef, EcritureNum);
-        ImportFRLine2.SetRange(JournalCode, Rec.JournalCode);
-        ImportFRLine2.SetRange(EcritureDate, Rec.EcritureDate);
-        ImportFRLine2.SetRange(EcritureNum, Rec.EcritureNum);
-        ImportFRLine2.SetRange(PieceRef, Rec.PieceRef);
-        ImportFRLine2.SetFilter(CompAuxNum, '<>%1', '');
-        if ImportFRLine2.Count > 1 then
+        ImportLine2.SetCurrentKey(JournalCode, PieceRef, EcritureNum);
+        ImportLine2.SetRange(JournalCode, Rec.JournalCode);
+        ImportLine2.SetRange(EcritureDate, Rec.EcritureDate);
+        ImportLine2.SetRange(EcritureNum, Rec.EcritureNum);
+        ImportLine2.SetRange(PieceRef, Rec.PieceRef);
+        ImportLine2.SetFilter(CompAuxNum, '<>%1', '');
+        if ImportLine2.Count > 1 then
             exit;
-        ImportFRLine2.SetRange(CompAuxNum);
-        ImportFRLine2.SetFilter(CompteNum, '445*'); //MapSourceCode."VAT Account No. Filter"); 
-        ImportFRLine2.CalcSums(Amount);
-        exit(ImportFRLine2.Amount);
+        ImportLine2.SetRange(CompAuxNum);
+        ImportLine2.SetFilter(CompteNum, '445*'); //MapSourceCode."VAT Account No. Filter"); 
+        ImportLine2.CalcSums(Amount);
+        exit(ImportLine2.Amount);
     end;
 }

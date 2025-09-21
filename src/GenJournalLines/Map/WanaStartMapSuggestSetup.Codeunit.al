@@ -52,9 +52,9 @@ codeunit 87102 "WanaStart Map Suggest Setup"
                         pRec.Validate("Account Type", pRec."Account Type"::Customer);
                     '4452',
                     '4456':
-                        pRec.Validate("Gen. Posting Type", pRec."Gen. Posting Type"::Purchase);
+                        pRec.Validate("WanaStart Source Posting Type", pRec."WanaStart Source Posting Type"::Purchase);
                     '4457':
-                        pRec.Validate("Gen. Posting Type", pRec."Gen. Posting Type"::Sale);
+                        pRec.Validate("WanaStart Source Posting Type", pRec."WanaStart Source Posting Type"::Sale);
                     '5120' .. '5129':
                         pRec.Validate("Account Type", pRec."Account Type"::"Bank Account");
                 /*

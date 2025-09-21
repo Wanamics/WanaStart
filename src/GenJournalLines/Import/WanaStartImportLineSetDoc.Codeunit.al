@@ -1,6 +1,6 @@
 codeunit 87107 "WanaStart Import Line Set Doc."
 {
-    TableNo = "WanaStart Import FR Line";
+    TableNo = "wanaStart Import Line";
 
     trigger OnRun()
     var
@@ -19,10 +19,10 @@ codeunit 87107 "WanaStart Import Line Set Doc."
     end;
 
     var
-        xRec: Record "WanaStart Import FR Line";
+        xRec: Record "wanaStart Import Line";
         Suffix: Integer;
 
-    local procedure Update(var pRec: Record "WanaStart Import FR Line"): Boolean
+    local procedure Update(var pRec: Record "wanaStart Import Line"): Boolean
     begin
         xRec."Document No." := pRec."Document No.";
         if (pRec.JournalCode <> xRec.JournalCode) or
@@ -44,9 +44,9 @@ codeunit 87107 "WanaStart Import Line Set Doc."
             exit(pRec.Modify());
     end;
 
-    local procedure UniqueCustomerVendor(pRec: Record "WanaStart Import FR Line"): Boolean
+    local procedure UniqueCustomerVendor(pRec: Record "wanaStart Import Line"): Boolean
     var
-        Rec2: Record "WanaStart Import FR Line";
+        Rec2: Record "wanaStart Import Line";
     begin
         Rec2.SetRange(JournalCode, pRec.JournalCode);
         Rec2.SetRange(EcritureNum, pRec.EcritureNum);

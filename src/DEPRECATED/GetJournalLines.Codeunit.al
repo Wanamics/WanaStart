@@ -1,3 +1,4 @@
+#if FALSE
 codeunit 87106 "WanaStart Get Journal Lines"
 {
     TableNo = "Gen. Journal Line";
@@ -48,7 +49,7 @@ codeunit 87106 "WanaStart Get Journal Lines"
 
                 if not MapAccount.Skip and
                     not MapSourceCode.Skip and
-                    (not UnrealizedVAT or (MapAccount."Gen. Posting Type" = MapAccount."Gen. Posting Type"::" ") or (MapAccount."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type")) then begin
+                    (not UnrealizedVAT or (MapAccount."WanaStart Source Posting Type" = MapAccount."WanaStart Source Posting Type"::" ") or (MapAccount."WanaStart Source Posting Type" <> MapSourceCode."WanaStart Source Posting Type")) then begin
                     pRec := Default;
                     Set(pRec, ImportLine);
                     OnBeforeInsert(pRec, ImportLine);
@@ -93,23 +94,23 @@ codeunit 87106 "WanaStart Get Journal Lines"
             (pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer]) then
             pRec.Validate("External Document No.", pRec."External Document No." + '.' + Format(ImportLine."Split Line No."));
 
-        if MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" " then begin
+        if MapSourceCode."WanaStart Source Posting Type" <> MapSourceCode."WanaStart Source Posting Type"::" " then begin
             if pRec."Account Type" <> pRec."Account Type"::Employee then
-                if IsInvoice(MapSourceCode."Gen. Posting Type", ImportLine) then
+                if IsInvoice(MapSourceCode."WanaStart Source Posting Type", ImportLine) then
                     pRec.Validate("Document Type", pRec."Document Type"::Invoice)
                 else
                     pRec.Validate("Document Type", pRec."Document Type"::"Credit Memo");
         end;
 
         if (pRec."Account Type" in [pRec."Account Type"::Vendor, pRec."Account Type"::Customer]) and
-            ((MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" ") or (ImportLine."VAT Prod. Posting Group" <> '')) then begin
+            ((MapSourceCode."WanaStart Source Posting Type" <> MapSourceCode."WanaStart Source Posting Type"::" ") or (ImportLine."VAT Prod. Posting Group" <> '')) then begin
             GetVATPostingSetup(pRec, ImportLine);
             UnrealizedVAT := ImportLine.Open and /*(VATPostingSetup."VAT %" <> 0) and */(VATPostingSetup."Unrealized VAT Type" = VATPostingSetup."Unrealized VAT Type"::Percentage);
             if UnrealizedVAT then begin
                 // if ImportLine."VAT Prod. Posting Group" <> '' then
                 //     pRec.Validate("Document No.", CopyStr(pRec."Document No." + '/' + ImportLine."VAT Prod. Posting Group", 1, MaxStrLen(pRec."Document No.")));
                 pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
-                // pRec.Validate("Bal. Gen. Posting Type", MapSourceCode."Gen. Posting Type");
+                // pRec.Validate("Bal. Gen. Posting Type", MapSourceCode."WanaStart Source Posting Type");
                 if pRec."Account Type" = pRec."Account Type"::Vendor then
                     pRec.Validate("Bal. Gen. Posting Type", pRec."Bal. Gen. Posting Type"::Purchase)
                 else
@@ -118,7 +119,7 @@ codeunit 87106 "WanaStart Get Journal Lines"
                 pRec.Validate("Bal. VAT Prod. Posting Group", VATPostingSetup."VAT Prod. Posting Group")
             end;
         end else
-            if UnrealizedVAT and (MapSourceCode."Gen. Posting Type" <> MapSourceCode."Gen. Posting Type"::" ") then
+            if UnrealizedVAT and (MapSourceCode."WanaStart Source Posting Type" <> MapSourceCode."WanaStart Source Posting Type"::" ") then
                 pRec.Validate("Bal. Account No.", MapSourceCode."Bal. Account No.");
 
         pRec.Validate(Amount, ImportLine.Amount);
@@ -141,7 +142,7 @@ codeunit 87106 "WanaStart Get Journal Lines"
         pRec."Shortcut Dimension 2 Code" := ImportLine."_Shortcut Dimension 2 Code";
     end;
 
-    local procedure IsInvoice(pGenPostingType: enum "General Posting Type"; ImportLine: Record "WanaStart Import FR Line"): Boolean
+    local procedure IsInvoice(pGenPostingType: enum "WanaStart Source Posting Type"; ImportLine: Record "WanaStart Import FR Line"): Boolean
     begin
         case pGenPostingType of
             pGenPostingType::Purchase:
@@ -199,3 +200,4 @@ codeunit 87106 "WanaStart Get Journal Lines"
     begin
     end;
 }
+#endif

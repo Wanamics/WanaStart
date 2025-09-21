@@ -10,7 +10,7 @@ namespace Wanamics.Start.MergeAndAcquisition;
 using Microsoft.Foundation.Company;
 using Microsoft.Finance.AuditFileExport;
 
-codeunit 87138 "Export Data Check M&A" implements "Audit File Export Data Check"
+codeunit 87138 "WanaStart Export Data Check" implements "Audit File Export Data Check"
 {
     Access = Internal;
 

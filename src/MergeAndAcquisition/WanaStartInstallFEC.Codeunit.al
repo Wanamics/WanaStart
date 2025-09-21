@@ -8,7 +8,7 @@ namespace Wanamics.Start.MergeAndAcquisition;
 
 using Microsoft.Finance.AuditFileExport;
 
-codeunit 87139 "Install M&A"
+codeunit 87139 "WanaStart Install M&A"
 {
     Subtype = Install;
 

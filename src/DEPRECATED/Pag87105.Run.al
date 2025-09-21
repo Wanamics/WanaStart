@@ -1,5 +1,5 @@
 #if FALSE
-namespace WanaStart.WanaStart;
+namespace Wanamics.WanaStart;
 
 using System.Reflection;
 

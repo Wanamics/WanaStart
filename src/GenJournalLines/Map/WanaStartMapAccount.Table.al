@@ -1,7 +1,22 @@
+namespace Wanamics.WanaStart;
+
+using Microsoft.Finance.GeneralLedger.Journal;
+using Microsoft.Sales.Customer;
+using Microsoft.Purchases.Vendor;
+using Microsoft.Bank.BankAccount;
+using Microsoft.HumanResources.Employee;
+using Microsoft.FixedAssets.FixedAsset;
+using Microsoft.Intercompany.Partner;
+using Microsoft.Finance.GeneralLedger.Account;
+using Microsoft.Foundation.Company;
+using Microsoft.Finance.VAT.Setup;
+using Microsoft.Foundation.Enums;
+using Microsoft.Finance.Dimension;
 table 87100 "wanaStart Map Account"
 {
     Caption = 'Map Account';
     DataClassification = ToBeClassified;
+    LookupPageId = "WanaStart Map Accounts";
 
     fields
     {
@@ -9,10 +24,12 @@ table 87100 "wanaStart Map Account"
         {
             Caption = 'From Account No.';
             DataClassification = ToBeClassified;
+            Width = 6;
         }
         field(2; "From SubAccount No."; Code[20])
         {
             Caption = 'From SubAccount No.';
+            Width = 8;
         }
         field(3; "From Account Name"; Text[100])
         {
@@ -23,12 +40,13 @@ table 87100 "wanaStart Map Account"
         {
             Caption = 'Account Type';
             DataClassification = ToBeClassified;
+            Width = 5;
             trigger OnValidate()
             begin
                 if "Account Type" <> xRec."Account Type" then begin
                     "Account No." := '';
                     "Template Code" := '';
-                    "Gen. Posting Type" := "Gen. Posting Type"::" ";
+                    "WanaStart Source Posting Type" := "WanaStart Source Posting Type"::" ";
                 end;
             end;
         }
@@ -37,8 +55,7 @@ table 87100 "wanaStart Map Account"
             Caption = 'Account No.';
             DataClassification = ToBeClassified;
             TableRelation =
-            if ("Account Type" = const("G/L Account")) "G/L Account"
-                where("Account Type" = const(Posting), "Direct Posting" = const(true))
+            if ("Account Type" = const("G/L Account")) "G/L Account" where("Account Type" = const(Posting), "Direct Posting" = const(true))
             else
             if ("Account Type" = const(Customer)) Customer
             else
@@ -51,6 +68,7 @@ table 87100 "wanaStart Map Account"
             if ("Account Type" = const("IC Partner")) "IC Partner"
             else
             if ("Account Type" = const(Employee)) Employee;
+            Width = 6;
         }
         field(6; "Template Code"; Code[20])
         {
@@ -61,6 +79,7 @@ table 87100 "wanaStart Map Account"
             if ("Account Type" = const(Vendor)) "Vendor Templ."
             else
             if ("Account Type" = const(Employee)) "Employee Templ.";
+            Width = 5;
             trigger OnValidate()
             begin
                 case "Account Type" of
@@ -77,6 +96,7 @@ table 87100 "wanaStart Map Account"
         {
             Caption = 'VAT Prod. Posting Group';
             TableRelation = "VAT Product Posting Group";
+            Width = 5;
             trigger OnValidate()
             begin
                 case "Account Type" of
@@ -89,9 +109,10 @@ table 87100 "wanaStart Map Account"
                 end;
             end;
         }
-        field(8; "Gen. Posting Type"; enum "General Posting Type")
+        field(8; "WanaStart Source Posting Type"; enum "WanaStart Posting Type")
         {
-            Caption = 'Gen. Posting Type';
+            Caption = 'Posting Type';
+            Width = 5;
             trigger OnValidate()
             begin
                 TestField("Account Type", "Account Type"::"G/L Account");
@@ -125,33 +146,36 @@ table 87100 "wanaStart Map Account"
             CaptionClass = '1,2,4';
             Caption = 'Dimension 4 Code';
             TableRelation = "Dimension Value".Code where("Global Dimension No." = const(4), Blocked = const(false));
+            Width = 8;
         }
         field(100; "No. of Lines"; Integer)
         {
             Caption = 'No. of Lines';
             FieldClass = FlowField;
             CalcFormula =
-                Count("WanaStart Import FR Line"
+                Count("wanaStart Import Line"
                     where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No.")));
             Editable = false;
             BlankZero = true;
+            Width = 5;
         }
         field(101; Amount; Decimal)
         {
             Caption = 'Amount';
             FieldClass = FlowField;
             CalcFormula =
-                sum("WanaStart Import FR Line".Amount
+                sum("wanaStart Import Line".Amount
                     where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No.")));
             Editable = false;
             BlankZero = true;
+            Width = 8;
         }
         field(102; "No. of Open Lines"; Integer)
         {
             Caption = 'No. of Open Lines';
             FieldClass = FlowField;
             CalcFormula =
-                count("WanaStart Import FR Line"
+                count("wanaStart Import Line"
                     where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), Open = const(true)));
             Editable = false;
             BlankZero = true;
@@ -162,20 +186,22 @@ table 87100 "wanaStart Map Account"
             Caption = 'Amount Incl. VAT';
             FieldClass = FlowField;
             CalcFormula =
-                sum("WanaStart Import FR Line".Amount
-                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), "Gen. Posting Type" = filter("Purchase" | "Sale")));
+                sum("wanaStart Import Line".Amount
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), "Posting Type" = filter("Purchase" | "Sale")));
             Editable = false;
             BlankZero = true;
+            Width = 8;
         }
         field(104; "VAT Amount"; Decimal)
         {
             Caption = 'VAT Amount';
             FieldClass = FlowField;
             CalcFormula =
-                sum("WanaStart Import FR Line"."VAT Amount"
-                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), "Gen. Posting Type" = filter("Purchase" | "Sale")));
+                sum("wanaStart Import Line"."VAT Amount"
+                    where(CompteNum = field("From Account No."), CompAuxNum = field("From subAccount No."), "Posting Type" = filter("Purchase" | "Sale")));
             Editable = false;
             BlankZero = true;
+            Width = 8;
         }
         field(105; "VAT %"; Decimal)
         {
@@ -189,6 +215,44 @@ table 87100 "wanaStart Map Account"
             Editable = false;
             FieldClass = FlowField;
             CalcFormula = lookup("G/L Account"."VAT Prod. Posting Group" where("No." = field("Account No.")));
+            Width = 5;
+        }
+        field(109; "Source Code Filter"; Code[10])
+        {
+            Caption = 'Source Code Filter';
+            FieldClass = FlowFilter;
+            TableRelation = "wanaStart Map Source Code";
+        }
+        field(110; "Date Filter"; Date)
+        {
+            Caption = 'Date Filter';
+            FieldClass = FlowFilter;
+        }
+        field(111; "Balance at Date"; Decimal)
+        {
+            AutoFormatType = 1;
+            CalcFormula = sum("wanaStart Import Line".Amount
+                where(
+                    JournalCode = field("Source Code Filter"),
+                    CompteNum = field("From Account No."), CompAuxNum = field("From SubAccount No."), EcritureDate = field(upperlimit("Date Filter"))));
+            Caption = 'Balance at Date';
+            Editable = false;
+            FieldClass = FlowField;
+            BlankZero = true;
+            Width = 8;
+        }
+        field(112; "Net Change"; Decimal)
+        {
+            AutoFormatType = 1;
+            CalcFormula = sum("wanaStart Import Line".Amount
+                where(
+                    JournalCode = field("Source Code Filter"),
+                    CompteNum = field("From Account No."), CompAuxNum = field("From SubAccount No."), EcritureDate = field("Date Filter")));
+            Caption = 'Net Change';
+            Editable = false;
+            FieldClass = FlowField;
+            BlankZero = true;
+            Width = 8;
         }
     }
     keys
@@ -198,8 +262,12 @@ table 87100 "wanaStart Map Account"
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "From Account No.", "From Account Name", "Account No.") { }
+    }
     var
-        CsvBuffer: Record "CSV Buffer" temporary;
+        CsvBuffer: Record System.IO."CSV Buffer" temporary;
         RowNo: Integer;
         ColumnNo: Integer;
 

@@ -1,5 +1,5 @@
 #if FALSE
-namespace WanaStart.WanaStart;
+namespace Wanamics.WanaStart;
 
 using Microsoft.Finance.GeneralLedger.Account;
 using System.Utilities;

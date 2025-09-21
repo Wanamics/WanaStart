@@ -3,25 +3,25 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="WanaStart">
     <body>
       <group id="body">
-        <trans-unit id="Codeunit 2603355027 - NamedType 1877971069" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 589197222 - NamedType 1877971069" size-unit="char" translate="yes" xml:space="preserve">
           <source>Master Data and G/L Entries</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Export Data Handling M&amp;A - NamedType CustomDataTxt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Export Data Handling - NamedType CustomDataTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3170793201 - NamedType 1696908038" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2736875778 - NamedType 1696908038" size-unit="char" translate="yes" xml:space="preserve">
           <source>Creating FEC audit file\</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType CreateFileTxt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Generate File M&amp;A - NamedType CreateFileTxt</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3170793201 - NamedType 3607931179" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2736875778 - NamedType 3607931179" size-unit="char" translate="yes" xml:space="preserve">
           <source>There are no entries to export within the defined filter. The file was not created.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType NoEntriestoExportErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Generate File M&amp;A - NamedType NoEntriestoExportErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3170793201 - NamedType 4043817024" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 2736875778 - NamedType 4043817024" size-unit="char" translate="yes" xml:space="preserve">
           <source>Processing transactions: #1###</source>
           <note from="Developer" annotates="general" priority="2">#1 - percent of processed G/L Entries</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit Generate File M&amp;A - NamedType ProcessTransactionsTxt</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Generate File M&amp;A - NamedType ProcessTransactionsTxt</note>
         </trans-unit>
         <trans-unit id="Report 4269844626 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Export G/L Entries - Merge &amp; Aquisition</source>
@@ -123,35 +123,540 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart M&amp;A Exp. G/L Entries - Control wanOpeningDetails - Property Caption</note>
         </trans-unit>
-        <trans-unit id="XmlPort 864910206 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="XmlPort 1541053245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>FEC M&amp;A</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">XmlPort FEC M&amp;A - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort WanaStart FEC M&amp;A - Property Caption</note>
         </trans-unit>
-        <trans-unit id="EnumExtension 2324962439 - EnumValue 2878805827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 1217862704">
+        <trans-unit id="EnumExtension 2850948370 - EnumValue 2878805827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 1217862704">
           <source>WanaMerge</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension Export Format M&amp;A - EnumValue WanaMerge - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension WanaStart Export Format - EnumValue WanaMerge - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 1095620362 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
-          <source>_Applies-to Id</source>
+        <trans-unit id="Table 1608961456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Map Account</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _Applies-to ID - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 3869156894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+        <trans-unit id="Table 1608961456 - Method 59423316 - NamedType 804005424" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import FEC File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Method Initialize - NamedType ImportFromExcelTitle</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Method 59423316 - NamedType 3713533041" size-unit="char" translate="yes" xml:space="preserve">
+          <source>FEC Files (*.txt)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Method Initialize - NamedType ExcelFileCaption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Method 2647891866 - NamedType 3950098385" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Loading...\\</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Method Load - NamedType ProgressLbl</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 1622979514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Account No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Account No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 3699788827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Account Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Account Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 636392376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Amount - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 3291406315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Amount Incl. VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Amount Incl. VAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 3730000841 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Balance at Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Balance at Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 995090288 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Date Filter</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Date Filter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2538533960 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 2 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 1 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 1964727017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 2 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 2 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2783906506 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 3 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 3 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 3041667371 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Dimension 4 Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 4 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2180470884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From Account Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field From Account Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 1384813212 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From Account No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field From Account No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 336946648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>From SubAccount No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field From SubAccount No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2962032260 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>G/L Acc. VAT Prod. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field G/L Acc. VAT Prod. P. G. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 2304016699 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Net Change</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Net Change - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 950508093 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field No. of Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 4028953697 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No. of Open Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field No. of Open Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 343736747 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Skip</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Skip - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 3928181700 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Code Filter</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Source Code Filter - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 339805095 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Template Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Template Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 1246077090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field VAT % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 1108276017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field VAT Amount - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 236064653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Prod. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field VAT Prod. Posting Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1608961456 - Field 4083480800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field WanaStart Source Posting Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanaStart</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Method 4158747048 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to set the %1 to %2 for %3 selected lines?</source>
+          <note from="Developer" annotates="general" priority="2">%1 = Document No., %2 = FieldCaption, %3 = Count</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Method SetDocumentNo - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Control 1844012642 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Bus. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Control VAT Bus. Posting Group - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Control 304519175 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Control CheckVAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Control 318613646 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Control Details - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 1068937304 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Apply Applies-to IDs</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action Apply - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 2400667564 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Clean Data Before GoLive</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action CleanUp - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 2212959633 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General Journal</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action GeneralJournal - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 63198111 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import FEC</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action ImportFEC - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 3169050434 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Map Accounts</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action MapAccounts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 3186187288 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Map Source Codes</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action MapSourceCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 3707689466 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Send to Journal</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action SendToJournal - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 2199002769 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Document No. from Ecriture Num</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action SetDocumentNoFromEcritureNum - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 4071734763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Document No. from PieceRef</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action SetDocumentNoFromPieceRef - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 3170191563 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action SetVAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3630933339 - Action 1123480694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Split</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart - Action Split - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Map Accounts</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Method 2864276601 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do-you want to set %1 for %2 "%3"?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Method SetGLAccountVATProductPostingGroup - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Control 422618514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Account Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Control AccountName - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Control 4080497836 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Bus. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Control VATBusPostingGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 744084026 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Create Accounts</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action CreateAccounts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 744084026 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do-you want to create %1 account(s)?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action CreateAccounts - Method OnAction - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 3169050434 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Map Account Nos.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action MapAccounts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 3169050434 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do-you want to map %1 account(s)?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action MapAccounts - Method OnAction - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 738400759 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set G/L Account VAT Prod. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetGLAccountVATProdPostingGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 597894686 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Map Account VAT Prod. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetMapAccountVATProdPostingGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 597894686 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do-you want to set %1 for %2 "%3"?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetMapAccountVATProdPostingGroup - Method OnAction - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 540777326 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set VAT Bus. Posting Group</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetVATBusPostingGroup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 3629808269 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Values</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action UpdateAccounts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2116719985 - Action 3629808269 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do-you want to set %1 account(s)?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action UpdateAccounts - Method OnAction - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Report 3846153405 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanaStart Balance Batch</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Balance Batch - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3846153405 - Method 2736589801 - NamedType 1317555977" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 journal line(s) balanced.</source>
+          <note from="Developer" annotates="general" priority="2">%1:No. of journal lines inserted</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Balance Batch - Method OnPostReport - NamedType InsertedMsg</note>
+        </trans-unit>
+        <trans-unit id="Report 3846153405 - ReportDataItem 634226533 - Method 72583909 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to balance batch journal lines by Posting Date and Document No.?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Balance Batch - ReportDataItem GenJournalLine - Method OnPreDataItem - NamedType ConfirmMsg</note>
+        </trans-unit>
+        <trans-unit id="Report 3846153405 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Balance Batch - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3846153405 - Control 3494368714 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the G/L Account to use for balancing the journal lines.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Balance Batch - Control BalanceAccountNo - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 3846153405 - Control 3494368714 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Balance Account No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Balance Batch - Control BalanceAccountNo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 937020195 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanaStart Delete Unmapped Acc.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Delete Unmapped Acc. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanaStart Import Balance</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Method 2736589801 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 lines imported in %2.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Method OnPostReport - NamedType DoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Method 1544076788 - NamedType 4289051840" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to delete %1 previous lines?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Method OnPreReport - NamedType DeleteLines</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the description for the journal lines.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 3117834186 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the document number for the journal lines.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control DocumentNo - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 3117834186 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Document No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control DocumentNo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 3037438984 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the posting date for the journal lines.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control PostingDate - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 855165998 - Control 3037438984 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Import Balance - Control PostingDate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 995313617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanaStart Set VAT Account Amt.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Set VAT Account Amt. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 334975558 - Field 3869156894 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 334975558">
           <source>_External Document No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _External Document No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 3358261293 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+        <trans-unit id="Table 334975558 - Field 3358261293 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 334975558">
           <source>Shortcut Dimension 1 Code"</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _Shortcut Dimension 1 Code - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 1229148556 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2944520266">
+        <trans-unit id="Table 334975558 - Field 1229148556 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 334975558">
           <source>Shortcut Dimension 2 Code"</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension WanaStart Import FR Line - Field _Shortcut Dimension 2 Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 68660963 - EnumValue 3409713080 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opening</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum WanaStart Posting Type - EnumValue Opening - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 68660963 - EnumValue 395510365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum WanaStart Posting Type - EnumValue Purchase - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 68660963 - EnumValue 2315137949 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sale</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum WanaStart Posting Type - EnumValue Sale - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanaStart Send to Journal</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1268359924 - NamedType 2958873029" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WanApply extension not installed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method CheckWanApplyIsInstalled - NamedType WanApplyNotInstalledLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1268359924 - NamedType 1508367569" size-unit="char" translate="yes" xml:space="preserve">
+          <source>"%1" will not be applied</source>
+          <note from="Developer" annotates="general" priority="2">%1: FieldCaption("Applies-to ID")</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method CheckWanApplyIsInstalled - NamedType AppliesToIdWillNotBeAppliedLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1268359924 - NamedType 348515413" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to continue?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method CheckWanApplyIsInstalled - NamedType ContinueLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 2736589801 - NamedType 1178781371" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed in %1.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPostReport - NamedType ProcessLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 2736589801 - NamedType 120251437" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to open journal?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPostReport - NamedType OpenGenJournalLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1544076788 - NamedType 3764383116" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Warning, %1 line(s) of this journal will be deleted.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPreReport - NamedType ConfirmLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1544076788 - NamedType 348515413" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do-you want to continue?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPreReport - NamedType ContinueLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1544076788 - NamedType 1066422477" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Vend. Bal. Account and Cust. Bal. Account must be defined.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPreReport - NamedType BalAccountErr</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1544076788 - NamedType 1825552018" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Deleting Journal Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPreReport - NamedType DeletingLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Method 1544076788 - NamedType 3046438418" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sending to Journal</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Method OnPreReport - NamedType SendingLbl</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 3284430714 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the bal. account No. for customer entries (ex : 471411)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control CustBalAccountNo - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 3284430714 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cust. Bal. Account</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control CustBalAccountNo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 4158316017 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Spécifies a Document No. prefix</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control DocumentPrefix - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 4158316017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Document No. Prefix</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control DocumentPrefix - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 189954099 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the general journal batch that is used by the batch job.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control GenJournalBatch - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 189954099 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Gen. Journal Batch</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control GenJournalBatch - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 3491986895 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the general journal template that is used by the batch job.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control GenJournalTemplate - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 3491986895 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Gen. Journal Template</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control GenJournalTemplate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 1091926946 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the bal. account No. for vendor entries (ex : 471401)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control VendBalAccountNo - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Report 3410018817 - Control 1091926946 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Vend. Bal. Account</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Report WanaStart Send to Journal - Control VendBalAccountNo - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2676737549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Check Direct Posting Buf.</source>
@@ -353,185 +858,80 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table WanaStart FA Import Buffer - Field Warranty Date - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import FR Line</source>
+        <trans-unit id="Table 334975558 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Line</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 636392376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 636392376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Amount</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field Amount - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field Amount - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 486908828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 486908828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Document No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field Document No. - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field Document No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 59113118 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Gen. Posting Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field Gen. Posting Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 3320823955 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field Line No. - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field Line No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 4259830144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 4199058574 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field No VAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 334975558 - Field 4259830144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Open</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field Open - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field Open - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 2779192349 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 1877729964 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field Posting Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 334975558 - Field 2779192349 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Split Line No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field Split Line No. - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field Split Line No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 1246077090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 1246077090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>VAT %</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field VAT % - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field VAT % - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 1108276017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 210445474 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Account Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field VAT Account Amount - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 334975558 - Field 399564923 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Account Amt. %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field VAT Account Amt. % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 334975558 - Field 1108276017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>VAT Amount</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field VAT Amount - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field VAT Amount - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2944520266 - Field 236064653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 334975558 - Field 507169440 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>VAT Amount Diff.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field VAT Amount Diff. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 334975558 - Field 236064653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>VAT Prod. Posting Group</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import FR Line - Field VAT Prod. Posting Group - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Map Account</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Method 59423316 - NamedType 804005424" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import FEC File</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Method Initialize - NamedType ImportFromExcelTitle</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Method 59423316 - NamedType 3713533041" size-unit="char" translate="yes" xml:space="preserve">
-          <source>FEC Files (*.txt)</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Method Initialize - NamedType ExcelFileCaption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Method 2647891866 - NamedType 3950098385" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Loading...\\</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Method Load - NamedType ProgressLbl</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 1622979514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Account No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Account No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 3699788827 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Account Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Account Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 636392376 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Amount</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Amount - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 3291406315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Amount Incl. VAT</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Amount Incl. VAT - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 2538533960 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Dimension 2 Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 1 Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 1964727017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Dimension 2 Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 2 Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 2783906506 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Dimension 3 Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 3 Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 3041667371 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Dimension 4 Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Dimension 4 Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 2180470884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From Account Name</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field From Account Name - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 1384813212 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From Account No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field From Account No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 336946648 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>From SubAccount No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field From SubAccount No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 2962032260 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>G/L Acc. VAT Prod. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field G/L Acc. VAT Prod. P. G. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 59113118 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Gen. Posting Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Gen. Posting Type - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 950508093 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Lines</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field No. of Lines - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 4028953697 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No. of Open Lines</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field No. of Open Lines - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 343736747 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Skip</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Skip - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 339805095 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Template Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field Template Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 1246077090 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>VAT %</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field VAT % - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 1108276017 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>VAT Amount</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field VAT Amount - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1608961456 - Field 236064653 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>VAT Prod. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Account - Field VAT Prod. Posting Group - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Import Line - Field VAT Prod. Posting Group - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3443212447 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Map SourceCode</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3443212447 - Field 1891586249 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Bal. Account No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field Bal. Account No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3443212447 - Field 486908828 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Document No.</source>
@@ -539,7 +939,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field Document No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3443212447 - Field 486908828 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
-          <source>EcritureNum,PieceRef,From Line</source>
+          <source>EcritureNum,PieceRef,From Line,ExternalDocumentNo</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field Document No. - Property OptionCaption</note>
         </trans-unit>
@@ -549,7 +949,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field External Document No. - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3443212447 - Field 1527563463 - Property 62802879" size-unit="char" translate="yes" xml:space="preserve">
-          <source>PieceRef,EcritureNum,None</source>
+          <source>PieceRef,EcritureNum,None,ExternalDocumentNo</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field External Document No. - Property OptionCaption</note>
         </trans-unit>
@@ -562,11 +962,6 @@
           <source>From Source Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field From Source Name - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3443212447 - Field 59113118 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Gen. Posting Type</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field Gen. Posting Type - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3443212447 - Field 950508093 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>No. of Lines</source>
@@ -593,30 +988,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field VAT Prod. Posting Group - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3443212447 - Field 68660963 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table wanaStart Map Source Code - Field WanaStart Posting Type - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3992644840 - Method 1665861916 - NamedType 3764383116" size-unit="char" translate="yes" xml:space="preserve">
           <source>Do-you want to Apply Customer, Vendor and Employee entries by Applies-to Id?</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Apply Applies-to ID - Method OnRun - NamedType ConfirmLbl</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2883899677 - Method 3537485 - NamedType 2779639592" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Get Journal Lines</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Get Journal Lines - Method GetLines - NamedType ProgressMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2883899677 - Method 1665861916 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Warning, %1 line(s) of this journal will be deleted.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Get Journal Lines - Method OnRun - NamedType ConfirmMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2883899677 - Method 1665861916 - NamedType 3431447212" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to continue?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Get Journal Lines - Method OnRun - NamedType ContinueMsg</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 2883899677 - Method 1665861916 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 lines inserted in %2.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit WanaStart Get Journal Lines - Method OnRun - NamedType DoneMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 2579101105 - Method 742725649 - NamedType 1927907622" size-unit="char" translate="yes" xml:space="preserve">
           <source>Title is empty for column %1.</source>
@@ -683,10 +1063,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Check VAT - Control Account No. - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1751457627 - Control 2987713617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1751457627 - Control 2180470884 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>FromAccount Name</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Check VAT - Control Feom Account Name - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Check VAT - Control From Account Name - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1751457627 - Control 1068393778 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Map Account VAT Prod. Posting Group</source>
@@ -718,46 +1098,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Check VAT - Control VAT Calculation Type - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1642587315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import Lines</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Control 1844012642 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>VAT Bus. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Control VAT Bus. Posting Group - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Control 304519175 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Check VAT</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Control CheckVAT - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Control 318613646 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Details</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Control Details - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Action 63198111 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Import FEC</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Action ImportFEC - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Action 3169050434 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Map Accounts</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Action MapAccounts - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Action 3186187288 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Map Source Codes</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Action MapSourceCode - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1642587315 - Action 1123480694 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Split</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Import Lines - Action Split - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3864917365 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Lines Details</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -773,81 +1113,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Account Update - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2116719985 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Map Accounts</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Method 2864276601 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to set %1 for %2 "%3"?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Method SetGLAccountVATProductPostingGroup - NamedType ConfirmMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Control 422618514 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Account Name</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Control AccountName - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Control 4080497836 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>VAT Bus. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Control VATBusPostingGroup - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 3471137671 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Lines</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action Lines - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 744084026 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Create Accounts</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action CreateAccounts - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 744084026 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to create %1 account(s)?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action CreateAccounts - Method OnAction - NamedType ConfirmMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 3169050434 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Map Account Nos.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action MapAccounts - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 3169050434 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to map %1 account(s)?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action MapAccounts - Method OnAction - NamedType ConfirmMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 738400759 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set G/L Account VAT Prod. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetGLAccountVATProdPostingGroup - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 597894686 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set Map Account VAT Prod. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetMapAccountVATProdPostingGroup - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 597894686 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to set %1 for %2 "%3"?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetMapAccountVATProdPostingGroup - Method OnAction - NamedType ConfirmMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 540777326 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set VAT Bus. Posting Group</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action SetVATBusPostingGroup - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 3629808269 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Set Values</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action UpdateAccounts - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2116719985 - Action 3629808269 - Method 1377591017 - NamedType 2294662597" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Do-you want to set %1 account(s)?</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Accounts - Action UpdateAccounts - Method OnAction - NamedType ConfirmMsg</note>
-        </trans-unit>
         <trans-unit id="Page 3411458474 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Map Source Codes</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -857,6 +1122,11 @@
           <source>Set Document No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Source Codes - Action SetDocumentNo - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3411458474 - Action 1313562152 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set VAT Account Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page WanaStart Map Source Codes - Action SetVATAccountAmount - Property Caption</note>
         </trans-unit>
         <trans-unit id="Report 2124104798 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Check Direct Posting</source>
@@ -948,55 +1218,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart Chart of Accounts - Action CheckDirectPosting - Property Caption</note>
         </trans-unit>
-        <trans-unit id="PageExtension 1952688225 - Action 2263412507 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1200019362">
-          <source>Clean Data Before GoLive</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart Data Administration - Action wanaStartCleanUp - Property Caption</note>
-        </trans-unit>
         <trans-unit id="PageExtension 2912805685 - Action 3630933339 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 714858205">
           <source>WanaStart</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart FA G/L Journal  - Action WanaStart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Action 3630933339 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>WanaStart</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Action WanaStart - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Action 1581345591 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Apply Applies-to IDs</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Action WanaStartApply - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Action 676278693 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Get Lines</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Action WanaStartGetJournalLines - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Action 2947793024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Import FEC</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Action WanaStartImportFEC - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Action 2033991569 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Map Accounts</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Action WanaStartMapAccounts - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Action 427797127 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Map Source Codes</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Action WanaStartMapSourceCode - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Control 3320823955 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Specifies the value of the Line No. field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Control Line No. - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 3298978426 - Control 2720485332 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2583272393">
-          <source>Specifies the value of the Source Code field.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension WanaStart General Journal - Control Source Code - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PermissionSet 3090612347 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>WanaStart</source>

@@ -2,6 +2,7 @@ table 87101 "wanaStart Map Source Code"
 {
     Caption = 'Map SourceCode';
     DataClassification = ToBeClassified;
+    LookupPageId = "WanaStart Map Source Codes";
 
     fields
     {
@@ -25,34 +26,35 @@ table 87101 "wanaStart Map Source Code"
             TableRelation = "Source Code";
             Width = 6;
         }
-        field(4; "Bal. Account No."; Code[20])
-        {
-            Caption = 'Bal. Account No.';
-            DataClassification = ToBeClassified;
-            TableRelation = "G/L Account";
-            Width = 6;
-        }
+        // field(4; "Bal. Account No."; Code[20])
+        // {
+        //     Caption = 'Bal. Account No.';
+        //     DataClassification = ToBeClassified;
+        //     TableRelation = "G/L Account";
+        //     Width = 6;
+        //     ObsoleteState = Removed;
+        // }
         field(5; "VAT Prod. Posting Group"; Code[20])
         {
             Caption = 'VAT Prod. Posting Group';
             TableRelation = "VAT Product Posting Group";
         }
-        field(6; "Gen. Posting Type"; enum "General Posting Type")
+        field(6; "WanaStart Posting Type"; enum "WanaStart Posting Type")
         {
-            Caption = 'Gen. Posting Type';
+            Caption = 'Posting Type';
             Width = 5;
             trigger OnValidate()
             var
-                ImportLine: Record "WanaStart Import FR Line";
+                ImportLine: Record "wanaStart Import Line";
             begin
-                if "Gen. Posting Type" <> xRec."Gen. Posting Type" then begin
+                if "WanaStart Posting Type" <> xRec."WanaStart Posting Type" then begin
                     ImportLine.SetRange(JournalCode, "From Source Code");
                     ImportLine.SetFilter(CompAuxNum, '<>%1', '');
-                    ImportLine.ModifyAll("Gen. Posting Type", "Gen. Posting Type");
-                    if ("Gen. Posting Type" = "Gen. Posting Type"::Purchase) or (xRec."Gen. Posting Type" = "Gen. Posting Type"::Purchase) then
-                        UpdateMapAccount("Gen. Posting Type"::Purchase);
-                    if ("Gen. Posting Type" = "Gen. Posting Type"::Sale) or (xRec."Gen. Posting Type" = "Gen. Posting Type"::Sale) then
-                        UpdateMapAccount("Gen. Posting Type"::Sale);
+                    ImportLine.ModifyAll("Posting Type", "WanaStart Posting Type");
+                    if ("WanaStart Posting Type" = "WanaStart Posting Type"::Purchase) or (xRec."WanaStart Posting Type" = "WanaStart Posting Type"::Purchase) then
+                        UpdateMapAccount("WanaStart Posting Type"::Purchase);
+                    if ("WanaStart Posting Type" = "WanaStart Posting Type"::Sale) or (xRec."WanaStart Posting Type" = "WanaStart Posting Type"::Sale) then
+                        UpdateMapAccount("WanaStart Posting Type"::Sale);
                 end;
             end;
         }
@@ -72,22 +74,22 @@ table 87101 "wanaStart Map Source Code"
         field(11; "Document No."; Option)
         {
             Caption = 'Document No.';
-            OptionMembers = "EcritureNum","PieceRef","From Line";
-            OptionCaption = 'EcritureNum,PieceRef,From Line';
+            OptionMembers = "EcritureNum","PieceRef","From Line","External Document No.";
+            OptionCaption = 'EcritureNum,PieceRef,From Line,ExternalDocumentNo';
             Width = 5;
         }
         field(12; "External Document No."; Option)
         {
             Caption = 'External Document No.';
-            OptionMembers = "PieceRef","EcritureNum","None";
-            OptionCaption = 'PieceRef,EcritureNum,None';
+            OptionMembers = "PieceRef","EcritureNum","None","External Document No.";
+            OptionCaption = 'PieceRef,EcritureNum,None,ExternalDocumentNo';
             Width = 5;
         }
         field(100; "No. of Lines"; Integer)
         {
             Caption = 'No. of Lines';
             FieldClass = FlowField;
-            CalcFormula = Count("WanaStart Import FR Line" where(JournalCode = field("From Source Code")));
+            CalcFormula = Count("wanaStart Import Line" where(JournalCode = field("From Source Code")));
             Editable = false;
             BlankZero = true;
             Width = 5;
@@ -96,7 +98,7 @@ table 87101 "wanaStart Map Source Code"
         {
             Caption = 'No. of Open Lines';
             FieldClass = FlowField;
-            CalcFormula = Count("WanaStart Import FR Line" where(JournalCode = field("From Source Code"), Open = const(true)));
+            CalcFormula = Count("wanaStart Import Line" where(JournalCode = field("From Source Code"), Open = const(true)));
             Editable = false;
             BlankZero = true;
             Width = 5;
@@ -109,16 +111,20 @@ table 87101 "wanaStart Map Source Code"
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "From Source Code", "From Source Name") { }
+    }
 
-    local procedure UpdateMapAccount(pGenPostingType: Enum "General Posting Type")
+    local procedure UpdateMapAccount(pGenPostingType: Enum "WanaStart Posting Type")
     var
         MapAccount: Record "WanaStart Map Account";
         Progress: Codeunit "Progress Dialog";
     begin
         case pGenPostingType of
-            "General Posting Type"::Purchase:
+            "WanaStart Posting Type"::Purchase:
                 MapAccount.SetRange("Account Type", MapAccount."Account Type"::Vendor);
-            "General Posting Type"::Sale:
+            "WanaStart Posting Type"::Sale:
                 MapAccount.SetRange("Account Type", MapAccount."Account Type"::Customer);
         end;
         MapAccount.SetAutoCalcFields("Amount Incl. VAT", "VAT Amount");

@@ -3,13 +3,13 @@ page 87104 "WanaStart Import Check VAT"
     ApplicationArea = All;
     Caption = 'Import Lines Check VAT';
     PageType = CardPart;
-    SourceTable = "WanaStart Import FR Line";
+    SourceTable = "wanaStart Import Line";
 
     layout
     {
         area(content)
         {
-            field("Feom Account Name"; MapAccount."From Account Name")
+            field("From Account Name"; MapAccount."From Account Name")
             {
                 Caption = 'FromAccount Name';
             }
@@ -78,6 +78,8 @@ page 87104 "WanaStart Import Check VAT"
     }
     trigger OnAfterGetCurrRecord()
     begin
+        if Rec.CompteNum = '' then
+            exit;
         MapAccount.Get(Rec.CompteNum, Rec.CompAuxNum);
         MapAccountVATBusPostingGroup := MapAccount.GetVATBusPostingGroup();
         MapSourceCode.Get(Rec.JournalCode);

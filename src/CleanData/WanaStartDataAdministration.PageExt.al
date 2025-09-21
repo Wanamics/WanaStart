@@ -1,3 +1,4 @@
+#if FALSE
 pageextension 87109 "WanaStart Data Administration" extends "Data Administration"
 {
     actions
@@ -14,3 +15,4 @@ pageextension 87109 "WanaStart Data Administration" extends "Data Administration
         }
     }
 }
+#endif

@@ -1,11 +1,9 @@
-// from codeunit 10826 "Generate File FEC"
-
+#if FALSE
 // ------------------------------------------------------------------------------------------------
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 // ------------------------------------------------------------------------------------------------
-namespace Wanamics.Start.MergeAndAcquisition;
-using Microsoft.Finance.AuditFileExport;
+namespace Microsoft.Finance.AuditFileExport;
 
 using Microsoft.Bank.BankAccount;
 using Microsoft.Bank.Ledger;
@@ -14,22 +12,22 @@ using Microsoft.Finance.GeneralLedger.Journal;
 using Microsoft.Finance.GeneralLedger.Ledger;
 using Microsoft.Foundation.AuditCodes;
 using Microsoft.Purchases.Payables;
+using Microsoft.Sales.Setup;
 using Microsoft.Purchases.Vendor;
 using Microsoft.Sales.Customer;
 using Microsoft.Sales.Receivables;
 using System.Reflection;
 using System.Telemetry;
 using System.Utilities;
-using Microsoft.Finance.ReceivablesPayables;
 
-codeunit 87136 "Generate File M&A"
+codeunit 10826 "Generate File FEC"
 {
     Access = Internal;
 
     var
         GLRegisterGlobal: Record "G/L Register";
         TypeHelper: Codeunit "Type Helper";
-        DataHandlingFEC: Codeunit "Export Data Handling M&A";
+        DataHandlingFEC: Codeunit "Data Handling FEC";
         CurrentSourceType: Enum "Gen. Journal Source Type";
         CurrentTransactionNo: Integer;
         StartingDate: Date;
@@ -55,9 +53,6 @@ codeunit 87136 "Generate File M&A"
         NoEntriestoExportErr: Label 'There are no entries to export within the defined filter. The file was not created.';
         CreateFileTxt: label 'Creating FEC audit file\';
         ProcessTransactionsTxt: label 'Processing transactions: #1###', Comment = '#1 - percent of processed G/L Entries';
-        //[
-        wanAppliesToId: Text;
-    //]
 
     procedure GenerateFileContent(AuditFileExportLine: Record "Audit File Export Line"; var TempBlob: Codeunit "Temp Blob")
     var
@@ -117,24 +112,18 @@ codeunit 87136 "Generate File M&A"
 
                 TotalDetailedBalance := 0;
                 if GLAccount."Detailed Balance" then begin
-                    Customer.SetAutoCalcFields("Net Change (LCY)");
-                    Customer.SetLoadFields(Name, "Net Change (LCY)");
-                    Customer.SetFilter("Date Filter", '<%1', ClosingDate(AuditFileExportHeader."Starting Date"));
+                    Customer.SetLoadFields(Name);
                     if Customer.FindSet() then
                         repeat
                             DetailedBalance := CalcDetailedBalanceBySource(GLAccount."No.", "Gen. Journal Source Type"::Customer, Customer."No.");
-                            // WriteDetailedGLAccountBySource(GLAccount."No.", GLAccount.Name, Customer."No.", Customer.Name, DetailedBalance);
-                            WriteDetailedCustomerBalance(GLAccount."No.", GLAccount.Name, Customer."No.", Customer.Name, DetailedBalance);
+                            WriteDetailedGLAccountBySource(GLAccount."No.", GLAccount.Name, Customer."No.", Customer.Name, DetailedBalance);
                             TotalDetailedBalance += DetailedBalance;
                         until Customer.Next() = 0;
-                    Vendor.SetAutoCalcFields("Net Change (LCY)");
-                    Vendor.SetLoadFields(Name, "Net Change (LCY)");
-                    Vendor.SetFilter("Date Filter", '<%1', ClosingDate(AuditFileExportHeader."Starting Date"));
+                    Vendor.SetLoadFields(Name);
                     if Vendor.FindSet() then
                         repeat
                             DetailedBalance := CalcDetailedBalanceBySource(GLAccount."No.", "Gen. Journal Source Type"::Vendor, Vendor."No.");
-                            // WriteDetailedGLAccountBySource(GLAccount."No.", GLAccount.Name, Vendor."No.", Vendor.Name, DetailedBalance);
-                            WriteDetailedVendorBalance(GLAccount."No.", GLAccount.Name, Vendor."No.", Vendor.Name, DetailedBalance);
+                            WriteDetailedGLAccountBySource(GLAccount."No.", GLAccount.Name, Vendor."No.", Vendor.Name, DetailedBalance);
                             TotalDetailedBalance += DetailedBalance;
                         until Vendor.Next() = 0;
                     BankAccount.SetLoadFields(Name);
@@ -163,9 +152,6 @@ codeunit 87136 "Generate File M&A"
         GLEntry.SetLoadFields(
             "Transaction No.", "Source Type", "Source No.", "Source Code", "G/L Account No.", "G/L Account Name",
             "Posting Date", "Document No.", "Document Date", Description, Amount, "Debit Amount", "Credit Amount");
-        //[
-        GLEntry.AddLoadFields("External Document No.", "Applies-to ID", "Global Dimension 1 Code", "Global Dimension 2 Code", "Dimension Set ID");
-        //]
 
         GLEntry.SetRange("Posting Date", StartingDate, EndingDate);
         GLEntry.SetFilter("G/L Account No.", GLAccount.GetFilter("No."));
@@ -177,19 +163,11 @@ codeunit 87136 "Generate File M&A"
                 UpdateProgressDialog(1, Format(Round(Counter / CounterTotal * 100, 1)));
 
                 if GLEntry."Posting Date" <> ClosingDate(GLEntry."Posting Date") then
-#if not CLEAN23
-                    ProcessGLEntry(GLEntry, AuditFileExportHeader);
-#else
                     ProcessGLEntry(GLEntry);
-#endif
             until GLEntry.Next() = 0;
     end;
 
-#if not CLEAN23
-    local procedure ProcessGLEntry(var GLEntry: Record "G/L Entry"; AuditFileExportHeader: Record "Audit File Export Header")
-#else
     local procedure ProcessGLEntry(var GLEntry: Record "G/L Entry")
-#endif
     var
         BankAccountLedgerEntry: Record "Bank Account Ledger Entry";
         GLRegister: Record "G/L Register";
@@ -256,6 +234,7 @@ codeunit 87136 "Generate File M&A"
                     end;
 
             end;
+        AllowMultiplePosting(PartyNo, PartyName, GLEntry, Customer);
 
         FindGLRegister(GLRegister, GLEntry."Entry No.");
         if GLRegister.SystemCreatedAt <> 0DT then
@@ -265,11 +244,7 @@ codeunit 87136 "Generate File M&A"
 
         WriteGLEntryToFile(
             GLEntry,
-#if CLEAN23
             GLEntry."Transaction No.",
-#else
-            GetProgressiveNo(GLRegister, GLEntry, AuditFileExportHeader),
-#endif
             DateCreated, PartyNo, PartyName, FCYAmount, CurrencyCode, DocNoApplied, DateApplied);
     end;
 
@@ -279,9 +254,6 @@ codeunit 87136 "Generate File M&A"
         UnrealizedAmt: Decimal;
     begin
         GLEntry.SetLoadFields("Posting Date", "G/L Account No.", "Source Type", "Source No.", "Bal. Account Type", Amount);
-        //[
-        GLEntry.AddLoadFields("External Document No.", "Applies-to ID", "Global Dimension 1 Code", "Global Dimension 2 Code");
-        //]
         GLEntry.SetFilter("Posting Date", '..%1', StartingDate - 1);
         GLEntry.SetRange("G/L Account No.", GLAccountNo);
         GLEntry.SetRange("Source Type", SourceType);
@@ -375,10 +347,6 @@ codeunit 87136 "Generate File M&A"
         GLSourceType: Enum "Gen. Journal Source Type";
         CountOfGLEntriesInTransaction: Integer;
         LedgerAmount: Decimal;
-        //[
-        wanClosedByCustLedgerEntry: Record "Cust. Ledger Entry";
-        wanClosedByVendorLedgerEntry: Record "Vendor Ledger Entry";
-    //]
     begin
         DocNoSet := '';
         DateApplied := 0D;
@@ -387,9 +355,6 @@ codeunit 87136 "Generate File M&A"
             GLSourceType::Customer:
                 begin
                     CustLedgerEntry.SetLoadFields("Transaction No.", "Customer No.", "Customer Name", "Customer Posting Group", "Currency Code");
-                    //[
-                    CustLedgerEntry.AddLoadFields(Open, "Closed by Entry No.");
-                    //]
                     CustLedgerEntry.SetCurrentKey("Transaction No.");
                     CustLedgerEntry.SetRange("Transaction No.", TransactionNo);
                     if CustLedgerEntry.FindSet() then begin
@@ -417,25 +382,12 @@ codeunit 87136 "Generate File M&A"
                             end;
                         until CustLedgerEntry.Next() = 0;
                         DocNoSet := DelChr(DocNoSet, '>', ';');
-                        //[
-                        wanAppliesToId := '';
-                        if (CustLedgerEntry."Closed by Entry No." = 0) and not CustLedgerEntry.Open then
-                            wanAppliesToId := Format(CustLedgerEntry."Entry No.")
-                        else if CustLedgerEntry."Closed by Entry No." <> 0 then begin
-                            wanClosedByCustLedgerEntry.SetLoadFields("Posting Date");
-                            if wanClosedByCustLedgerEntry.Get(CustLedgerEntry."Closed by Entry No.") and (wanClosedByCustLedgerEntry."Posting Date" < EndingDate) then
-                                wanAppliesToId := Format(CustLedgerEntry."Closed by Entry No.");
-                        end;
-                        //]
                     end;
                 end;
 
             GLSourceType::Vendor:
                 begin
                     VendorLedgerEntry.SetLoadFields("Transaction No.", "Vendor No.", "Vendor Name", "Vendor Posting Group", "Currency Code");
-                    //[
-                    VendorLedgerEntry.AddLoadFields(Open, "Closed by Entry No.");
-                    //]
                     VendorLedgerEntry.SetCurrentKey("Transaction No.");
                     VendorLedgerEntry.SetRange("Transaction No.", TransactionNo);
                     if VendorLedgerEntry.FindSet() then begin
@@ -463,16 +415,6 @@ codeunit 87136 "Generate File M&A"
                             end;
                         until VendorLedgerEntry.Next() = 0;
                         DocNoSet := DelChr(DocNoSet, '>', ';');
-                        //[
-                        wanAppliesToId := '';
-                        if (VendorLedgerEntry."Closed by Entry No." = 0) and not VendorLedgerEntry.Open then
-                            wanAppliesToId := Format(VendorLedgerEntry."Entry No.")
-                        else if VendorLedgerEntry."Closed by Entry No." <> 0 then begin
-                            wanClosedByVendorLedgerEntry.SetLoadFields("Posting Date");
-                            if wanClosedByVendorLedgerEntry.Get(VendorLedgerEntry."Closed by Entry No.") and (wanClosedByVendorLedgerEntry."Posting Date" < EndingDate) then
-                                wanAppliesToId := Format(VendorLedgerEntry."Closed by Entry No.");
-                        end;
-                        //]
                     end;
                 end;
         end;
@@ -539,19 +481,6 @@ codeunit 87136 "Generate File M&A"
             DescriptionValue := SourceCode.Description;
         end;
     end;
-
-#if not CLEAN23
-    local procedure GetProgressiveNo(var GLRegister: Record "G/L Register"; var GLEntry: Record "G/L Entry"; AuditFileExportHeader: Record "Audit File Export Header"): Integer
-    begin
-        //[
-        /*
-        if AuditFileExportHeader."Use Transaction No." then
-            exit(GLEntry."Transaction No.");
-        */
-        //]
-        exit(GLRegister."No.");
-    end;
-#endif
 
     local procedure GetTransPayRecEntriesCount(TransactionNo: Integer; PayRecAcc: Code[20]): Integer
     var
@@ -766,13 +695,7 @@ codeunit 87136 "Generate File M&A"
     local procedure WriteHeader()
     begin
         AppendLine('JournalCode|JournalLib|EcritureNum|EcritureDate|CompteNum|CompteLib|CompAuxNum|CompAuxLib|PieceRef|' +
-        //[
-        /*
-            'PieceDate|EcritureLib|Debit|Credit|EcritureLet|DateLet|ValidDate|Montantdevise|Idevise');
-        */
-           'PieceDate|EcritureLib|Debit|Credit|EcritureLet|DateLet|ValidDate|Montantdevise|Idevise' +
-           '|_ExternalDocumentNo|_AppliesToID|_ShortcutDimension1Code|_ShortcutDimension2Code');
-        //]
+          'PieceDate|EcritureLib|Debit|Credit|EcritureLet|DateLet|ValidDate|Montantdevise|Idevise');
     end;
 
     local procedure WriteDetailedGLAccountBySource(GLAccountNo: Code[20]; GLAccountName: Text[100]; SourceNo: Code[20]; PartyName: Text[100]; Amount: Decimal)
@@ -796,9 +719,6 @@ codeunit 87136 "Generate File M&A"
           GLAccountName + '|' +
           SourceNo + '|' +
           PartyName + '|' +
-          //[
-          'PFX-' +
-          //]
           '00000|' +
           DataHandlingFEC.GetFormattedDate(StartingDate) + '|' +
           'BAL OUV ' + PartyName + '|' +
@@ -806,10 +726,7 @@ codeunit 87136 "Generate File M&A"
           FormatAmount(CreditAmt) + '|' +
           '||' +
           DataHandlingFEC.GetFormattedDate(StartingDate) +
-          //[
-          //   '||');
-          '||||||');
-        //]
+          '||');
     end;
 
     local procedure WriteGLAccount(GLAccountNo: Code[20]; GLAccountName: Text[100]; OpeningBalance: Decimal)
@@ -829,9 +746,6 @@ codeunit 87136 "Generate File M&A"
           GLAccountNo + '|' +
           GLAccountName + '|' +
           '||' +
-          //[
-          'PFX-' +
-          //]
           '00000|' +
           DataHandlingFEC.GetFormattedDate(StartingDate) + '|' +
           'BAL OUV ' + GLAccountName + '|' +
@@ -839,12 +753,7 @@ codeunit 87136 "Generate File M&A"
           FormatAmount(CreditAmount) + '|' +
           '||' +
           DataHandlingFEC.GetFormattedDate(StartingDate) +
-          //[
-          /*
           '||');
-          */
-          '||||||');
-        //]
     end;
 
     local procedure WriteGLEntryToFile(var GLEntry: Record "G/L Entry"; ProgressiveNo: Integer; GLRegisterCreationDate: Date; PartyNo: Code[20]; PartyName: Text[100]; FCYAmount: Text[250]; CurrencyCode: Code[10]; DocNoSet: Text; DateApplied: Date)
@@ -860,9 +769,6 @@ codeunit 87136 "Generate File M&A"
           GLEntry."G/L Account Name" + '|' +
           Format(PartyNo) + '|' +
           PartyName + '|' +
-          //[
-          'PFX-' +
-          //]
           GLEntry."Document No." + '|' +
           DataHandlingFEC.GetFormattedDate(GLEntry."Document Date") + '|' +
           GLEntry.Description + '|' +
@@ -872,16 +778,7 @@ codeunit 87136 "Generate File M&A"
           DataHandlingFEC.GetFormattedDate(DateApplied) + '|' +
           DataHandlingFEC.GetFormattedDate(GLRegisterCreationDate) + '|' +
           FCYAmount + '|' +
-          //[
-          /*
           CurrencyCode);
-          */
-          CurrencyCode + '|' +
-          GLEntry."External Document No." + '|' +
-          format(wanAppliesToId) + '|' +
-          GLEntry."Global Dimension 1 Code" + '|' +
-          GLEntry."Global Dimension 2 Code");
-        //]
     end;
 
     local procedure AppendLine(LineContent: Text)
@@ -931,90 +828,34 @@ codeunit 87136 "Generate File M&A"
         TextLine: Text;
         BlobOutStream: OutStream;
     begin
-        //[
-        // TempBlob.CreateOutStream(BlobOutStream);
-        TempBlob.CreateOutStream(BlobOutStream, TextEncoding::UTF8);
-        //]
+        TempBlob.CreateOutStream(BlobOutStream);
         foreach TextLine in LinesList do
             BlobOutStream.WriteText(TextLine);
     end;
 
-    local procedure WriteDetailedCustomerBalance(GLAccountNo: Code[20]; GLAccountName: Text[100]; SourceNo: Code[20]; PartyName: Text[100]; Amount: Decimal)
+    local procedure AllowMultiplePosting(var PartyNo: Code[20]; var PartyName: Text[100]; GLEntry: Record "G/L Entry"; Customer: Record Customer)
     var
-        CustLedgerEntry: Record "Cust. Ledger Entry";
-        CVLEB: Record "CV Ledger Entry Buffer";
+        AltCustPostGroup: Record "Alt. Customer Posting Group";
+        CustPostGroup: Record "Customer Posting Group";
+        CustPostGroup2: Record "Customer Posting Group";
+        SalesSetup: Record "Sales & Receivables Setup";
     begin
-        if Amount = 0 then
+        if not ((SalesSetup.Get()) and (SalesSetup."Allow Multiple Posting Groups")) then
+            exit;
+        if not ((GLEntry."Source Type" = GLEntry."Source Type"::Customer) and (Customer.Get(GLEntry."Source No."))) then
+            exit;
+        if not CustPostGroup.Get(Customer."Customer Posting Group") then
             exit;
 
-        CustLedgerEntry.SetLoadFields("Customer No.", "Currency Code", "Remaining Amount", Description, "Document Date", "Document No.", "External Document No.");
-        CustLedgerEntry.SetRange("Customer No.", SourceNo);
-        CustLedgerEntry.SetFilter("Posting Date", '<%1', StartingDate);
-        CustLedgerEntry.SetAutoCalcFields("Remaining Amount");
-        CustLedgerEntry.SetFilter("Remaining Amount", '<>%1', 0);
-        if CustLedgerEntry.FindFirst() then
+        AltCustPostGroup.SetRange("Customer Posting Group", CustPostGroup.Code);
+        if AltCustPostGroup.FindSet() then
             repeat
-                CVLEB.CopyFromCustLedgEntry(CustLedgerEntry);
-                WriteOpenEntry(GLAccountNo, GLAccountName, SourceNo, PartyName, CVLEB);
-            until CustLedgerEntry.Next() = 0;
-    end;
-
-    local procedure WriteDetailedVendorBalance(GLAccountNo: Code[20]; GLAccountName: Text[100]; SourceNo: Code[20]; PartyName: Text[100]; Amount: Decimal)
-    var
-        VendorLedgerEntry: Record "Vendor Ledger Entry";
-        CVLEB: Record "CV Ledger Entry Buffer";
-    begin
-        if Amount = 0 then
-            exit;
-
-        VendorLedgerEntry.SetLoadFields("Vendor No.", "Currency Code", "Remaining Amount", Description, "Document Date", "Document No.", "External Document No.");
-        VendorLedgerEntry.SetRange("Vendor No.", SourceNo);
-        VendorLedgerEntry.SetFilter("Posting Date", '<%1', StartingDate);
-        VendorLedgerEntry.SetAutoCalcFields("Remaining Amount");
-        VendorLedgerEntry.SetFilter("Remaining Amount", '<>%1', 0);
-        if VendorLedgerEntry.FindFirst() then
-            repeat
-                CVLEB.CopyFromVendLedgEntry(VendorLedgerEntry);
-                WriteOpenEntry(GLAccountNo, GLAccountName, SourceNo, PartyName, CVLEB);
-            until VendorLedgerEntry.Next() = 0;
-    end;
-
-    local procedure WriteOpenEntry(GLAccountNo: Code[20]; GLAccountName: Text[100]; SourceNo: Code[20]; PartyName: Text[100]; CVLEB: Record "CV Ledger Entry Buffer")
-    var
-        DebitAmt: Decimal;
-        CreditAmt: Decimal;
-    begin
-        if CVLEB."Remaining Amount" > 0 then
-            DebitAmt := CVLEB."Remaining Amount"
-        else
-            CreditAmt := -CVLEB."Remaining Amount";
-        AppendLine(
-          CVLEB."Source Code" + '|' +
-          '' + '|' +
-          '0|' +
-          DataHandlingFEC.GetFormattedDate(StartingDate) + '|' +
-          GLAccountNo + '|' +
-          GLAccountName + '|' +
-          SourceNo + '|' +
-          PartyName + '|' +
-          //[
-          'PFX-' +
-          //]
-          '00000|' +
-        //   CVLEB."Document No." + '|' +
-          DataHandlingFEC.GetFormattedDate(CVLEB."Document Date") + '|' +
-          CVLEB.Description + '|' +
-          FormatAmount(CVLEB."Debit Amount (LCY)") + '|' +
-          FormatAmount(CVLEB."Credit Amount (LCY)") + '|' +
-          //????   DocNoSet + '|' +
-          /*GetFormattedDate(DateApplied) +*/ '|' +
-          /*GetFormattedDate(GLRegisterCreationDate) +*/ '|' +
-          FormatAmount(CVLEB."Remaining Amount") + '|' +
-          //[
-          //CurrencyCode + CRLF);
-          CVLEB."Currency Code" + '|' +
-          CVLEB."External Document No." +
-          CRLF);
-        //]
+                if CustPostGroup2.Get(AltCustPostGroup."Alt. Customer Posting Group") then
+                    if CustPostGroup2."Receivables Account" = GLEntry."G/L Account No." then begin
+                        PartyNo := Customer."No.";
+                        PartyName := Customer.Name;
+                    end;
+            until AltCustPostGroup.Next() = 0;
     end;
 }
+#endif

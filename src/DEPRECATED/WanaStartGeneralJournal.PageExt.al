@@ -1,3 +1,4 @@
+#if FALSE
 pageextension 87100 "WanaStart General Journal" extends "General Journal"
 {
     layout
@@ -25,6 +26,30 @@ pageextension 87100 "WanaStart General Journal" extends "General Journal"
             group(WanaStart)
             {
                 Caption = 'WanaStart';
+                action(WanaStartImportBalance)
+                {
+                    Caption = 'Import Balance';
+                    ApplicationArea = All;
+                    Image = ImportChartOfAccounts;
+                    // RunObject = codeunit "WanaStart Import Balance";
+                    RunObject = Report "WanaStart Import Balance";
+                    // trigger OnAction()
+                    // var
+                    //     ImportLine: Record "WanaStart Import FR Line";
+                    //     StartDateTime: DateTime;
+                    //     DoneMsg: Label '%1 lines imported in %2.';
+                    //     DeleteLines: Label 'Do you want to delete %1 previous lines?';
+                    // begin
+                    //     if not ImportLine.IsEmpty then
+                    //         if not Confirm(DeleteLines, false, ImportLine.Count) then
+                    //             exit
+                    //         else
+                    //             ImportLine.DeleteAll();
+                    //     StartDateTime := CurrentDateTime;
+                    //     Xmlport.Run(Xmlport::"WanaStart Import Balance", false, true, ImportLine);
+                    //     Message(DoneMsg, ImportLine.Count, CurrentDateTime - StartDateTime);
+                    // end;
+                }
                 action(WanaStartImportFEC)
                 {
                     Caption = 'Import FEC';
@@ -33,19 +58,19 @@ pageextension 87100 "WanaStart General Journal" extends "General Journal"
                     RunObject = codeunit "WanaStart Import FR";
                     // trigger OnAction()
                     // var
-                    //     ImportFRLine: Record "wanaStart Import FR Line";
+                    //     ImportLine: Record "wanaStart Import FR Line";
                     //     StartDateTime: DateTime;
                     //     DoneMsg: Label '%1 lines imported in %2.';
                     //     DeleteLines: Label 'Do you want to delete %1 previous lines?';
                     // begin
-                    //     if not ImportFRLine.IsEmpty then
-                    //         if not Confirm(DeleteLines, false, ImportFRLine.Count) then
+                    //     if not ImportLine.IsEmpty then
+                    //         if not Confirm(DeleteLines, false, ImportLine.Count) then
                     //             exit
                     //         else
                     //             Rec.DeleteAll();
                     //     StartDateTime := CurrentDateTime;
                     //     Xmlport.Run(Xmlport::"Import FEC+", false, true, Rec);
-                    //     Message(DoneMsg, ImportFRLine.Count, CurrentDateTime - StartDateTime);
+                    //     Message(DoneMsg, ImportLine.Count, CurrentDateTime - StartDateTime);
                     // end;
                 }
                 action(WanaStartMapSourceCode)
@@ -77,7 +102,15 @@ pageextension 87100 "WanaStart General Journal" extends "General Journal"
                     Image = ApplyEntries;
                     RunObject = codeunit "wanaStart Apply Applies-to ID";
                 }
+                action(WanaStartBalance)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Balance / Posting Date & Document No.';
+                    Image = Balance;
+                    RunObject = report "WanaStart Balance Batch";
+                }
             }
         }
     }
 }
+#endif
